@@ -14,6 +14,7 @@
 
 # Gradle
 */.gradle/
+.gradle/
 */build/
 */out/
 
@@ -28,8 +29,6 @@ hs_err_pid*
 
 # Project files
 *.class
-*/performance*.log
-performance*.log
 */logs/
 logs/
 

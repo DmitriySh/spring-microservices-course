@@ -1,0 +1,7 @@
+dependencies {
+    compile group: 'org.springframework', name: 'spring-context', version: '5.0.7.RELEASE'
+}
+
+tasks.withType(Jar) { j ->
+    j.manifest.attributes('Main-Class': 'ru.shishmakov.Main')
+}
