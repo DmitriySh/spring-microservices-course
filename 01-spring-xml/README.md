@@ -44,7 +44,7 @@ spring-microservices-course$ java -jar ./01-spring-xml/build/libs/01-spring-xml-
 
 Please type your first name: <name>
 Please type your surname: <surname>
-Good luck dima shishmakov!
+Good luck <name> <surname>!
 Start quiz...
 
 Question 1: Столица России
