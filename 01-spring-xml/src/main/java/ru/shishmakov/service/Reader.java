@@ -32,8 +32,6 @@ public class Reader {
      * 0 - question<br/>
      * 1 - right answer<br/>
      * 2..n - wrong answers<br/>
-     *
-     * @throws IOException
      */
     public void init() throws IOException {
         log.info("init questions...");
@@ -51,7 +49,7 @@ public class Reader {
                         list.add(answer, values[1]);
                         return list;
                     }));
-            questions.add(new Question(values[0], answers, answer));
+            questions.add(new Question(values[0], answers, answer + 1));
             count += 1;
         }
         log.info("read csv file: {}, lines: {}", source, count);

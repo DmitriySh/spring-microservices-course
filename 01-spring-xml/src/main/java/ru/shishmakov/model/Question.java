@@ -12,5 +12,5 @@ import java.util.List;
 public class Question {
     private final String text;
     private final List<String> answers;
-    private final int trueAnswer;
+    private final Integer trueAnswer;
 }
