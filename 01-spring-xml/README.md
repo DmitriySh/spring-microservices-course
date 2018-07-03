@@ -1,8 +1,8 @@
 Quiz for students
 =======
+Use Spring Core 5.x.
 
 ## Description
-Use Spring Core 5.x.
  - The program stores questions and answers into a csv file
  - The program runs in a terminal and asks a user:
    - name and surname,
