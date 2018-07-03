@@ -1,26 +1,25 @@
 package ru.shishmakov.service;
 
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import ru.shishmakov.model.Question;
 
-import java.lang.invoke.MethodHandles;
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 public class Quiz {
-    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    private final Store store;
+    private final Reader reader;
 
     public void start() {
-        logger.info("Start quiz...");
+        log.info("Start quiz...");
 
-        List<Question> questions = store.getQuestions();
+        List<Question> questions = reader.getQuestions();
         boolean next = true;
         while (next) {
-
+            questions.forEach(System.out::println);
+            next = false;
         }
     }
 }

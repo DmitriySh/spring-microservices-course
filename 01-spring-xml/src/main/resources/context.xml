@@ -5,9 +5,11 @@
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="quiz" class="ru.shishmakov.service.Quiz">
-        <constructor-arg ref="store"/>
+        <constructor-arg ref="reader"/>
     </bean>
 
-    <bean id="store" class="ru.shishmakov.service.Store" init-method="init"/>
+    <bean id="reader" class="ru.shishmakov.service.Reader" init-method="init">
+        <constructor-arg name="source" value="#{ systemProperties['question.file'] ?: 'questions.csv' }"/>
+    </bean>
 
 </beans>
