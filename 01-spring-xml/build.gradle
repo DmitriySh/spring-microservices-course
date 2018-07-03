@@ -1,5 +1,6 @@
 dependencies {
-    compile group: 'org.springframework', name: 'spring-context', version: '5.0.7.RELEASE'
+    compile 'org.springframework:spring-context:5.0.7.RELEASE'
+    compileOnly 'org.projectlombok:lombok:1.16.22'
 }
 
 tasks.withType(Jar) { j ->
