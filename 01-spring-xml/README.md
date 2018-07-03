@@ -1,4 +1,4 @@
-Tests for students
+Quiz for students
 =======
 
 ## Description
@@ -10,7 +10,7 @@ Use Spring Core 5.x.
    - gets a result at the end of the quiz
  - Services covered by unit tests
 
-
+## Documentation
  * Use class [ClassPathXmlApplicationContext](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/context/support/ClassPathXmlApplicationContext.html) to build the container of [Inversion of Control (IoC)](https://docs.spring.io/spring/docs/5.0.x/spring-framework-reference/core.html#spring-core).
  * The container then injects those dependencies when it creates the bean. 
  * This process is fundamentally the inverse, hence the name IoC, of the bean itself controlling the instantiation or location of its dependencies by using direct construction of classes, or a mechanism such as the Service Locator pattern.
