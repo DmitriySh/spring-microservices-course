@@ -1,11 +1,12 @@
 package ru.shishmakov.service;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.shishmakov.model.Question;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.lang.invoke.MethodHandles;
 import java.util.List;
 import java.util.function.Function;
 
@@ -14,11 +15,14 @@ import static org.apache.commons.lang3.StringUtils.*;
 /**
  * Console client to make the quiz
  */
-@Slf4j
-@RequiredArgsConstructor
 public class Quiz {
+    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private final Reader reader;
+
+    public Quiz(Reader reader) {
+        this.reader = reader;
+    }
 
     /**
      * Start the quiz
@@ -27,7 +31,7 @@ public class Quiz {
      */
     public int start() {
         String sep = System.lineSeparator();
-        log.info("Hello quiz!" + sep);
+        logger.info("Hello quiz!" + sep);
         try (BufferedReader input = new BufferedReader(new InputStreamReader(System.in))) {
             System.out.print("Please type your first name: ");
             String name = readAnswer(input, str -> str);
@@ -51,7 +55,7 @@ public class Quiz {
             System.out.println(String.format("%sResult: %s/%s%sByu! =)", sep, score, questions.size(), sep));
             return score;
         } catch (Exception e) {
-            log.error("error at the time of quiz", e);
+            logger.error("error at the time of quiz", e);
         }
         return 0;
     }

@@ -1,7 +1,6 @@
 dependencies {
 
     compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.9.0'
-    compileOnly 'org.projectlombok:lombok:1.16.22'
 }
 
 tasks.withType(Jar) { j ->

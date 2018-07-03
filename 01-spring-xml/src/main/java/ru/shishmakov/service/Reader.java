@@ -4,12 +4,12 @@ import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvParser;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.shishmakov.model.Question;
 
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -19,13 +19,19 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
 
-@Slf4j
-@Getter
-@RequiredArgsConstructor
 public class Reader {
+    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private final String source;
     private final List<Question> questions = new ArrayList<>();
+
+    public Reader(String source) {
+        this.source = source;
+    }
+
+    public List<Question> getQuestions() {
+        return questions;
+    }
 
     /**
      * Read csv file:<br/>
@@ -34,7 +40,7 @@ public class Reader {
      * 2..n - wrong answers<br/>
      */
     public void init() throws IOException {
-        log.info("init questions...");
+        logger.info("init questions...");
         int count = 0;
         Random random = new Random();
 
@@ -52,7 +58,7 @@ public class Reader {
             questions.add(new Question(values[0], answers, answer + 1));
             count += 1;
         }
-        log.info("read csv file: {}, lines: {}", source, count);
+        logger.info("read csv file: {}, lines: {}", source, count);
     }
 
     private MappingIterator<String[]> buildIterator() throws IOException {
