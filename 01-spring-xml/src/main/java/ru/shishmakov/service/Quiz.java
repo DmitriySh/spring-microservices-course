@@ -11,13 +11,21 @@ import java.util.function.Function;
 
 import static org.apache.commons.lang3.StringUtils.*;
 
+/**
+ * Console client to make the quiz
+ */
 @Slf4j
 @RequiredArgsConstructor
 public class Quiz {
 
     private final Reader reader;
 
-    public void start() {
+    /**
+     * Start the quiz
+     *
+     * @return count of right answers (score)
+     */
+    public int start() {
         String sep = System.lineSeparator();
         log.info("Hello quiz!" + sep);
         try (BufferedReader input = new BufferedReader(new InputStreamReader(System.in))) {
@@ -37,13 +45,15 @@ public class Quiz {
                 System.out.println(String.format("Answers: %s", getSolutions(q)));
                 System.out.print("Please type number your answer: ");
                 Integer answer = readAnswer(input, Integer::valueOf);
-                if (q.getTrueAnswer().equals(answer)) score++;
+                if (q.checkAnswer(answer)) score++;
             }
 
             System.out.println(String.format("%sResult: %s/%s%sByu! =)", sep, score, questions.size(), sep));
+            return score;
         } catch (Exception e) {
             log.error("error at the time of quiz", e);
         }
+        return 0;
     }
 
     private String getSolutions(Question q) {
@@ -55,7 +65,7 @@ public class Quiz {
         return solutions.toString();
     }
 
-    private <R> R readAnswer(BufferedReader input, Function<String, R> function) {
+    <R> R readAnswer(BufferedReader input, Function<String, R> function) {
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 final String read = input.readLine();
