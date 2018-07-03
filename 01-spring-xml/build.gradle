@@ -1,5 +1,6 @@
 dependencies {
-    compile 'org.springframework:spring-context:5.0.7.RELEASE'
+
+    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.9.0'
     compileOnly 'org.projectlombok:lombok:1.16.22'
 }
 

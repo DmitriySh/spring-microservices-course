@@ -50,12 +50,11 @@ configure(subprojects) {
     dependencies {
         compile 'ch.qos.logback:logback-classic:1+'
         compile 'org.apache.commons:commons-lang3:3+'
+        compile 'org.springframework:spring-context:5.0.7.RELEASE'
 
-        compile "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
-        compile "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jacksonVersion}"
-
-        testCompile 'org.hamcrest:hamcrest-all:1.3'
         testCompile 'junit:junit:4.12'
+        testCompile 'org.hamcrest:hamcrest-all:1.3'
+        testCompile 'org.mockito:mockito-all:1.10.19'
     }
 
     test {
