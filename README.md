@@ -1,3 +1,7 @@
+[![Build Status](https://travis-ci.com/DmitriySh/spring-microservices-course.svg?branch=master)](https://travis-ci.com/DmitriySh/spring-microservices-course)
+
+
+
 Spring Framework
 =======
 
