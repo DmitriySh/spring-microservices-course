@@ -2,6 +2,7 @@ package ru.shishmakov.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 import ru.shishmakov.model.Question;
 
 import java.io.BufferedReader;
@@ -16,6 +17,7 @@ import static org.apache.commons.lang3.StringUtils.*;
  */
 @Slf4j
 @RequiredArgsConstructor
+@Service
 public class Quiz {
 
     private final Reader reader;

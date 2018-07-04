@@ -5,10 +5,12 @@ import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvParser;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import ru.shishmakov.model.Question;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,11 +23,15 @@ import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @Getter
-@RequiredArgsConstructor
+@Service
 public class Reader {
 
     private final String source;
     private final List<Question> questions = new ArrayList<>();
+
+    public Reader(@Value("#{ systemProperties['question.file'] ?: 'questions.csv' }") String source) {
+        this.source = source;
+    }
 
     /**
      * Read csv file:<br/>
@@ -33,6 +39,7 @@ public class Reader {
      * 1 - right answer<br/>
      * 2..n - wrong answers<br/>
      */
+    @PostConstruct
     public void init() throws IOException {
         log.info("init questions...");
         int count = 0;
