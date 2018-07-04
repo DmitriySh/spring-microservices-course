@@ -1,8 +1,8 @@
 import java.time.ZonedDateTime
 
 ext {
-    buildVesion = '0.1'
-    jacksonVersion = "2.8.7"
+    buildVesion = '0.2'
+    springVersion = "5.0.7.RELEASE"
 }
 
 task wrapper(type: Wrapper) {
@@ -50,7 +50,7 @@ configure(subprojects) {
     dependencies {
         compile 'ch.qos.logback:logback-classic:1+'
         compile 'org.apache.commons:commons-lang3:3+'
-        compile 'org.springframework:spring-context:5.0.7.RELEASE'
+        compile "org.springframework:spring-context:${springVersion}"
 
         testCompile 'junit:junit:4.12'
         testCompile 'org.hamcrest:hamcrest-all:1.3'
