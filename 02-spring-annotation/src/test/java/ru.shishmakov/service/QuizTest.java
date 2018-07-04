@@ -1,9 +1,6 @@
 package ru.shishmakov.service;
 
-import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
-
-@RunWith(MockitoJUnitRunner.class)
+//@RunWith(MockitoJUnitRunner.class)
 public class QuizTest {
 
 //    @Rule

@@ -1,69 +1,82 @@
 package ru.shishmakov.service;
 
-import com.fasterxml.jackson.databind.MappingIterator;
-import com.fasterxml.jackson.dataformat.csv.CsvMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvParser;
-import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import ru.shishmakov.model.Question;
 
 import javax.annotation.PostConstruct;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Slf4j
 @Getter
 @Service
 public class Reader {
+    private final Locale local;
+    private final MessageSource messages;
+    private final List<Question> questions;
 
-    @Value("#{ systemProperties['question.file'] ?: 'questions.csv' }")
-    private String source;
-    private final List<Question> questions = new ArrayList<>();
+    public Reader(MessageSource messages, @Value("${local:en}") String local) {
+        this.local = buildLocal(local);
+        this.messages = messages;
+        this.questions = new ArrayList<>();
+    }
 
     /**
-     * Read csv file:<br/>
-     * 0 - question<br/>
-     * 1 - right answer<br/>
-     * 2..n - wrong answers<br/>
+     * Read questions from bundle file file:<br/>
+     * title - question<br/>
+     * 1st answer - right answer<br/>
+     * 2nd .. n - wrong answers<br/>
      */
     @PostConstruct
-    public void init() throws IOException {
+    public void init() {
         log.info("init questions...");
         int count = 0;
         Random random = new Random();
 
-        MappingIterator<String[]> iterator = buildIterator();
-        while (iterator.hasNext()) {
-            String[] values = iterator.next();
-            int answer = random.nextInt(values.length - 2);
+        for (int i = 1; !Thread.currentThread().isInterrupted(); i++) {
+            String title = getMessage("question.title." + i);
+            String[] values = getMessage("question.answers." + i).split(";");
+            if (isBlank(title) || values.length == 0) break;
+
+            int rightAnswer = random.nextInt(values.length - 1);
             List<String> answers = Stream.of(values)
-                    .skip(2)
+                    .skip(1)
                     .collect(collectingAndThen(toList(), list -> {
                         Collections.shuffle(list);
-                        list.add(answer, values[1]);
+                        list.add(rightAnswer, values[0]);
                         return list;
                     }));
-            questions.add(new Question(values[0], answers, answer + 1));
+            questions.add(new Question(title, answers, rightAnswer + 1));
             count += 1;
         }
-        log.info("read csv file: {}, lines: {}", source, count);
+        log.info("read questions: {}", count);
     }
 
-    private MappingIterator<String[]> buildIterator() throws IOException {
-        return new CsvMapper()
-                .enable(CsvParser.Feature.WRAP_AS_ARRAY)
-                .readerFor(String[].class)
-                .with(CsvSchema.emptySchema().withoutEscapeChar().withColumnSeparator(';'))
-                .readValues(this.getClass().getClassLoader().getResourceAsStream(source));
+    public String getMessage(String key) {
+        return messages.getMessage(key, null, EMPTY, local);
+    }
+
+    private Locale buildLocal(String local) {
+        return Optional.ofNullable(local)
+                .map(String::trim)
+                .map(String::toLowerCase)
+                .map(l -> {
+                    switch (l) {
+                        case "ru":
+                            return new Locale("ru", "RU");
+                        default:
+                            return Locale.ENGLISH;
+                    }
+                })
+                .orElse(Locale.ENGLISH);
     }
 }

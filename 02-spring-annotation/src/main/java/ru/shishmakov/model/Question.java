@@ -11,7 +11,7 @@ import java.util.Objects;
 @ToString
 @RequiredArgsConstructor
 public class Question {
-    private final String text;
+    private final String title;
     private final List<String> answers;
     private final Integer trueAnswer;
 
