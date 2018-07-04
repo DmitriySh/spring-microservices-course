@@ -26,12 +26,9 @@ import static java.util.stream.Collectors.toList;
 @Service
 public class Reader {
 
-    private final String source;
+    @Value("#{ systemProperties['question.file'] ?: 'questions.csv' }")
+    private String source;
     private final List<Question> questions = new ArrayList<>();
-
-    public Reader(@Value("#{ systemProperties['question.file'] ?: 'questions.csv' }") String source) {
-        this.source = source;
-    }
 
     /**
      * Read csv file:<br/>
