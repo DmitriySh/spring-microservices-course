@@ -50,7 +50,7 @@ public class Quiz {
                 if (q.checkAnswer(answer)) score++;
             }
 
-            System.out.println(String.format("%sResult: %s/%s%sByu! =)", sep, score, questions.size(), sep));
+            System.out.println(String.format("%sResult: %s/%s%sGoodbye! =)", sep, score, questions.size(), sep));
             return score;
         } catch (Exception e) {
             log.error("error at the time of quiz", e);
