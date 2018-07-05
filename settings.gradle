@@ -10,4 +10,5 @@
 rootProject.name = 'spring-microservices-course'
 
 include '01-spring-xml'
+include '02-spring-annotation'
 
