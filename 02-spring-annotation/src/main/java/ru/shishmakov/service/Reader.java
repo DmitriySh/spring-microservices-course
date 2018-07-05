@@ -72,7 +72,7 @@ public class Reader {
                 .map(l -> {
                     switch (l) {
                         case "ru":
-                            return new Locale("ru", "RU");
+                            return Locale.forLanguageTag("ru-RU");
                         default:
                             return Locale.ENGLISH;
                     }
