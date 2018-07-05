@@ -1,6 +1,7 @@
 dependencies {
 
     compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.9.0'
+    compile "org.springframework:spring-context:${springVersion}"
 }
 
 tasks.withType(Jar) { j ->
