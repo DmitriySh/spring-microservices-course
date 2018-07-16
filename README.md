@@ -8,6 +8,12 @@ Spring Framework
 
 Spring Framework course step by step...
 
+## Requirements:
+
+  * Java SE Development Kit 8  
+  * Gradle 4.x (or you could use Gradle wrapper)   
+  * Git 1.7.x (or newer) 
+
 ## Homework 1: [Quiz for students](https://github.com/DmitriySh/spring-microservices-course/tree/master/01-spring-xml)
 Use class [ClassPathXmlApplicationContext](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/context/support/ClassPathXmlApplicationContext.html)
 
