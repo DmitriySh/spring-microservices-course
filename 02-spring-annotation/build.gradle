@@ -1,10 +1,10 @@
 dependencies {
 
-    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.9.0'
+    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.9.6'
     compile "org.springframework:spring-context:${springVersion}"
 
-    annotationProcessor 'org.projectlombok:lombok:1.16.22'
-    compileOnly 'org.projectlombok:lombok:1.16.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.0'
+    compileOnly 'org.projectlombok:lombok:1.18.0'
 }
 
 tasks.withType(Jar) { j ->
