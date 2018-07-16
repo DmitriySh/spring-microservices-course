@@ -1,12 +1,21 @@
-dependencies {
+import java.time.ZonedDateTime
 
-    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.9.6'
+dependencies {
     compile "org.springframework:spring-context:${springVersion}"
 
     annotationProcessor 'org.projectlombok:lombok:1.18.0'
     compileOnly 'org.projectlombok:lombok:1.18.0'
 }
 
-tasks.withType(Jar) { j ->
-    j.manifest.attributes('Main-Class': 'ru.shishmakov.Main')
+tasks.withType(Jar) { jar ->
+    jar.manifest.attributes(
+            'Created-By': 'Gradle ' + gradle.gradleVersion + ', Java ' + JavaVersion.current(),
+            'Date': ZonedDateTime.now(),
+            'Implementation-Title': project.name,
+            'Implementation-Version': version,
+            'Implementation-Vendor': 'ru.shishmakov',
+            'Main-Class': 'ru.shishmakov.Main'
+    )
+    jar.baseName = project.name + '-all'
+    jar.from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 }
