@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.function.Function;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
-import static org.apache.commons.lang3.StringUtils.trim;
 
 /**
  * Console client to make the quiz
@@ -64,7 +63,7 @@ public class Quiz {
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 final String read = input.readLine();
-                if (isNotBlank(read)) return function.apply(trim(read));
+                if (isNotBlank(read)) return function.apply(read.trim());
             } catch (Exception ignored) {
             }
         }
