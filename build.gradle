@@ -5,7 +5,7 @@ ext {
     springVersion = "5.0.7.RELEASE"
 }
 
-task wrapper(type: Wrapper) {
+wrapper {
     gradleVersion = '4.8.1'
 }
 
