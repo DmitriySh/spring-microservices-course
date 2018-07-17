@@ -1,14 +1,12 @@
 package ru.shishmakov.service;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import ru.shishmakov.Main.Application;
 import ru.shishmakov.model.Question;
 
-import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -19,13 +17,16 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Slf4j
 @Getter
-@RequiredArgsConstructor
 @Service
 public class Reader {
     private final MessageSource messages;
-    private final Application application;
+    private final Locale local;
     private final List<Question> questions = new ArrayList<>();
-    private Locale local;
+
+    public Reader(MessageSource messages, Application application) {
+        this.messages = messages;
+        this.local = buildLocal(application.getLocal());
+    }
 
     /**
      * Read questions from bundle file file:<br/>
@@ -33,11 +34,9 @@ public class Reader {
      * 1st answer - right answer<br/>
      * 2nd .. n - wrong answers<br/>
      */
-    @PostConstruct
     public void init() {
         log.info("init questions...");
         int count = 0;
-        this.local = buildLocal(application.getLocal());
         Random random = new Random();
 
         for (int i = 1; !Thread.currentThread().isInterrupted(); i++) {
