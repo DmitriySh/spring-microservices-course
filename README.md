@@ -15,7 +15,12 @@ Spring Framework course step by step...
   * Git 1.7.x (or newer) 
 
 ## Homework 1: [Quiz for students](https://github.com/DmitriySh/spring-microservices-course/tree/master/01-spring-xml)
-Use class [ClassPathXmlApplicationContext](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/context/support/ClassPathXmlApplicationContext.html)
+Use class [ClassPathXmlApplicationContext](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/context/support/ClassPathXmlApplicationContext.html) 
+and xml file for configuration
 
 ## Homework 2: [Quiz for students](https://github.com/DmitriySh/spring-microservices-course/tree/master/02-spring-annotation)
-Use class [AnnotationConfigApplicationContext](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/context/annotation/AnnotationConfigApplicationContext.html) and annotations [@Configuration](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/context/annotation/Configuration.html), [@ComponentScan](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/context/annotation/ComponentScan.html), [@Service](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/stereotype/Service.html)
+Use class [AnnotationConfigApplicationContext](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/context/annotation/AnnotationConfigApplicationContext.html) 
+and annotations [@Configuration](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/context/annotation/Configuration.html), 
+[@ComponentScan](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/context/annotation/ComponentScan.html), 
+[@Service](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/stereotype/Service.html)
+for configuration
