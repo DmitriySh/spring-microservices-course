@@ -20,8 +20,8 @@ They will need minimal or zero configuration.
  	* Undertow 1.4(2.0) (spring-boot-starter-undertow)
     * or embedded reactive HTTP server (spring-boot-starter-reactor-netty)
 
- * Spring Boot defines `starters` used to limit the amount of manual dependency configuration that you have to do 
- to get a project up and run it quickly (https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#using-boot-starter)
+ * Spring Boot defines [starters](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#using-boot-starter) 
+ used to limit the amount of manual dependency configuration that you have to do to get a project up and run it quickly 
  * Spring Boot supports `auto-configuration` attempts to automatically configure your Spring application 
  with "Opinionated Defaults Configuration":
    * app will use `H2` in-memory database if you have JAR file `h2.jar` in classpath and have configured no other `DataSource` beans,
