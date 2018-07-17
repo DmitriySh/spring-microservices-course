@@ -20,7 +20,7 @@ They will need minimal or zero configuration.
  	* Undertow 1.4(2.0) (spring-boot-starter-undertow)
     * or embedded reactive HTTP server (spring-boot-starter-reactor-netty)
 
- * Spring Boot defines [starters](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#using-boot-starter) 
+ * Spring Boot defines [starters](https://docs.spring.io/spring-boot/docs/2.0.x/reference/htmlsingle/#using-boot-starter) 
  used to limit the amount of manual dependency configuration that you have to do to get a project up and run it quickly 
  * Spring Boot supports `auto-configuration` attempts to automatically configure your Spring application 
  with "Opinionated Defaults Configuration":
@@ -28,9 +28,9 @@ They will need minimal or zero configuration.
    * app will automatically configure JPA if you annotated your JPA beans with `@Entity` and don't have a `persistence.xml` file
    * and others ...
  * Power of annotations that could replace set of separated annotations ([@SpringBootApplication](https://docs.spring.io/spring-boot/docs/2.0.x/reference/html/using-boot-using-springbootapplication-annotation.html) = [@Configuration](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/context/annotation/Configuration.html) + [@ComponentScan](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/context/annotation/ComponentScan.html) + [@EnableAutoConfiguration](https://docs.spring.io/spring-boot/docs/2.0.x/api/org/springframework/boot/autoconfigure/EnableAutoConfiguration.html))
- * You can start to define your own configuration to replace specific parts of the [auto-configuration](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#using-boot-auto-configuration),   
+ * You can start to define your own configuration to replace specific parts of the [auto-configuration](https://docs.spring.io/spring-boot/docs/2.0.x/reference/htmlsingle/#using-boot-auto-configuration),   
 
- * Spring Boot could package app and dependencies into a single, executable JAR as an [init.d service](https://docs.spring.io/spring-boot/docs/current/reference/html/deployment-install.html)
+ * Spring Boot could package app and dependencies into a single, executable JAR as an [init.d service](https://docs.spring.io/spring-boot/docs/2.0.x/reference/html/deployment-install.html)
  * Plugin for Spring Boot defines a special JAR file layout where app classes locates into `BOOT-INF/classes` directory and Jar files of libraries into `BOOT-INF/lib`
  * [spring-boot-starter-test](https://docs.spring.io/spring-boot/docs/2.0.x/reference/html/boot-features-testing.html) provides a number of utilities and annotations to help when testing your application
 
