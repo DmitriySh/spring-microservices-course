@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.util.List;
 import java.util.function.Function;
 
+import static java.util.function.Function.identity;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
@@ -22,6 +23,16 @@ public class Quiz {
     private final Reader reader;
 
     /**
+     * Preparation stage
+     *
+     * @return self reference
+     */
+    public Quiz init() {
+        reader.init();
+        return this;
+    }
+
+    /**
      * Start the quiz
      *
      * @return count of right answers (score)
@@ -31,10 +42,10 @@ public class Quiz {
         log.info(reader.getMessage("intro.hello") + sep);
         try (BufferedReader input = new BufferedReader(new InputStreamReader(System.in))) {
             System.out.print(reader.getMessage("intro.name") + ": ");
-            String name = readAnswer(input, str -> str);
+            String name = readAnswer(input, identity());
 
             System.out.print(reader.getMessage("intro.surname") + ": ");
-            String surname = readAnswer(input, str -> str);
+            String surname = readAnswer(input, identity());
 
             System.out.println(String.format("%s %s %s!", reader.getMessage("intro.start.1"), name, surname));
             System.out.println(reader.getMessage("intro.start.2"));

@@ -10,7 +10,7 @@ import java.lang.invoke.MethodHandles;
 import java.util.List;
 import java.util.function.Function;
 
-import static org.apache.commons.lang3.StringUtils.*;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * Console client to make the quiz
@@ -73,8 +73,7 @@ public class Quiz {
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 final String read = input.readLine();
-                if (isBlank(read)) continue;
-                else return function.apply(trim(lowerCase(read)));
+                if (isNotBlank(read)) return function.apply(read.trim());
             } catch (Exception ignored) {
             }
         }
