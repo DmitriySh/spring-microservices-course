@@ -4,7 +4,7 @@ plugins {
 }
 
 dependencies {
-    compile('org.springframework.boot:spring-boot-starter')
+    compile 'org.springframework.boot:spring-boot-starter'
     compile 'org.springframework.shell:spring-shell-starter:2.0.1.RELEASE'
     annotationProcessor('org.springframework.boot:spring-boot-configuration-processor')
 
