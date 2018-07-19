@@ -31,4 +31,5 @@ hs_err_pid*
 *.class
 */logs/
 logs/
+*.log
 .java-version
