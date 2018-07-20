@@ -25,6 +25,6 @@ and annotations [@Configuration](https://docs.spring.io/spring/docs/5.0.x/javado
 [@Service](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/stereotype/Service.html)
 for configuration
 
-## Homework 3: [Quiz for students](https://github.com/DmitriySh/spring-microservices-course/tree/feature/03-spring-boot-start/03-spring-boot-start)
+## Homework 3: [Quiz for students](https://github.com/DmitriySh/spring-microservices-course/tree/master/03-spring-boot-start)
 Use class [SpringApplication](https://docs.spring.io/spring-boot/docs/2.0.x/reference/html/boot-features-spring-application.html) and annotation [@SpringBootApplication](https://docs.spring.io/spring-boot/docs/2.0.x/reference/html/using-boot-using-springbootapplication-annotation.html) for configuration
 
