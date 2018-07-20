@@ -1,5 +1,5 @@
 package ru.shishmakov.model;
 
 public enum State {
-    IDLE, START, FINISH
+    IDLE, RUN, FINISH
 }

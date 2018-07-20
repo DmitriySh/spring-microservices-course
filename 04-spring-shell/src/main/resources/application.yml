@@ -1,3 +1,4 @@
-# RU - russian language; EN or other - english language by default
+---
 application:
-  local: EN
+  local: EN # RU - russian language; EN or other - english language by default
+  state: IDLE

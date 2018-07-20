@@ -14,6 +14,7 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.core.annotation.Order;
 import org.springframework.shell.jline.PromptProvider;
 import org.springframework.stereotype.Component;
+import ru.shishmakov.model.State;
 import ru.shishmakov.service.Reader;
 
 import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
@@ -50,5 +51,6 @@ public class Main {
     @ConfigurationProperties("application")
     public static class ApplicationProperties {
         private String local;
+        private State state;
     }
 }
