@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
-import ru.shishmakov.Main.Application;
+import ru.shishmakov.Main.ApplicationProperties;
 import ru.shishmakov.model.Question;
 
 import java.util.*;
@@ -23,9 +23,9 @@ public class Reader {
     private final Locale local;
     private final List<Question> questions = new ArrayList<>();
 
-    public Reader(MessageSource messages, Application application) {
+    public Reader(MessageSource messages, ApplicationProperties properties) {
         this.messages = messages;
-        this.local = buildLocal(application.getLocal());
+        this.local = buildLocal(properties.getLocal());
     }
 
     /**

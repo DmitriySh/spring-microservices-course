@@ -48,7 +48,7 @@ public class Main {
     @Setter
     @Component
     @ConfigurationProperties("application")
-    public static class Application {
+    public static class ApplicationProperties {
         private String local;
     }
 }

@@ -6,7 +6,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import ru.shishmakov.Main.Application;
+import ru.shishmakov.Main.ApplicationProperties;
 import ru.shishmakov.model.Question;
 
 import java.util.List;
@@ -23,23 +23,23 @@ public class ResourceBundleTest {
     @Mock
     private MessageSource messageSource;
     @Mock
-    private Application application;
+    private ApplicationProperties properties;
 
     @Test
     public void readerShouldHaveRussianLocal() {
-        doReturn("RU").when(application).getLocal();
+        doReturn("RU").when(properties).getLocal();
 
-        Reader reader = new Reader(messageSource, application);
+        Reader reader = new Reader(messageSource, properties);
 
         assertEquals("Locales are not equal", new Locale("ru", "RU"), reader.getLocal());
     }
 
     @Test
     public void readerShouldHaveEnglishLocal() {
-        doReturn("EN").doReturn("default local").when(application).getLocal();
+        doReturn("EN").doReturn("default local").when(properties).getLocal();
 
-        Reader reader1 = new Reader(messageSource, application);
-        Reader reader2 = new Reader(messageSource, application);
+        Reader reader1 = new Reader(messageSource, properties);
+        Reader reader2 = new Reader(messageSource, properties);
 
         assertEquals("Locales are not equal", ENGLISH, reader1.getLocal());
         assertEquals("Locales are not equal", ENGLISH, reader2.getLocal());
@@ -47,9 +47,9 @@ public class ResourceBundleTest {
 
     @Test
     public void readerShouldHaveRussianQuestions() {
-        doReturn("RU").when(application).getLocal();
+        doReturn("RU").when(properties).getLocal();
 
-        Reader reader = new Reader(buildRealMessageSource(), application);
+        Reader reader = new Reader(buildRealMessageSource(), properties);
         reader.init();
         List<Question> questions = reader.getQuestions();
         assertFalse("Questions should be", questions.isEmpty());
@@ -62,9 +62,9 @@ public class ResourceBundleTest {
 
     @Test
     public void readerShouldHaveEnglishQuestions() {
-        doReturn("default local").when(application).getLocal();
+        doReturn("default local").when(properties).getLocal();
 
-        Reader reader = new Reader(buildRealMessageSource(), application);
+        Reader reader = new Reader(buildRealMessageSource(), properties);
         reader.init();
         List<Question> questions = reader.getQuestions();
         assertFalse("Questions should be", questions.isEmpty());
