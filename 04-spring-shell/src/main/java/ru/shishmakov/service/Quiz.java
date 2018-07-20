@@ -34,19 +34,19 @@ public class Quiz implements Quit.Command {
     @ShellMethod(value = "Number of answer.")
     public void number(int number) {
         if (context.getState() == RUN) context.putData("number", number);
-        doAfter();
+        onCommand();
     }
 
     @ShellMethod(value = "Your name.")
     public void name(String text) {
         context.putData("name", text.trim());
-        doAfter();
+        onCommand();
     }
 
     @ShellMethod(value = "Your surname.")
     public void surname(String text) {
         context.putData("surname", text.trim());
-        doAfter();
+        onCommand();
     }
 
     @ShellMethod(value = "Exit the quiz.", key = {"exit", "quit"})
@@ -54,7 +54,7 @@ public class Quiz implements Quit.Command {
         finish();
     }
 
-    void doAfter() {
+    void onCommand() {
         switch (context.getState()) {
             case IDLE: {
                 if (context.containsData("name") && context.containsData("surname")) {
@@ -63,19 +63,20 @@ public class Quiz implements Quit.Command {
                     System.out.println(String.format("%s %s %s!", reader.getMessage("intro.start.1"), name, surname));
                     System.out.println(reader.getMessage("intro.start.2"));
                     context.setState(RUN);
-                    doAfter();
+                    onCommand();
                 } else System.out.print(reader.getMessage("intro.name&surname") + context.getSep());
                 break;
             }
             case RUN: {
                 if (context.containsData("number")) {
                     Question q = reader.getQuestions().get(context.readIntData("qid"));
-                    if (q.checkAnswer(context.removeIntData("number"))) context.incrementIntData("score");
+                    if (q.checkAnswer(context.removeIntData("number")))
+                        context.incrementIntData("score");
                     context.incrementIntData("qid");
                 }
                 if (Objects.equals(context.readIntData("qid"), reader.getQuestions().size())) {
                     context.setState(FINISH);
-                    doAfter();
+                    onCommand();
                 } else {
                     Question q = reader.getQuestions().get(context.readIntData("qid"));
                     System.out.println(String.format("%s%s %s: %s", context.getSep(),
@@ -90,7 +91,7 @@ public class Quiz implements Quit.Command {
         }
     }
 
-    private void finish() {
+    void finish() {
         System.out.println(String.format("%s%s: %s/%s", context.getSep(),
                 reader.getMessage("quiz.result"), context.readIntData("score"), reader.getQuestions().size()));
         System.out.println(reader.getMessage("quiz.result.bye"));
