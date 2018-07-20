@@ -2,21 +2,21 @@ package ru.shishmakov.service;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import ru.shishmakov.Main.ApplicationProperties;
 import ru.shishmakov.model.State;
 
-import javax.validation.constraints.Null;
-import java.util.AbstractMap;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toMap;
-import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
+/**
+ * Holds the user state of the quiz
+ */
 @Service
-@Scope(SCOPE_PROTOTYPE)
 public class QuizContext {
     private final Map<String, Object> data;
     @Getter
@@ -28,32 +28,26 @@ public class QuizContext {
     public QuizContext(ApplicationProperties properties) {
         this.state = properties.getState();
         this.sep = System.lineSeparator();
-        this.data = Stream.of(new AbstractMap.SimpleEntry<>("qid", 0), new AbstractMap.SimpleEntry<>("score", 0))
-                .collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
+        this.data = Stream.of(new SimpleEntry<>("qid", 0), new SimpleEntry<>("score", 0))
+                .collect(toMap(Entry::getKey, Entry::getValue));
     }
 
-    @Null Integer readIntData(String key) {
-        try {
-            return (Integer) data.get(key);
-        } catch (Exception ignored) {
-            return null;
-        }
+    Integer readIntData(String key) {
+        return (Integer) data.get(key);
+
     }
 
-    @Null String readStrData(String key) {
-        try {
-            return (String) data.get(key);
-        } catch (Exception ignored) {
-            return null;
-        }
+
+    String readStrData(String key) {
+        return (String) data.get(key);
     }
 
     boolean containsData(String key) {
         return data.containsKey(key);
     }
 
-    void removeData(String key) {
-        data.remove(key);
+    String removeStrData(String key) {
+        return (String) data.remove(key);
     }
 
     Integer removeIntData(String key) {
