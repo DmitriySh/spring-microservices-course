@@ -5,11 +5,15 @@
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="quiz" class="ru.shishmakov.service.Quiz">
-        <constructor-arg ref="reader"/>
+        <constructor-arg ref="fileReader"/>
     </bean>
 
-    <bean id="reader" class="ru.shishmakov.service.Reader" init-method="init">
+    <bean id="fileReader" class="ru.shishmakov.service.ReaderFileImpl" init-method="init">
         <constructor-arg name="source" value="#{ systemProperties['question.file'] ?: 'questions.csv' }"/>
+    </bean>
+
+    <bean id="socketReader" class="ru.shishmakov.service.ReaderSocketImpl">
+        <constructor-arg name="source" value="#{ systemProperties['question.url'] ?: 'url' }"/>
     </bean>
 
 </beans>
