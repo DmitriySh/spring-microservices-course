@@ -56,39 +56,45 @@ public class Quiz implements Quit.Command {
 
     void onCommand() {
         switch (context.getState()) {
-            case IDLE: {
-                if (context.containsData("name") && context.containsData("surname")) {
-                    String name = context.readStrData("name");
-                    String surname = context.readStrData("surname");
-                    System.out.println(String.format("%s %s %s!", reader.getMessage("intro.start.1"), name, surname));
-                    System.out.println(reader.getMessage("intro.start.2"));
-                    context.setState(RUN);
-                    onCommand();
-                } else System.out.print(reader.getMessage("intro.name&surname") + context.getSep());
+            case IDLE:
+                processIdle();
                 break;
-            }
-            case RUN: {
-                if (context.containsData("number")) {
-                    Question q = reader.getQuestions().get(context.readIntData("qid"));
-                    if (q.checkAnswer(context.removeIntData("number")))
-                        context.incrementIntData("score");
-                    context.incrementIntData("qid");
-                }
-                if (Objects.equals(context.readIntData("qid"), reader.getQuestions().size())) {
-                    context.setState(FINISH);
-                    onCommand();
-                } else {
-                    Question q = reader.getQuestions().get(context.readIntData("qid"));
-                    System.out.println(String.format("%s%s %s: %s", context.getSep(),
-                            reader.getMessage("quiz.question"), context.readIntData("qid") + 1, q.getTitle()));
-                    System.out.println(String.format("%s: %s", reader.getMessage("quiz.answers"), getSolutions(q)));
-                    System.out.print(reader.getMessage("quiz.type.answer") + context.getSep());
-                }
+            case RUN:
+                processRun();
                 break;
-            }
             case FINISH:
                 finish();
         }
+    }
+
+    private void processRun() {
+        if (context.containsData("number")) {
+            Question q = reader.getQuestions().get(context.readIntData("qid"));
+            if (q.checkAnswer(context.removeIntData("number")))
+                context.incrementIntData("score");
+            context.incrementIntData("qid");
+        }
+        if (Objects.equals(context.readIntData("qid"), reader.getQuestions().size())) {
+            context.setState(FINISH);
+            onCommand(); // go on
+        } else {
+            Question q = reader.getQuestions().get(context.readIntData("qid"));
+            System.out.println(String.format("%s%s %s: %s", context.getSep(),
+                    reader.getMessage("quiz.question"), context.readIntData("qid") + 1, q.getTitle()));
+            System.out.println(String.format("%s: %s", reader.getMessage("quiz.answers"), getSolutions(q)));
+            System.out.print(reader.getMessage("quiz.type.answer") + context.getSep());
+        }
+    }
+
+    private void processIdle() {
+        if (context.containsData("name") && context.containsData("surname")) {
+            String name = context.readStrData("name");
+            String surname = context.readStrData("surname");
+            System.out.println(String.format("%s %s %s!", reader.getMessage("intro.start.1"), name, surname));
+            System.out.println(reader.getMessage("intro.start.2"));
+            context.setState(RUN);
+            onCommand(); // go on
+        } else System.out.print(reader.getMessage("intro.name&surname") + context.getSep());
     }
 
     void finish() {
