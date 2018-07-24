@@ -79,15 +79,15 @@ public class QuizTest {
 
     @Test
     public void readerShouldHaveRussianLocal() {
-        Reader reader = new Reader(mock(MessageSource.class), "ru");
+        ReaderFileImpl reader = new ReaderFileImpl(mock(MessageSource.class), "ru");
 
         assertEquals("Locales are not equal", new Locale("ru", "RU"), reader.getLocal());
     }
 
     @Test
     public void readerShouldHaveEnglishLocal() {
-        Reader reader1 = new Reader(mock(MessageSource.class), "en");
-        Reader reader2 = new Reader(mock(MessageSource.class), "default local");
+        ReaderFileImpl reader1 = new ReaderFileImpl(mock(MessageSource.class), "en");
+        ReaderFileImpl reader2 = new ReaderFileImpl(mock(MessageSource.class), "default local");
 
         assertEquals("Locales are not equal", ENGLISH, reader1.getLocal());
         assertEquals("Locales are not equal", ENGLISH, reader2.getLocal());
@@ -99,7 +99,7 @@ public class QuizTest {
         messageSource.setBasename("/i18n/bundle");
         messageSource.setDefaultEncoding("UTF-8");
 
-        Reader reader = new Reader(messageSource, "ru");
+        ReaderFileImpl reader = new ReaderFileImpl(messageSource, "ru");
         reader.init();
         List<Question> questions = reader.getQuestions();
         assertFalse("Questions should be", questions.isEmpty());
@@ -116,7 +116,7 @@ public class QuizTest {
         messageSource.setBasename("/i18n/bundle");
         messageSource.setDefaultEncoding("UTF-8");
 
-        Reader reader = new Reader(messageSource, "default local");
+        ReaderFileImpl reader = new ReaderFileImpl(messageSource, "default local");
         reader.init();
         List<Question> questions = reader.getQuestions();
         assertFalse("Questions should be", questions.isEmpty());
