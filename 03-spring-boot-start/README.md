@@ -1,6 +1,6 @@
 Quiz for students
 =======
-Use Spring Boot 2.0.x.<br/>
+Use `Spring Boot 2.x`.<br/>
 Spring Boot makes it easy to create stand-alone, production-grade Spring-based applications that you can run quickly. 
 They will need minimal or zero configuration.
 
@@ -58,6 +58,7 @@ ________        .__
 /   \_/.  \  |  /  |/    /
 \_____\ \_/____/|__/_____ \
        \__>              \/
+Dmitriy Shishmakov | Spring Boot
 
 13:56:18.062 [main] INFO  r.s.Main - Starting Main on shishmakov.local with PID 43209 (/Users/dima/programming/git/otus/spring-course/spring-microservices-course/03-spring-boot-start/build/libs/03-spring-boot-start-all-0.1.jar started by dima in /Users/dima/programming/git/otus/spring-course/spring-microservices-course/03-spring-boot-start/build/libs)
 13:56:18.066 [main] DEBUG r.s.Main - Running with Spring Boot v2.0.3.RELEASE, Spring v5.0.7.RELEASE

@@ -1,0 +1,21 @@
+plugins {
+    id 'org.springframework.boot' version '2.0.3.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.5.RELEASE' // + automatically import the spring-boot-dependencies bom from the version of Spring Boot
+}
+
+dependencies {
+    compile 'org.springframework.boot:spring-boot-starter'
+    compile 'org.springframework.shell:spring-shell-starter:2.0.1.RELEASE'
+    annotationProcessor('org.springframework.boot:spring-boot-configuration-processor')
+
+    compileOnly 'org.projectlombok:lombok:1.18.0'
+    annotationProcessor 'org.projectlombok:lombok:1.18.0'
+
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+bootJar {
+    baseName = project.name + '-all'
+    enabled = true
+    launchScript()
+}

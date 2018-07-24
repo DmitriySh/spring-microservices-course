@@ -62,6 +62,10 @@ public class Reader {
         return messages.getMessage(key, null, EMPTY, local);
     }
 
+    public String getMessage(String key, String defaultMessage) {
+        return messages.getMessage(key, null, defaultMessage, local);
+    }
+
     private Locale buildLocal(String local) {
         return Optional.ofNullable(local)
                 .map(String::trim)

@@ -1,6 +1,6 @@
 Quiz for students
 =======
-Use Spring Core 5.x.
+Use `Spring Core 5.x`.
 
 ## Description
  - The program stores questions and answers into a bundle of properties files (rus and eng)
