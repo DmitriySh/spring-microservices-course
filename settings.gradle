@@ -13,4 +13,5 @@ include '01-spring-xml'
 include '02-spring-annotation'
 include '03-spring-boot-start'
 include '04-spring-shell'
+include '05-spring-jdbc'
 
