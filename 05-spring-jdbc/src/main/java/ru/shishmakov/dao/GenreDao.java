@@ -6,7 +6,7 @@ import ru.shishmakov.domain.Genre;
 import java.util.List;
 
 @Repository
-public class GenreRepository implements IRepository<Genre> {
+public class GenreDao implements Dao<Genre> {
     @Override
     public void save(Genre genre) {
 

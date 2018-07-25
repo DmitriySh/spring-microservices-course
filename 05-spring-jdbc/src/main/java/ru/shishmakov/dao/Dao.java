@@ -2,7 +2,7 @@ package ru.shishmakov.dao;
 
 import java.util.List;
 
-public interface IRepository<T> {
+public interface Dao<T> {
 
     void save(T genre);
 
