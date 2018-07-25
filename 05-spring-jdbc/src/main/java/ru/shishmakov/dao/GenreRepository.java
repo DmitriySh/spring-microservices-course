@@ -1,10 +1,12 @@
 package ru.shishmakov.dao;
 
+import org.springframework.stereotype.Repository;
 import ru.shishmakov.domain.Genre;
 
 import java.util.List;
 
-public class GenreRepository implements GenericRepository<Genre> {
+@Repository
+public class GenreRepository implements IRepository<Genre> {
     @Override
     public void save(Genre genre) {
 

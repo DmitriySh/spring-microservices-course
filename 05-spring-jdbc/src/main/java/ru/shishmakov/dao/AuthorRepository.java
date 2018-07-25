@@ -6,7 +6,7 @@ import ru.shishmakov.domain.Author;
 import java.util.List;
 
 @Repository
-public class AuthorRepository implements GenericRepository<Author> {
+public class AuthorRepository implements IRepository<Author> {
     @Override
     public void save(Author genre) {
 

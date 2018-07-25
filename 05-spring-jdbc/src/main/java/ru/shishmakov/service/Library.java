@@ -1,20 +1,78 @@
 package ru.shishmakov.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
+import ru.shishmakov.dao.AuthorType;
+import ru.shishmakov.dao.BookType;
+import ru.shishmakov.dao.GenreType;
+import ru.shishmakov.dao.IRepository;
+import ru.shishmakov.domain.Author;
+import ru.shishmakov.domain.Book;
+import ru.shishmakov.domain.Genre;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 
+import static java.util.stream.Collectors.joining;
+
+@RequiredArgsConstructor
 @ShellComponent
 public class Library {
+    @GenreType
+    private final IRepository<Genre> genreRepository;
+    @BookType
+    private final IRepository<Book> bookRepository;
+    @AuthorType
+    private final IRepository<Author> authorRepository;
 
     @PostConstruct
     public void init() {
-        System.out.print("\nWelcome to demo Library!\n");
+        System.out.print("\n\tWelcome to demo Library!\n");
     }
 
-    @ShellMethod(value = "Number of answer.")
-    public void number(int number) {
+    @ShellMethod(value = "Get all books.")
+    public void getAllBooks() {
+        System.out.println("All books: " + bookRepository.getAll().stream().map(Book::toString).collect(joining(",")));
+    }
+
+    @ShellMethod(value = "Get all authors.")
+    public void getAllAuthors() {
+        System.out.println("All authors: " + authorRepository.getAll().stream().map(Author::toString).collect(joining(",")));
+    }
+
+    @ShellMethod(value = "Get all genres.")
+    public void getAllGenres() {
+        System.out.println("All genres: " + genreRepository.getAll().stream().map(Genre::toString).collect(joining(",")));
+    }
+
+    @ShellMethod(value = ".")
+    public void getBookAuthors(int bookId) {
+        Book book = bookRepository.getById(bookId);
+        System.out.println("Book: " + book.getTitle());
+        System.out.println("Authors: " + book.getAuthors().stream().map(Author::toString).collect(joining(",")));
+    }
+
+    @ShellMethod(value = ".")
+    public void getBookGenres(int bookId) {
+        Book book = bookRepository.getById(bookId);
+        System.out.println("Book: " + book.getTitle());
+        System.out.println("Genres: " + book.getGenres().stream().map(Genre::toString).collect(joining(",")));
+    }
+
+    @ShellMethod(value = ".")
+    public void createBook(String title, List<Integer> authors, List<String> genres) {
+        List<Author> authorList = null;
+        List<Genre> genreList = null;
+        Book book = new Book(/*???*/null, title, authorList, genreList);
+        bookRepository.save(book);
+        // log
+    }
+
+    @ShellMethod(value = ".")
+    public void replaceBook(int number) {
 
     }
+
+
 }
