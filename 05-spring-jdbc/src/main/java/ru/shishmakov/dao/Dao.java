@@ -10,7 +10,7 @@ public interface Dao<T> {
 
     void delete(T genre);
 
-    T getById(int id);
+    T getById(long id);
 
     Collection<T> getAll();
 }

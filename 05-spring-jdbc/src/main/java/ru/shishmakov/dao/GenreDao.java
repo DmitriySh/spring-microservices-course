@@ -30,7 +30,7 @@ public class GenreDao implements Dao<Genre> {
     }
 
     @Override
-    public Genre getById(int id) {
+    public Genre getById(long id) {
         return null;
     }
 

@@ -30,7 +30,7 @@ public class AuthorDao implements Dao<Author> {
     }
 
     @Override
-    public Author getById(int id) {
+    public Author getById(long id) {
         return null;
     }
 

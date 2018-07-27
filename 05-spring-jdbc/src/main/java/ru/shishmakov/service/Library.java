@@ -50,18 +50,18 @@ public class Library {
         System.out.println(genreDao.getAll().stream().map(Genre::toString).collect(joining("\n")));
     }
 
-    @ShellMethod(value = ".")
-    public void getBookAuthors(int bookId) {
+    @ShellMethod(value = "Get authors of the book.")
+    public void getBookAuthors(long bookId) {
         Book book = bookDao.getById(bookId);
         System.out.println("Book: " + book.getTitle());
-        System.out.println("Authors: " + book.getAuthors().stream().map(Author::toString).collect(joining(",")));
+        System.out.println("Authors:\n" + book.getAuthors().stream().map(Author::toString).collect(joining("\n")));
     }
 
-    @ShellMethod(value = ".")
-    public void getBookGenres(int bookId) {
+    @ShellMethod(value = "Get genres of the book.")
+    public void getBookGenres(long bookId) {
         Book book = bookDao.getById(bookId);
         System.out.println("Book: " + book.getTitle());
-        System.out.println("Genres: " + book.getGenres().stream().map(Genre::toString).collect(joining(",")));
+        System.out.println("Genres:\n" + book.getGenres().stream().map(Genre::toString).collect(joining("\n")));
     }
 
     @ShellMethod(value = ".")
