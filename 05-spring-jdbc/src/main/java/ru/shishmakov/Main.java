@@ -11,8 +11,7 @@ import static org.springframework.util.StringUtils.concatenateStringArrays;
 public class Main {
 
     public static void main(String[] args) throws SQLException {
-//        Console.main(args);
-        String[] commands = {"--spring.shell.command.script.enabled=false"};
+        String[] commands = {"--spring.shell.command.quit.enabled=false", "--spring.shell.command.script.enabled=false"};
         SpringApplication.run(Main.class, concatenateStringArrays(args, commands));
     }
 }

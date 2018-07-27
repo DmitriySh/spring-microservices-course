@@ -78,5 +78,10 @@ public class Library {
 
     }
 
+    @ShellMethod(value = "Exit the library.", key = {"exit", "quit"})
+    public void exit() {
+        System.out.println("\n\tGoodbye! =)\n");
+        System.exit(0);
+    }
 
 }
