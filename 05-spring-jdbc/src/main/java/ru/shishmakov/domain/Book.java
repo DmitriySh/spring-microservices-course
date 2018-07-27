@@ -1,12 +1,10 @@
 package ru.shishmakov.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
-import java.util.List;
+import java.util.Set;
 
+@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,7 +12,7 @@ public class Book {
     private Long id;
     private String title;
     @ToString.Exclude
-    private List<Author> authors;
+    private Set<Author> authors;
     @ToString.Exclude
-    private List<Genre> genres;
+    private Set<Genre> genres;
 }

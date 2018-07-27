@@ -9,6 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Author {
     private long id;
-    private String name;
-    private String surname;
+    private String fullname;
 }

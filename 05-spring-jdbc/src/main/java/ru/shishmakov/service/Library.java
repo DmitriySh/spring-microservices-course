@@ -13,9 +13,13 @@ import ru.shishmakov.domain.Genre;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Set;
 
 import static java.util.stream.Collectors.joining;
 
+/**
+ * User client
+ */
 @RequiredArgsConstructor
 @ShellComponent
 public class Library {
@@ -28,22 +32,22 @@ public class Library {
 
     @PostConstruct
     public void init() {
-        System.out.print("\n\tWelcome to demo Library!\n");
+        System.out.print("\n\tWelcome to demo Library!\n\n");
     }
 
-    @ShellMethod(value = "Get all books.")
+    @ShellMethod(value = "Get all books.", key = "get-books")
     public void getAllBooks() {
-        System.out.println("All books: " + bookDao.getAll().stream().map(Book::toString).collect(joining(",")));
+        System.out.println(bookDao.getAll().stream().map(Book::toString).collect(joining("\n")));
     }
 
-    @ShellMethod(value = "Get all authors.")
+    @ShellMethod(value = "Get all authors.", key = "get-authors")
     public void getAllAuthors() {
-        System.out.println("All authors: " + authorDao.getAll().stream().map(Author::toString).collect(joining(",")));
+        System.out.println(authorDao.getAll().stream().map(Author::toString).collect(joining("\n")));
     }
 
-    @ShellMethod(value = "Get all genres.")
+    @ShellMethod(value = "Get all genres.", key = "get-genres")
     public void getAllGenres() {
-        System.out.println("All genres: " + genreDao.getAll().stream().map(Genre::toString).collect(joining(",")));
+        System.out.println(genreDao.getAll().stream().map(Genre::toString).collect(joining("\n")));
     }
 
     @ShellMethod(value = ".")
@@ -62,8 +66,8 @@ public class Library {
 
     @ShellMethod(value = ".")
     public void createBook(String title, List<Integer> authors, List<String> genres) {
-        List<Author> authorList = null;
-        List<Genre> genreList = null;
+        Set<Author> authorList = null;
+        Set<Genre> genreList = null;
         Book book = new Book(/*???*/null, title, authorList, genreList);
         bookDao.save(book);
         // log

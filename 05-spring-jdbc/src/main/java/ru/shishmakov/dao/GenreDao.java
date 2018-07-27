@@ -3,7 +3,7 @@ package ru.shishmakov.dao;
 import org.springframework.stereotype.Repository;
 import ru.shishmakov.domain.Genre;
 
-import java.util.List;
+import java.util.Collection;
 
 @Repository
 public class GenreDao implements Dao<Genre> {
@@ -28,7 +28,7 @@ public class GenreDao implements Dao<Genre> {
     }
 
     @Override
-    public List<Genre> getAll() {
+    public Collection<Genre> getAll() {
         return null;
     }
 }

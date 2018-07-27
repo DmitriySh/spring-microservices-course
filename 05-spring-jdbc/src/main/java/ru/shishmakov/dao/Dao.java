@@ -1,6 +1,6 @@
 package ru.shishmakov.dao;
 
-import java.util.List;
+import java.util.Collection;
 
 public interface Dao<T> {
 
@@ -12,5 +12,5 @@ public interface Dao<T> {
 
     T getById(int id);
 
-    List<T> getAll();
+    Collection<T> getAll();
 }

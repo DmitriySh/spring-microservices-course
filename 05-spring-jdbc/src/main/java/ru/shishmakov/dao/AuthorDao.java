@@ -3,7 +3,7 @@ package ru.shishmakov.dao;
 import org.springframework.stereotype.Repository;
 import ru.shishmakov.domain.Author;
 
-import java.util.List;
+import java.util.Collection;
 
 @Repository
 public class AuthorDao implements Dao<Author> {
@@ -28,7 +28,7 @@ public class AuthorDao implements Dao<Author> {
     }
 
     @Override
-    public List<Author> getAll() {
+    public Collection<Author> getAll() {
         return null;
     }
 }
