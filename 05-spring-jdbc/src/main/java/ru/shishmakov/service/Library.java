@@ -35,6 +35,7 @@ public class Library {
     private final Dao<Book> bookDao;
     @AuthorType
     private final Dao<Author> authorDao;
+    private volatile Console console;
 
     @PostConstruct
     public void init() {
@@ -84,8 +85,17 @@ public class Library {
 
     }
 
+    @ShellMethod(value = "Run H2 database console.")
+    public void h2() throws SQLException {
+        if (console == null) {
+            console = new Console();
+            console.runTool();
+        }
+    }
+
     @ShellMethod(value = "Exit the library.", key = {"exit", "quit"})
     public void exit() {
+        ofNullable(console).ifPresent(Console::shutdown);
         System.out.println("\n\tGoodbye! =)\n");
         System.exit(0);
     }
