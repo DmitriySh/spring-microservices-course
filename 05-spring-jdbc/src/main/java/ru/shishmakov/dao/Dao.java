@@ -12,7 +12,7 @@ public interface Dao<T> {
         throw new UnsupportedOperationException();
     }
 
-    default void delete(T genre) {
+    default void delete(long id) {
         throw new UnsupportedOperationException();
     }
 

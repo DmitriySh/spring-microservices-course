@@ -15,21 +15,6 @@ public class AuthorDao implements Dao<Author> {
     private final JdbcOperations jdbc;
 
     @Override
-    public void save(Author genre) {
-
-    }
-
-    @Override
-    public void update(Author genre) {
-
-    }
-
-    @Override
-    public void delete(Author genre) {
-
-    }
-
-    @Override
     public Author getById(long id) {
         return null;
     }

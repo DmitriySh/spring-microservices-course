@@ -71,7 +71,7 @@ public class Library {
         System.out.println("Genres:\n" + book.getGenres().stream().map(Genre::toString).collect(joining("\n")));
     }
 
-    @ShellMethod(value = "Create new book")
+    @ShellMethod(value = "Create new book.")
     public void createBook(String title, Set<Long> authorIds, List<Long> genreIds) {
         bookDao.save(Book.builder()
                 .title(title)
@@ -80,9 +80,9 @@ public class Library {
                 .build());
     }
 
-    @ShellMethod(value = ".")
-    public void replaceBook(int number) {
-
+    @ShellMethod(value = "Delete the book.")
+    public void deleteBook(long bookId) {
+        bookDao.delete(bookId);
     }
 
     @ShellMethod(value = "Run H2 database console.")

@@ -55,8 +55,15 @@ public class BookDao implements Dao<Book> {
     }
 
     @Override
-    public void delete(Book book) {
-
+    public void delete(long bookId) {
+        transaction.execute(new TransactionCallbackWithoutResult() {
+            @Override
+            protected void doInTransactionWithoutResult(TransactionStatus status) {
+                jdbcParameter.update("delete from book_author where book_id = :book_id", new MapSqlParameterSource("book_id", bookId));
+                jdbcParameter.update("delete from book_genre where book_id = :book_id", new MapSqlParameterSource("book_id", bookId));
+                jdbcParameter.update("delete from book where id = :book_id", new MapSqlParameterSource("book_id", bookId));
+            }
+        });
     }
 
     @Override

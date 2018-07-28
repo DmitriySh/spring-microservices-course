@@ -15,21 +15,6 @@ public class GenreDao implements Dao<Genre> {
     private final JdbcOperations jdbc;
 
     @Override
-    public void save(Genre genre) {
-
-    }
-
-    @Override
-    public void update(Genre genre) {
-
-    }
-
-    @Override
-    public void delete(Genre genre) {
-
-    }
-
-    @Override
     public Genre getById(long id) {
         return null;
     }
