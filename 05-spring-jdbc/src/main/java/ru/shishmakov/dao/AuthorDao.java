@@ -15,11 +15,6 @@ public class AuthorDao implements Dao<Author> {
     private final JdbcOperations jdbc;
 
     @Override
-    public Author getById(long id) {
-        return null;
-    }
-
-    @Override
     public Collection<Author> getAll() {
         return jdbc.query("select * from author", rs -> {
             List<Author> result = new ArrayList<>();

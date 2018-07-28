@@ -15,11 +15,6 @@ public class GenreDao implements Dao<Genre> {
     private final JdbcOperations jdbc;
 
     @Override
-    public Genre getById(long id) {
-        return null;
-    }
-
-    @Override
     public Collection<Genre> getAll() {
         return jdbc.query("select * from genre", rs -> {
             List<Genre> result = new ArrayList<>();
