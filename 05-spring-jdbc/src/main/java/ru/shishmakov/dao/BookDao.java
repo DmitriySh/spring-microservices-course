@@ -5,6 +5,8 @@ import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
@@ -13,10 +15,14 @@ import ru.shishmakov.domain.Author;
 import ru.shishmakov.domain.Book;
 import ru.shishmakov.domain.Genre;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 
 import static java.util.Collections.singletonList;
 import static java.util.Objects.isNull;
+import static java.util.Objects.requireNonNull;
 import static java.util.Optional.ofNullable;
 import static org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils.createBatch;
 
@@ -32,10 +38,10 @@ public class BookDao implements Dao<Book> {
         transaction.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus status) {
-                jdbcParameter.update("insert into book (title) values (:title)", new MapSqlParameterSource("title", book.getTitle()));
-                book.setId(jdbcParameter.queryForObject("select id from book where title ilike :title",
-                        new MapSqlParameterSource("title", book.getTitle()),
-                        Long.class));
+                KeyHolder keyHolder = new GeneratedKeyHolder();
+                jdbcParameter.update("insert into book (title) values (:title)",
+                        new MapSqlParameterSource("title", book.getTitle()), keyHolder);
+                book.setId(requireNonNull(keyHolder.getKey()).longValue());
 
                 jdbcParameter.batchUpdate("insert into book_author (book_id, author_id) values (:book_id, :author_id)",
                         createBatch(book.getAuthors().stream()
@@ -68,7 +74,7 @@ public class BookDao implements Dao<Book> {
 
     @Override
     public Book getById(long id) {
-        return Objects.requireNonNull(jdbcParameter.query(
+        return requireNonNull(jdbcParameter.query(
                 "select b.id as book_id, b.title as book_title, ba.author_id as author_id, a.fullname as author_fullname, bg.genre_id as genre_id, g.name as genre_name " +
                         " from " +
                         " (select * from book where book.id = :book_id ) as b " +
@@ -86,7 +92,7 @@ public class BookDao implements Dao<Book> {
 
     @Override
     public Collection<Book> getAll() {
-        return Objects.requireNonNull(jdbc.query(
+        return requireNonNull(jdbc.query(
                 "select b.id as book_id, b.title as book_title, ba.author_id as author_id, a.fullname as author_fullname, bg.genre_id as genre_id, g.name as genre_name " +
                         " from book as b " +
                         "   left join book_author as ba " +
