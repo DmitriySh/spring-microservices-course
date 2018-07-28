@@ -4,13 +4,23 @@ import java.util.Collection;
 
 public interface Dao<T> {
 
-    void save(T genre);
+    default void save(T genre) {
+        throw new UnsupportedOperationException();
+    }
 
-    void update(T genre);
+    default void update(T genre) {
+        throw new UnsupportedOperationException();
+    }
 
-    void delete(T genre);
+    default void delete(T genre) {
+        throw new UnsupportedOperationException();
+    }
 
-    T getById(long id);
+    default T getById(long id) {
+        throw new UnsupportedOperationException();
+    }
 
-    Collection<T> getAll();
+    default Collection<T> getAll() {
+        throw new UnsupportedOperationException();
+    }
 }

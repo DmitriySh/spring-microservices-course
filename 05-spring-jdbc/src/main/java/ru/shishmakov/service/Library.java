@@ -1,6 +1,7 @@
 package ru.shishmakov.service;
 
 import lombok.RequiredArgsConstructor;
+import org.h2.tools.Console;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import ru.shishmakov.dao.AuthorType;
@@ -12,10 +13,15 @@ import ru.shishmakov.domain.Book;
 import ru.shishmakov.domain.Genre;
 
 import javax.annotation.PostConstruct;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
 
+import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toSet;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+
 
 /**
  * User client
@@ -64,13 +70,13 @@ public class Library {
         System.out.println("Genres:\n" + book.getGenres().stream().map(Genre::toString).collect(joining("\n")));
     }
 
-    @ShellMethod(value = ".")
-    public void createBook(String title, List<Integer> authors, List<String> genres) {
-        Set<Author> authorList = null;
-        Set<Genre> genreList = null;
-        Book book = new Book(/*???*/null, title, authorList, genreList);
-        bookDao.save(book);
-        // log
+    @ShellMethod(value = "Create new book")
+    public void createBook(String title, Set<Long> authorIds, List<Long> genreIds) {
+        bookDao.save(Book.builder()
+                .title(title)
+                .authors(authorIds.stream().map(id -> new Author(id, EMPTY)).collect(toSet()))
+                .genres(genreIds.stream().map(id -> new Genre(id, EMPTY)).collect(toSet()))
+                .build());
     }
 
     @ShellMethod(value = ".")

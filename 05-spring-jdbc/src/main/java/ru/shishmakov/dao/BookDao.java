@@ -3,8 +3,12 @@ package ru.shishmakov.dao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionOperations;
 import ru.shishmakov.domain.Author;
 import ru.shishmakov.domain.Book;
 import ru.shishmakov.domain.Genre;
@@ -14,25 +18,44 @@ import java.util.*;
 import static java.util.Collections.singletonList;
 import static java.util.Objects.isNull;
 import static java.util.Optional.ofNullable;
+import static org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils.createBatch;
 
 @RequiredArgsConstructor
 @Repository
 public class BookDao implements Dao<Book> {
     private final JdbcOperations jdbc;
     private final NamedParameterJdbcOperations jdbcParameter;
+    private final TransactionOperations transaction;
 
     @Override
-    public void save(Book genre) {
+    public void save(Book book) {
+        transaction.execute(new TransactionCallbackWithoutResult() {
+            @Override
+            protected void doInTransactionWithoutResult(TransactionStatus status) {
+                jdbcParameter.update("insert into book (title) values (:title)", new MapSqlParameterSource("title", book.getTitle()));
+                book.setId(jdbcParameter.queryForObject("select id from book where title ilike :title",
+                        new MapSqlParameterSource("title", book.getTitle()),
+                        Long.class));
 
+                jdbcParameter.batchUpdate("insert into book_author (book_id, author_id) values (:book_id, :author_id)",
+                        createBatch(book.getAuthors().stream()
+                                .map(a -> new MapSqlParameterSource("book_id", book.getId())
+                                        .addValue("author_id", a.getId())
+                                        .getValues())
+                                .toArray()));
+
+                jdbcParameter.batchUpdate("insert into book_genre (book_id, genre_id) values (:book_id, :genre_id)",
+                        createBatch(book.getGenres().stream()
+                                .map(g -> new MapSqlParameterSource("book_id", book.getId())
+                                        .addValue("genre_id", g.getId())
+                                        .getValues())
+                                .toArray()));
+            }
+        });
     }
 
     @Override
-    public void update(Book genre) {
-
-    }
-
-    @Override
-    public void delete(Book genre) {
+    public void delete(Book book) {
 
     }
 
@@ -50,7 +73,7 @@ public class BookDao implements Dao<Book> {
                         " on a.id = ba.author_id " +
                         "   left join genre as g " +
                         "   on g.id = bg.genre_id ",
-                Collections.singletonMap("book_id", id),
+                new MapSqlParameterSource("book_id", id),
                 mapBook()));
     }
 
