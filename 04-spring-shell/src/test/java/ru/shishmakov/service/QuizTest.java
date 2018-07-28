@@ -7,7 +7,6 @@ import org.junit.contrib.java.lang.system.SystemOutRule;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.MockReset;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.shell.Shell;
 import org.springframework.test.annotation.DirtiesContext;
@@ -39,7 +38,7 @@ public class QuizTest {
     private Shell shell;
     @SpyBean
     private QuizContext context;
-    @SpyBean(reset = MockReset.BEFORE)
+    @SpyBean
     private Quiz quiz;
 
     private List<Question> questions = Arrays.asList(
