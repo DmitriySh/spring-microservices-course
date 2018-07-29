@@ -14,8 +14,7 @@ import ru.shishmakov.domain.Genre;
 
 import javax.annotation.PostConstruct;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Set;
+import java.util.Collection;
 
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.joining;
@@ -72,11 +71,11 @@ public class Library {
     }
 
     @ShellMethod(value = "Create new book.")
-    public void createBook(String title, Set<Long> authorIds, List<Long> genreIds) {
+    public void createBook(String title, Collection<Long> authorIds, Collection<Long> genreIds) {
         bookDao.save(Book.builder()
                 .title(title)
-                .authors(authorIds.stream().map(id -> new Author(id, EMPTY)).collect(toSet()))
-                .genres(genreIds.stream().map(id -> new Genre(id, EMPTY)).collect(toSet()))
+                .authors(authorIds.stream().distinct().map(id -> new Author(id, EMPTY)).collect(toSet()))
+                .genres(genreIds.stream().distinct().map(id -> new Genre(id, EMPTY)).collect(toSet()))
                 .build());
     }
 

@@ -103,8 +103,7 @@ public class BookDao implements Dao<Book> {
                         "   on a.id = ba.author_id " +
                         " left join genre as g " +
                         " on g.id = bg.genre_id"
-                , mapBooks()))
-                .values();
+                , mapBooks()));
     }
 
     private ResultSetExtractor<Book> mapBook() {
@@ -126,7 +125,7 @@ public class BookDao implements Dao<Book> {
         };
     }
 
-    private ResultSetExtractor<Map<Long, Book>> mapBooks() {
+    private ResultSetExtractor<Collection<Book>> mapBooks() {
         return rs -> {
             final Map<Long, Book> results = new HashMap<>();
             while (rs.next()) {
@@ -153,7 +152,7 @@ public class BookDao implements Dao<Book> {
                                         .orElseGet(HashSet::new))
                                 .build()));
             }
-            return results;
+            return results.values();
         };
     }
 
