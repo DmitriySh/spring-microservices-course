@@ -1,4 +1,4 @@
-Library
+Library of books
 =======
 Use `Spring Boot JDBC 2.x`, `Spring Shell 2.x`.<br/>
 The layer of data storage uses to safely persist data for a long time. The most common layer is RDBMS.
@@ -35,8 +35,9 @@ The layer of data storage uses to safely persist data for a long time. The most 
    * threadsafe once configured
 
 * [RowMapper](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/jdbc/core/RowMapper.html) interface that is used to map [ResultSet](https://docs.oracle.com/javase/10/docs/api/java/sql/ResultSet.html) with a Java object
-* provides support for creating embedded databases using Java database engines ([HSQLDB](http://hsqldb.org), [H2](http://www.h2database.com/html/main.html), [Derby](http://db.apache.org/derby/))
+* Provides support for creating embedded databases using Java database engines ([HSQLDB](http://hsqldb.org), [H2](http://www.h2database.com/html/main.html), [Derby](http://db.apache.org/derby/))
 * `Spring Boot` finds resources `schema.sql`, `data.sql` and `test-data.sql` in the root of the classpath and initialize db during startup
+* [TransactionTemplate](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/transaction/support/TransactionTemplate.html) class simplifies programmatic transaction demarcation and transaction exception handling.
 
 Main site of `Spring Data JDBC`: https://docs.spring.io/spring/docs/5.0.x/spring-framework-reference/data-access.html
 
