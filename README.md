@@ -32,5 +32,5 @@ Spring Boot. Use class [SpringApplication](https://docs.spring.io/spring-boot/do
 ## Homework 4: [Quiz for students](https://github.com/DmitriySh/spring-microservices-course/tree/master/04-spring-shell)
 Spring Shell. Use annotation [@ShellComponent](https://docs.spring.io/spring-shell/docs/2.0.x/api/org/springframework/shell/standard/ShellComponent.html) like a new `@Component` stereotype to enable terminal client
 
-## Homework 5: [Library of books](https://github.com/DmitriySh/spring-microservices-course/tree/feature/05-spring-jdbc/05-spring-jdbc)
+## Homework 5: [Library of books](https://github.com/DmitriySh/spring-microservices-course/tree/master/05-spring-jdbc)
 Spring JDBC. Use DAO, [JdbcTemplate](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/jdbc/core/JdbcTemplate.html) and [TransactionTemplate](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/transaction/support/TransactionTemplate.html) to simplify using of JDBC and programmatic transactions
