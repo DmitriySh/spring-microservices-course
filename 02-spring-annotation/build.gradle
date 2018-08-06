@@ -4,8 +4,8 @@ dependencies {
     compile 'ch.qos.logback:logback-classic:1.2.3'
     compile "org.springframework:spring-context:${springVersion}"
 
-    compileOnly 'org.projectlombok:lombok:1.18.0'
-    annotationProcessor 'org.projectlombok:lombok:1.18.0'
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.hamcrest:hamcrest-all:1.3'

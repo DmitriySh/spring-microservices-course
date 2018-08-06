@@ -1,6 +1,7 @@
 ext {
     buildVesion = '0.1'
     springVersion = "5.0.7.RELEASE"
+    lombokVersion = "1.18.0"
 }
 
 wrapper {
