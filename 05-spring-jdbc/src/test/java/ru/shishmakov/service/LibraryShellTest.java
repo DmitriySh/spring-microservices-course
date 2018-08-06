@@ -34,13 +34,13 @@ import static org.mockito.Mockito.verify;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class LibraryTest {
+public class LibraryShellTest {
 
     @Rule
     public final SystemOutRule systemOutRule = new SystemOutRule().muteForSuccessfulTests();
 
     @Autowired
-    private Library library;
+    private LibraryShell libraryShell;
 
     @MockBean
     private Shell shell;
@@ -60,7 +60,7 @@ public class LibraryTest {
 
     @Test
     public void getAllBooksShouldRetrieveBookValues() {
-        library.getAllBooks();
+        libraryShell.getAllBooks();
 
         verify(bookDao).getAll();
         verify(jdbc).query(anyString(), ArgumentMatchers.<ResultSetExtractor<Book>>any());
@@ -68,7 +68,7 @@ public class LibraryTest {
 
     @Test
     public void getAllAuthorsShouldRetrieveAuthorValues() {
-        library.getAllAuthors();
+        libraryShell.getAllAuthors();
 
         verify(authorDao).getAll();
         verify(jdbc).query(anyString(), ArgumentMatchers.<ResultSetExtractor<Author>>any());
@@ -76,7 +76,7 @@ public class LibraryTest {
 
     @Test
     public void getAllGenresShouldRetrieveGenreValues() {
-        library.getAllGenres();
+        libraryShell.getAllGenres();
 
         verify(genreDao).getAll();
         verify(jdbc).query(anyString(), ArgumentMatchers.<ResultSetExtractor<Genre>>any());
@@ -84,7 +84,7 @@ public class LibraryTest {
 
     @Test
     public void getBookAuthorsShouldRetrieveBookByIdAndTheirAuthors() {
-        library.getBookAuthors(1L);
+        libraryShell.getBookAuthors(1L);
 
         verify(bookDao).getById(eq(1L));
         verify(jdbcParameter).query(anyString(), isA(SqlParameterSource.class), ArgumentMatchers.<ResultSetExtractor<Book>>any());
@@ -92,7 +92,7 @@ public class LibraryTest {
 
     @Test
     public void getBookGenresShouldRetrieveBookByIdAndTheirGenres() {
-        library.getBookGenres(1L);
+        libraryShell.getBookGenres(1L);
 
         verify(bookDao).getById(eq(1L));
         verify(jdbcParameter).query(anyString(), isA(SqlParameterSource.class), ArgumentMatchers.<ResultSetExtractor<Genre>>any());
@@ -101,7 +101,7 @@ public class LibraryTest {
     @Test
     public void createBookShouldAddNewBook() {
         int before = JdbcTestUtils.countRowsInTable((JdbcTemplate) jdbc, "book");
-        library.createBook("book title", emptySet(), emptySet());
+        libraryShell.createBook("book title", emptySet(), emptySet());
         int after = JdbcTestUtils.countRowsInTable((JdbcTemplate) jdbc, "book");
 
         assertThat(before).isLessThan(after);
@@ -109,7 +109,7 @@ public class LibraryTest {
 
     @Test
     public void createBookShouldThrowExceptionIfAuthorOrGenreUnavailable() {
-        assertThatThrownBy(() -> library.createBook("book title", singletonList(99L), singletonList(99L)))
+        assertThatThrownBy(() -> libraryShell.createBook("book title", singletonList(99L), singletonList(99L)))
                 .isInstanceOf(DataIntegrityViolationException.class)
                 .hasMessageContaining("Referential integrity constraint violation");
     }
@@ -118,10 +118,10 @@ public class LibraryTest {
     public void deleteBookShouldRemoveBook() {
         int first = JdbcTestUtils.countRowsInTable((JdbcTemplate) jdbc, "book");
 
-        library.createBook("book title", emptySet(), emptySet());
+        libraryShell.createBook("book title", emptySet(), emptySet());
         int middle = JdbcTestUtils.countRowsInTable((JdbcTemplate) jdbc, "book");
 
-        library.deleteBook(2);
+        libraryShell.deleteBook(2);
         int last = JdbcTestUtils.countRowsInTable((JdbcTemplate) jdbc, "book");
 
         assertThat(first).isLessThan(middle).isEqualTo(last);
