@@ -9,19 +9,21 @@ import java.util.Set;
 
 import static javax.persistence.CascadeType.MERGE;
 import static javax.persistence.CascadeType.PERSIST;
-import static javax.persistence.GenerationType.IDENTITY;
+import static javax.persistence.GenerationType.SEQUENCE;
 
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString
 @Setter
 @Getter
 @Entity
 public class Book {
 
     @Id
-    @GeneratedValue(strategy = IDENTITY)
+    @SequenceGenerator(name = "b_seq", sequenceName = "book_id_seq", allocationSize = 1)
+    @GeneratedValue(generator = "b_seq", strategy = SEQUENCE)
     private Long id;
 
     @NaturalId
@@ -33,6 +35,7 @@ public class Book {
     @JoinTable(name = "book_author",
             joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id"))
+    @Builder.Default
     private Set<Author> authors = new HashSet<>();
 
     @ToString.Exclude
@@ -40,6 +43,7 @@ public class Book {
     @JoinTable(name = "book_genre",
             joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id", referencedColumnName = "id"))
+    @Builder.Default
     private Set<Genre> genres = new HashSet<>();
 
     public void removeAuthor(Author author) {
