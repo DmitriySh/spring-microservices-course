@@ -5,14 +5,20 @@ import ru.shishmakov.domain.Book;
 
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnit;
 import java.util.*;
 import java.util.Map.Entry;
 
 @Repository
 public class BookRepository implements IRepository<Book> {
-    @PersistenceContext
+
     private EntityManager em;
+
+    @PersistenceUnit
+    public void setEm(EntityManagerFactory em) {
+        this.em = em.createEntityManager();
+    }
 
     @Override
     public void save(Book book) {

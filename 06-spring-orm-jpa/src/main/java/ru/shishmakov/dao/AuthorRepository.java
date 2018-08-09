@@ -4,14 +4,19 @@ import org.springframework.stereotype.Repository;
 import ru.shishmakov.domain.Author;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnit;
 import java.util.Collection;
 import java.util.Set;
 
 @Repository
 public class AuthorRepository implements IRepository<Author> {
-    @PersistenceContext
     private EntityManager em;
+
+    @PersistenceUnit
+    public void setEm(EntityManagerFactory em) {
+        this.em = em.createEntityManager();
+    }
 
     @Override
     public Collection<Author> getAll() {

@@ -4,14 +4,19 @@ import org.springframework.stereotype.Repository;
 import ru.shishmakov.domain.Genre;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnit;
 import java.util.Collection;
 import java.util.Set;
 
 @Repository
 public class GenreRepository implements IRepository<Genre> {
-    @PersistenceContext
     private EntityManager em;
+
+    @PersistenceUnit
+    public void setEm(EntityManagerFactory em) {
+        this.em = em.createEntityManager();
+    }
 
     @Override
     public Collection<Genre> getAll() {
