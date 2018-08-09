@@ -13,13 +13,12 @@ import ru.shishmakov.domain.Book;
 import ru.shishmakov.domain.Genre;
 
 import java.sql.SQLException;
-import java.util.Collection;
+import java.util.*;
 
 import static java.lang.System.lineSeparator;
+import static java.util.Collections.singletonList;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toSet;
-import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 @RequiredArgsConstructor
 @Service
@@ -56,31 +55,37 @@ public class LibraryService {
     }
 
     public String getBookAuthors(long bookId) {
-        Book book = bookDao.getById(bookId);
-        return new StringBuilder("Book: " + book.getTitle())
+        Map<String, Object> context = new HashMap<>();
+        context.put("eager", singletonList("authors"));
+        Optional<Book> book = bookDao.getById(bookId, context);
+        return book.map(b -> new StringBuilder("Book: " + b.getTitle())
                 .append(lineSeparator())
                 .append("Authors:")
                 .append(lineSeparator())
-                .append(book.getAuthors().stream().map(Author::toString).collect(joining(lineSeparator())))
-                .toString();
+                .append(b.getAuthors().stream().map(Author::toString).collect(joining(lineSeparator())))
+                .toString())
+                .orElseGet(() -> "book: " + bookId + " not found");
 
     }
 
     public String getBookGenres(long bookId) {
-        Book book = bookDao.getById(bookId);
-        return new StringBuilder("Book: " + book.getTitle())
+        Map<String, Object> context = new HashMap<>();
+        context.put("eager", singletonList("genres"));
+        Optional<Book> book = bookDao.getById(bookId, context);
+        return book.map(b -> new StringBuilder("Book: " + b.getTitle())
                 .append(lineSeparator())
                 .append("Genres:")
                 .append(lineSeparator())
-                .append(book.getGenres().stream().map(Genre::toString).collect(joining(lineSeparator())))
-                .toString();
+                .append(b.getGenres().stream().map(Genre::toString).collect(joining(lineSeparator())))
+                .toString())
+                .orElseGet(() -> "book: " + bookId + " not found");
     }
 
     public void createBook(String title, Collection<Long> authorIds, Collection<Long> genreIds) {
         bookDao.save(Book.builder()
                 .title(title)
-                .authors(authorIds.stream().distinct().map(id -> new Author(id, EMPTY)).collect(toSet()))
-                .genres(genreIds.stream().distinct().map(id -> new Genre(id, EMPTY)).collect(toSet()))
+                .authors(new HashSet<>(authorDao.getAll(new HashSet<>(authorIds))))
+                .genres(new HashSet<>(genreDao.getAll(new HashSet<>(genreIds))))
                 .build());
     }
 
