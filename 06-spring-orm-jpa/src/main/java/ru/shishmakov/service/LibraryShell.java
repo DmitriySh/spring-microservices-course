@@ -6,7 +6,7 @@ import org.springframework.shell.standard.ShellMethod;
 
 import javax.annotation.PostConstruct;
 import java.sql.SQLException;
-import java.util.Collection;
+import java.util.Set;
 
 import static java.lang.System.lineSeparator;
 
@@ -50,7 +50,7 @@ public class LibraryShell {
     }
 
     @ShellMethod(value = "Create new book.")
-    public void createBook(String title, Collection<Long> authorIds, Collection<Long> genreIds) {
+    public void createBook(String title, Set<Long> authorIds, Set<Long> genreIds) {
         service.createBook(title, authorIds, genreIds);
     }
 

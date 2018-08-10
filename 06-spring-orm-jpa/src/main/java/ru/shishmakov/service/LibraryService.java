@@ -4,16 +4,18 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.h2.tools.Console;
 import org.springframework.stereotype.Service;
-import ru.shishmakov.dao.AuthorType;
-import ru.shishmakov.dao.BookType;
-import ru.shishmakov.dao.GenreType;
-import ru.shishmakov.dao.IRepository;
+import ru.shishmakov.dao.AuthorRepository;
+import ru.shishmakov.dao.BookRepository;
+import ru.shishmakov.dao.GenreRepository;
 import ru.shishmakov.domain.Author;
 import ru.shishmakov.domain.Book;
 import ru.shishmakov.domain.Genre;
 
 import java.sql.SQLException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 import static java.lang.System.lineSeparator;
 import static java.util.Collections.singletonList;
@@ -23,12 +25,9 @@ import static java.util.stream.Collectors.joining;
 @RequiredArgsConstructor
 @Service
 public class LibraryService {
-    @GenreType
-    private final IRepository<Genre> genreDao;
-    @BookType
-    private final IRepository<Book> bookDao;
-    @AuthorType
-    private final IRepository<Author> authorDao;
+    private final GenreRepository genreDao;
+    private final BookRepository bookDao;
+    private final AuthorRepository authorDao;
     @Setter
     private volatile Console console;
 
@@ -81,12 +80,8 @@ public class LibraryService {
                 .orElseGet(() -> "book: " + bookId + " not found");
     }
 
-    public void createBook(String title, Collection<Long> authorIds, Collection<Long> genreIds) {
-        bookDao.save(Book.builder()
-                .title(title)
-                .authors(new HashSet<>(authorDao.getAll(new HashSet<>(authorIds))))
-                .genres(new HashSet<>(genreDao.getAll(new HashSet<>(genreIds))))
-                .build());
+    public void createBook(String title, Set<Long> authorIds, Set<Long> genreIds) {
+        bookDao.save(title, authorIds, genreIds);
     }
 
     public void deleteBook(long bookId) {

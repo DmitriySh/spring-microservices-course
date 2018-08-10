@@ -10,22 +10,20 @@ import java.util.Collection;
 import java.util.Set;
 
 @Repository
-public class GenreRepository implements IRepository<Genre> {
+public class GenreRepository {
     private EntityManager em;
 
     @PersistenceUnit
-    public void setEm(EntityManagerFactory em) {
+    public void setEmf(EntityManagerFactory em) {
         this.em = em.createEntityManager();
     }
 
-    @Override
     public Collection<Genre> getAll() {
         return em.createQuery("select g from Genre g", Genre.class)
                 .getResultList();
     }
 
-    @Override
-    public Collection<Genre> getAll(Set<Long> ids) {
+    public Collection<Genre> getByIds(Set<Long> ids) {
         return em.createQuery("select g from Genre g where g.id in (:ids)", Genre.class)
                 .setParameter("ids", ids)
                 .getResultList();
