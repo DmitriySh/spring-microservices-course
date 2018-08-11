@@ -9,6 +9,7 @@ import java.util.Set;
 
 import static javax.persistence.CascadeType.MERGE;
 import static javax.persistence.CascadeType.PERSIST;
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.SEQUENCE;
 
 @AllArgsConstructor
@@ -24,11 +25,11 @@ public class Author {
     @GeneratedValue(generator = "a_seq", strategy = SEQUENCE)
     private Long id;
 
-    @NaturalId
     @EqualsAndHashCode.Include
+    @NaturalId
     private String fullname;
 
-    @ManyToMany(mappedBy = "authors", cascade = {PERSIST, MERGE})
     @ToString.Exclude
+    @ManyToMany(mappedBy = "authors", cascade = {PERSIST, MERGE}, fetch = LAZY)
     private Set<Book> books = new HashSet<>();
 }

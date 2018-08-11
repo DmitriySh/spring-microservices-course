@@ -26,12 +26,21 @@ VALUES (1, 1),
        (1, 4),
        (2, 1),
        (2, 3),
---(3, 3), for null
+--        (3, 3), for null
        (4, 4);
 
 INSERT INTO book_genre (book_id, genre_id)
 VALUES (1, 1),
        (1, 2),
        (2, 2),
---(3, 3), for null
+--        (3, 3), for null
        (4, 1);
+
+INSERT INTO book_comment (book_id, text)
+VALUES (1, 'comment 1'),
+       (1, 'comment 2'),
+       (1, 'comment 3'),
+       (2, 'comment 1'),
+       (2, 'comment 2'),
+--        (3, 'comment 1'), for null
+       (4, 'comment 1');

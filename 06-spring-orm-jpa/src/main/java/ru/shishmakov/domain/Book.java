@@ -7,8 +7,8 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-import static javax.persistence.CascadeType.MERGE;
-import static javax.persistence.CascadeType.PERSIST;
+import static javax.persistence.CascadeType.*;
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.SEQUENCE;
 
 @Builder
@@ -33,20 +33,25 @@ public class Book {
     private String isbn;
 
     @ToString.Exclude
-    @ManyToMany(cascade = {PERSIST, MERGE})
+    @Builder.Default
+    @ManyToMany(cascade = {PERSIST, MERGE}, fetch = LAZY)
     @JoinTable(name = "book_author",
             joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id"))
-    @Builder.Default
     private Set<Author> authors = new HashSet<>();
 
     @ToString.Exclude
-    @ManyToMany(cascade = {PERSIST, MERGE})
+    @Builder.Default
+    @ManyToMany(cascade = {PERSIST, MERGE}, fetch = LAZY)
     @JoinTable(name = "book_genre",
             joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id", referencedColumnName = "id"))
-    @Builder.Default
     private Set<Genre> genres = new HashSet<>();
+
+    @ToString.Exclude
+    @Builder.Default
+    @OneToMany(mappedBy = "book", cascade = ALL, orphanRemoval = true, fetch = LAZY)
+    private Set<Comment> comments = new HashSet<>();
 
     public void removeAuthor(Author author) {
         authors.remove(author);
@@ -56,5 +61,15 @@ public class Book {
     public void removeGenre(Genre genre) {
         genres.remove(genre);
         genre.getBooks().remove(this);
+    }
+
+    public void addComment(Comment comment) {
+        comments.add(comment);
+        comment.setBook(this);
+    }
+
+    public void removeComment(Comment comment) {
+        comments.remove(comment);
+        comment.setBook(null);
     }
 }

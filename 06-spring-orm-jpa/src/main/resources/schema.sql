@@ -27,6 +27,18 @@ CREATE TABLE IF NOT EXISTS genre
   name VARCHAR(100) NOT NULL,
 );
 
+DROP TABLE IF EXISTS book_comment;
+DROP SEQUENCE IF EXISTS book_comment_id_seq;
+CREATE SEQUENCE IF NOT EXISTS book_comment_id_seq;
+CREATE TABLE IF NOT EXISTS book_comment
+(
+  id BIGINT DEFAULT book_comment_id_seq.nextval PRIMARY KEY,
+  book_id BIGINT NOT NULL,
+  text varchar(512) NOT NULL,
+  FOREIGN KEY (book_id) REFERENCES book(id)
+);
+
+
 -- relationships
 DROP TABLE IF EXISTS book_author;
 CREATE TABLE IF NOT EXISTS book_author
@@ -34,7 +46,7 @@ CREATE TABLE IF NOT EXISTS book_author
   book_id BIGINT NOT NULL,
   author_id BIGINT NOT NULL,
   FOREIGN KEY (book_id) REFERENCES book(id),
-  FOREIGN KEY (author_id) REFERENCES author(id),
+  FOREIGN KEY (author_id) REFERENCES author(id)
 );
 
 DROP TABLE IF EXISTS book_genre;
@@ -43,5 +55,5 @@ CREATE TABLE IF NOT EXISTS book_genre
   book_id BIGINT NOT NULL,
   genre_id BIGINT NOT NULL,
   FOREIGN KEY (book_id) REFERENCES book(id),
-  FOREIGN KEY (genre_id) REFERENCES genre(id),
+  FOREIGN KEY (genre_id) REFERENCES genre(id)
 );

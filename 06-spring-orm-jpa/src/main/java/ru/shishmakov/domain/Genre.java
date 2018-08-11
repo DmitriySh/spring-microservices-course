@@ -9,6 +9,7 @@ import java.util.Set;
 
 import static javax.persistence.CascadeType.MERGE;
 import static javax.persistence.CascadeType.PERSIST;
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.SEQUENCE;
 
 @AllArgsConstructor
@@ -29,7 +30,7 @@ public class Genre {
     @EqualsAndHashCode.Include
     private String name;
 
-    @ManyToMany(mappedBy = "genres", cascade = {PERSIST, MERGE})
+    @ManyToMany(mappedBy = "genres", cascade = {PERSIST, MERGE}, fetch = LAZY)
     @ToString.Exclude
     private Set<Book> books = new HashSet<>();
 }

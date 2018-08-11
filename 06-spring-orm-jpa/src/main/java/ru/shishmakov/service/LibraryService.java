@@ -9,18 +9,18 @@ import ru.shishmakov.dao.BookRepository;
 import ru.shishmakov.dao.GenreRepository;
 import ru.shishmakov.domain.Author;
 import ru.shishmakov.domain.Book;
+import ru.shishmakov.domain.Comment;
 import ru.shishmakov.domain.Genre;
 
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static java.lang.System.lineSeparator;
 import static java.util.Collections.singletonList;
 import static java.util.Collections.singletonMap;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.joining;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 @RequiredArgsConstructor
 @Service
@@ -80,6 +80,21 @@ public class LibraryService {
                 .orElseGet(() -> "book: " + bookId + " not found");
     }
 
+    public String getBookComments(long bookId) {
+        Map<String, Object> context = new HashMap<>();
+        context.put("eager", singletonList("comments"));
+        Optional<Book> book = bookDao.getById(bookId, context);
+        return book.map(b -> new StringBuilder("Book:")
+                .append(lineSeparator())
+                .append(b.toString())
+                .append(lineSeparator())
+                .append("Comments:")
+                .append(lineSeparator())
+                .append(b.getComments().stream().map(Comment::toString).collect(joining(lineSeparator())))
+                .toString())
+                .orElseGet(() -> "book: " + bookId + " not found");
+    }
+
     public String createBook(String title, String isbn, Set<Long> authorIds, Set<Long> genreIds) {
         Book book = Book.builder().title(title).isbn(isbn).build();
         List<Author> authors = authorDao.getByIds(authorIds);
@@ -90,6 +105,11 @@ public class LibraryService {
 
     public void deleteBook(long bookId) {
         bookDao.delete(bookId);
+    }
+
+    public void addBookComment(long bookId, String comment) {
+        Optional<Book> book = bookDao.getById(bookId, singletonMap("lazy", EMPTY));
+//        bookDao.save(book.get(), comment);
     }
 
     public void exit() {

@@ -49,9 +49,20 @@ public class LibraryShell {
         return service.getBookGenres(bookId);
     }
 
+    @ShellMethod(value = "Get comments of the book.")
+    public String getBookComments(long bookId) {
+        return service.getBookComments(bookId);
+    }
+
     @ShellMethod(value = "Create new book.")
     public String createBook(String title, String isbn, Set<Long> authorIds, Set<Long> genreIds) {
         return service.createBook(title, isbn, authorIds, genreIds);
+    }
+
+    @ShellMethod(value = "Add comment to book.")
+    public String addBookComment(long bookId, String comment) {
+        service.addBookComment(bookId, comment);
+        return "added";
     }
 
     @ShellMethod(value = "Delete the book.")
