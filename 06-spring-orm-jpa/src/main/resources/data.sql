@@ -6,11 +6,11 @@ VALUES ('author 1'),
        ('author 3'),
        ('author 4');
 
-INSERT INTO book (title)
-VALUES ('book 1'),
-       ('book 2'),
-       ('book 3'),
-       ('book 4');
+INSERT INTO book (title, isbn)
+VALUES ('book 1', '0-395-08254-1'),
+       ('book 2', '0-395-08254-2'),
+       ('book 3', '0-395-08254-3'),
+       ('book 4', '0-395-08254-4');
 
 INSERT INTO genre (name)
 VALUES ('genre 1'),

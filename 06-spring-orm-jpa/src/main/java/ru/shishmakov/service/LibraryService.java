@@ -57,7 +57,9 @@ public class LibraryService {
         Map<String, Object> context = new HashMap<>();
         context.put("eager", singletonList("authors"));
         Optional<Book> book = bookDao.getById(bookId, context);
-        return book.map(b -> new StringBuilder("Book: " + b.getTitle())
+        return book.map(b -> new StringBuilder("Book:")
+                .append(lineSeparator())
+                .append(b.toString())
                 .append(lineSeparator())
                 .append("Authors:")
                 .append(lineSeparator())
@@ -71,7 +73,9 @@ public class LibraryService {
         Map<String, Object> context = new HashMap<>();
         context.put("eager", singletonList("genres"));
         Optional<Book> book = bookDao.getById(bookId, context);
-        return book.map(b -> new StringBuilder("Book: " + b.getTitle())
+        return book.map(b -> new StringBuilder("Book:")
+                .append(lineSeparator())
+                .append(b.toString())
                 .append(lineSeparator())
                 .append("Genres:")
                 .append(lineSeparator())
@@ -80,8 +84,8 @@ public class LibraryService {
                 .orElseGet(() -> "book: " + bookId + " not found");
     }
 
-    public void createBook(String title, Set<Long> authorIds, Set<Long> genreIds) {
-        bookDao.save(title, authorIds, genreIds);
+    public void createBook(String title, String isbn, Set<Long> authorIds, Set<Long> genreIds) {
+        bookDao.save(title, isbn, authorIds, genreIds);
     }
 
     public void deleteBook(long bookId) {

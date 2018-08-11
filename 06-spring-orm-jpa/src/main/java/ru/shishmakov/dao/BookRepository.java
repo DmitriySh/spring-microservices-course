@@ -27,11 +27,12 @@ public class BookRepository {
         this.em = em.createEntityManager();
     }
 
-    public void save(String title, Set<Long> authorIds, Set<Long> genreIds) {
+    public void save(String title, String isbn, Set<Long> authorIds, Set<Long> genreIds) {
         em.getTransaction().begin();
         try {
             em.persist(Book.builder()
                     .title(title)
+                    .isbn(isbn)
                     .authors(new HashSet<>(authorDao.getByIds(new HashSet<>(authorIds))))
                     .genres(new HashSet<>(genreDao.getByIds(new HashSet<>(genreIds))))
                     .build());
