@@ -12,10 +12,13 @@ import ru.shishmakov.domain.Book;
 import ru.shishmakov.domain.Genre;
 
 import java.sql.SQLException;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import static java.lang.System.lineSeparator;
 import static java.util.Collections.singletonList;
+import static java.util.Collections.singletonMap;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.joining;
 
@@ -51,9 +54,7 @@ public class LibraryService {
     }
 
     public String getBookAuthors(long bookId) {
-        Map<String, Object> context = new HashMap<>();
-        context.put("eager", singletonList("authors"));
-        Optional<Book> book = bookDao.getById(bookId, context);
+        Optional<Book> book = bookDao.getById(bookId, singletonMap("eager", singletonList("authors")));
         return book.map(b -> new StringBuilder("Book:")
                 .append(lineSeparator())
                 .append(b.toString())
@@ -67,9 +68,7 @@ public class LibraryService {
     }
 
     public String getBookGenres(long bookId) {
-        Map<String, Object> context = new HashMap<>();
-        context.put("eager", singletonList("genres"));
-        Optional<Book> book = bookDao.getById(bookId, context);
+        Optional<Book> book = bookDao.getById(bookId, singletonMap("eager", singletonList("genres")));
         return book.map(b -> new StringBuilder("Book:")
                 .append(lineSeparator())
                 .append(b.toString())

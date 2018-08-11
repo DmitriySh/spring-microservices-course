@@ -55,13 +55,19 @@ public class LibraryShell {
     }
 
     @ShellMethod(value = "Delete the book.")
-    public void deleteBook(long bookId) {
+    public String deleteBook(long bookId) {
         service.deleteBook(bookId);
+        return "deleted";
     }
 
     @ShellMethod(value = "Run H2 database console.")
-    public void h2() throws SQLException {
-        if (!service.hasConsole()) service.initConsole();
+    public String h2() throws SQLException {
+        String status = "runnable";
+        if (!service.hasConsole()) {
+            service.initConsole();
+            status = "running";
+        }
+        return status;
     }
 
     @ShellMethod(value = "Exit the library.", key = {"exit", "quit"})
