@@ -56,6 +56,10 @@ public class LibraryService {
         return genreDao.getAll().stream().map(Genre::toString).collect(joining(lineSeparator()));
     }
 
+    public String getAllComments() {
+        return commentDao.getAll().stream().map(Comment::toString).collect(joining(lineSeparator()));
+    }
+
     public String getBookAuthors(long bookId) {
         Optional<Book> book = bookDao.getById(bookId, singletonMap("eager", singletonList("authors")));
         return book.map(b -> new StringBuilder("Book:")
