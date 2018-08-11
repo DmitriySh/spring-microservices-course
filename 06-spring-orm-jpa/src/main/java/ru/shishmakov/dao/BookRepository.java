@@ -2,7 +2,9 @@ package ru.shishmakov.dao;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import ru.shishmakov.domain.Author;
 import ru.shishmakov.domain.Book;
+import ru.shishmakov.domain.Genre;
 
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
@@ -17,9 +19,6 @@ import static java.util.Optional.ofNullable;
 @RequiredArgsConstructor
 @Repository
 public class BookRepository {
-    private final GenreRepository genreDao;
-    private final AuthorRepository authorDao;
-
     private EntityManager em;
 
     @PersistenceUnit
@@ -27,15 +26,13 @@ public class BookRepository {
         this.em = em.createEntityManager();
     }
 
-    public void save(String title, String isbn, Set<Long> authorIds, Set<Long> genreIds) {
+    public void save(Book book, List<Author> authors, List<Genre> genres) {
         em.getTransaction().begin();
         try {
-            em.persist(Book.builder()
-                    .title(title)
-                    .isbn(isbn)
-                    .authors(new HashSet<>(authorDao.getByIds(new HashSet<>(authorIds))))
-                    .genres(new HashSet<>(genreDao.getByIds(new HashSet<>(genreIds))))
-                    .build());
+            em.persist(book); // save entity
+            book.getAuthors().addAll(authors);
+            book.getGenres().addAll(genres);
+            em.merge(book); // save references
             em.getTransaction().commit();
         } catch (Exception e) {
             em.getTransaction().rollback();

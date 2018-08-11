@@ -12,10 +12,7 @@ import ru.shishmakov.domain.Book;
 import ru.shishmakov.domain.Genre;
 
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static java.lang.System.lineSeparator;
 import static java.util.Collections.singletonList;
@@ -84,8 +81,12 @@ public class LibraryService {
                 .orElseGet(() -> "book: " + bookId + " not found");
     }
 
-    public void createBook(String title, String isbn, Set<Long> authorIds, Set<Long> genreIds) {
-        bookDao.save(title, isbn, authorIds, genreIds);
+    public String createBook(String title, String isbn, Set<Long> authorIds, Set<Long> genreIds) {
+        Book book = Book.builder().title(title).isbn(isbn).build();
+        List<Author> authors = authorDao.getByIds(authorIds);
+        List<Genre> genres = genreDao.getByIds(genreIds);
+        bookDao.save(book, authors, genres);
+        return book.toString();
     }
 
     public void deleteBook(long bookId) {

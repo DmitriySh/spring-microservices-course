@@ -50,8 +50,8 @@ public class LibraryShell {
     }
 
     @ShellMethod(value = "Create new book.")
-    public void createBook(String title, String isbn, Set<Long> authorIds, Set<Long> genreIds) {
-        service.createBook(title, isbn, authorIds, genreIds);
+    public String createBook(String title, String isbn, Set<Long> authorIds, Set<Long> genreIds) {
+        return service.createBook(title, isbn, authorIds, genreIds);
     }
 
     @ShellMethod(value = "Delete the book.")
