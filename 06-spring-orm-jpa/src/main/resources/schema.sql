@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS book_comment
   book_id BIGINT NOT NULL,
   text varchar(512) NOT NULL,
   create_date TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT current_timestamp,
-  FOREIGN KEY (book_id) REFERENCES book(id)
+  FOREIGN KEY (book_id) REFERENCES book(id) ON DELETE CASCADE
 );
 
 
