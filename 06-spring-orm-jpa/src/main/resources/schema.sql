@@ -1,4 +1,6 @@
 -- tables
+DROP TABLE IF EXISTS book;
+DROP SEQUENCE IF EXISTS book_id_seq;
 CREATE SEQUENCE IF NOT EXISTS book_id_seq;
 CREATE TABLE IF NOT EXISTS book
 (
@@ -6,6 +8,8 @@ CREATE TABLE IF NOT EXISTS book
   title VARCHAR(100)
 );
 
+DROP TABLE IF EXISTS author;
+DROP SEQUENCE IF EXISTS author_id_seq;
 CREATE SEQUENCE IF NOT EXISTS author_id_seq;
 CREATE TABLE IF NOT EXISTS author
 (
@@ -13,6 +17,8 @@ CREATE TABLE IF NOT EXISTS author
   fullname VARCHAR(100)
 );
 
+DROP TABLE IF EXISTS genre;
+DROP SEQUENCE IF EXISTS genre_id_seq;
 CREATE SEQUENCE IF NOT EXISTS genre_id_seq;
 CREATE TABLE IF NOT EXISTS genre
 (
@@ -21,6 +27,7 @@ CREATE TABLE IF NOT EXISTS genre
 );
 
 -- relationships
+DROP TABLE IF EXISTS book_author;
 CREATE TABLE IF NOT EXISTS book_author
 (
   book_id BIGINT NOT NULL,
@@ -29,6 +36,7 @@ CREATE TABLE IF NOT EXISTS book_author
   FOREIGN KEY (author_id) REFERENCES author(id),
 );
 
+DROP TABLE IF EXISTS book_genre;
 CREATE TABLE IF NOT EXISTS book_genre
 (
   book_id BIGINT NOT NULL,
