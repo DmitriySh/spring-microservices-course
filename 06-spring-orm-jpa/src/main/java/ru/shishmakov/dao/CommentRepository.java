@@ -33,9 +33,9 @@ public class CommentRepository {
     public void save(Book book, Comment comment) {
         em.getTransaction().begin();
         try {
-            book.addComment(comment);
-            em.merge(book);
-//            book.addComment(comment);
+            comment.setBook(book);
+            em.persist(comment);
+            book.addComment(comment); // performance: update context if 'comment' don't have cascade updates
             em.getTransaction().commit();
         } catch (Exception e) {
             em.getTransaction().rollback();
