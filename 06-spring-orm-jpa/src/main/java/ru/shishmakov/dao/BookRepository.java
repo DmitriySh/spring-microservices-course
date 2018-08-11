@@ -12,6 +12,7 @@ import javax.persistence.PersistenceUnit;
 import java.util.*;
 import java.util.Map.Entry;
 
+import static java.util.Collections.singletonList;
 import static java.util.Collections.singletonMap;
 import static java.util.Optional.ofNullable;
 
@@ -41,8 +42,10 @@ public class BookRepository {
     public void delete(long bookId) {
         em.getTransaction().begin();
         try {
-            Book book = em.getReference(Book.class, bookId); // proxy
-            em.remove(book);
+            getById(bookId, singletonMap("eager", singletonList("comments"))).ifPresent(b -> {
+                b.removeAllComment();
+                em.remove(b);
+            });
             em.getTransaction().commit();
         } catch (Exception e) {
             em.getTransaction().rollback();

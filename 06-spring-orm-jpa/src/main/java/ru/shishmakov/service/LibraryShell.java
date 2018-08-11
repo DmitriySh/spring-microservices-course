@@ -75,6 +75,12 @@ public class LibraryShell {
         return "deleted";
     }
 
+    @ShellMethod(value = "Delete the comment.")
+    public String deleteComment(long commentId) {
+        service.deleteComment(commentId);
+        return "deleted";
+    }
+
     @ShellMethod(value = "Run H2 database console.")
     public String h2() throws SQLException {
         String status = "runnable";

@@ -119,6 +119,11 @@ public class LibraryService {
         bookDao.delete(bookId);
     }
 
+    public void deleteComment(long commentId) {
+        commentDao.getById(commentId, singletonMap("eager", singletonList("book")))
+                .ifPresent(commentDao::delete);
+    }
+
     public void exit() {
         ofNullable(console).ifPresent(Console::shutdown);
         System.out.println(lineSeparator() + "\tGoodbye! =)" + lineSeparator());

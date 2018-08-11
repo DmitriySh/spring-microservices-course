@@ -5,6 +5,7 @@ import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import static javax.persistence.CascadeType.*;
@@ -71,5 +72,13 @@ public class Book {
     public void removeComment(Comment comment) {
         comments.remove(comment);
         comment.setBook(null);
+    }
+
+    public void removeAllComment() {
+        for (Iterator<Comment> iterator = comments.iterator(); iterator.hasNext(); ) {
+            Comment comment = iterator.next();
+            comment.setBook(null);
+            iterator.remove();
+        }
     }
 }

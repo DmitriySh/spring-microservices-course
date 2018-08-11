@@ -4,11 +4,14 @@ import org.springframework.stereotype.Repository;
 import ru.shishmakov.domain.Book;
 import ru.shishmakov.domain.Comment;
 
+import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+
+import static java.util.Collections.singletonMap;
+import static java.util.Optional.ofNullable;
 
 @Repository
 public class CommentRepository {
@@ -30,12 +33,37 @@ public class CommentRepository {
                 .getResultList();
     }
 
+    public Optional<Comment> getById(long commentId, Map<String, Object> context) {
+        EntityGraph<Comment> graph = em.createEntityGraph(Comment.class);
+        context.entrySet().stream()
+                .filter(e -> Objects.equals(e.getKey(), "eager")) //eager
+                .map(Map.Entry::getValue)
+                .map(List.class::cast)
+                .flatMap(Collection::stream)
+                .map(String::valueOf)
+                .forEach(graph::addSubgraph);
+        return ofNullable(em.find(Comment.class, commentId, singletonMap("javax.persistence.fetchgraph", graph)));
+    }
+
     public void save(Book book, Comment comment) {
         em.getTransaction().begin();
         try {
             comment.setBook(book);
             em.persist(comment);
             book.addComment(comment); // performance: update context if 'comment' don't have cascade updates
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            throw e;
+        }
+    }
+    
+    public void delete(Comment comment) {
+        em.getTransaction().begin();
+        try {
+            Book book = comment.getBook();
+            em.remove(comment);
+            book.removeComment(comment);
             em.getTransaction().commit();
         } catch (Exception e) {
             em.getTransaction().rollback();
