@@ -6,6 +6,7 @@ import org.h2.tools.Console;
 import org.springframework.stereotype.Service;
 import ru.shishmakov.dao.AuthorRepository;
 import ru.shishmakov.dao.BookRepository;
+import ru.shishmakov.dao.CommentRepository;
 import ru.shishmakov.dao.GenreRepository;
 import ru.shishmakov.domain.Author;
 import ru.shishmakov.domain.Book;
@@ -13,20 +14,22 @@ import ru.shishmakov.domain.Comment;
 import ru.shishmakov.domain.Genre;
 
 import java.sql.SQLException;
-import java.util.*;
+import java.time.Instant;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import static java.lang.System.lineSeparator;
-import static java.util.Collections.singletonList;
-import static java.util.Collections.singletonMap;
+import static java.util.Collections.*;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.joining;
-import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 @RequiredArgsConstructor
 @Service
 public class LibraryService {
     private final GenreRepository genreDao;
     private final BookRepository bookDao;
+    private final CommentRepository commentDao;
     private final AuthorRepository authorDao;
     @Setter
     private volatile Console console;
@@ -81,9 +84,7 @@ public class LibraryService {
     }
 
     public String getBookComments(long bookId) {
-        Map<String, Object> context = new HashMap<>();
-        context.put("eager", singletonList("comments"));
-        Optional<Book> book = bookDao.getById(bookId, context);
+        Optional<Book> book = bookDao.getById(bookId, singletonMap("eager", singletonList("comments")));
         return book.map(b -> new StringBuilder("Book:")
                 .append(lineSeparator())
                 .append(b.toString())
@@ -103,13 +104,15 @@ public class LibraryService {
         return book.toString();
     }
 
-    public void deleteBook(long bookId) {
-        bookDao.delete(bookId);
+    public String createBookComment(long bookId, String commentText) {
+        Comment comment = Comment.builder().text(commentText).createDate(Instant.now()).build();
+        bookDao.getById(bookId, emptyMap())
+                .ifPresent(b -> commentDao.save(b, comment));
+        return comment.toString();
     }
 
-    public void addBookComment(long bookId, String comment) {
-        Optional<Book> book = bookDao.getById(bookId, singletonMap("lazy", EMPTY));
-//        bookDao.save(book.get(), comment);
+    public void deleteBook(long bookId) {
+        bookDao.delete(bookId);
     }
 
     public void exit() {

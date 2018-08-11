@@ -1,6 +1,5 @@
 package ru.shishmakov.dao;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.shishmakov.domain.Author;
 import ru.shishmakov.domain.Book;
@@ -16,7 +15,6 @@ import java.util.Map.Entry;
 import static java.util.Collections.singletonMap;
 import static java.util.Optional.ofNullable;
 
-@RequiredArgsConstructor
 @Repository
 public class BookRepository {
     private EntityManager em;
@@ -40,17 +38,6 @@ public class BookRepository {
         }
     }
 
-    public void save(Book book, String comment) {
-        em.getTransaction();
-        try {
-            // impl
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            em.getTransaction().rollback();
-            throw e;
-        }
-    }
-
     public void delete(long bookId) {
         em.getTransaction().begin();
         try {
@@ -64,8 +51,6 @@ public class BookRepository {
     }
 
     public Optional<Book> getById(long bookId, Map<String, Object> context) {
-        if (context.containsKey("lazy")) return ofNullable(em.getReference(Book.class, bookId));
-
         EntityGraph<Book> graph = em.createEntityGraph(Book.class);
         context.entrySet().stream()
                 .filter(e -> Objects.equals(e.getKey(), "eager")) //eager

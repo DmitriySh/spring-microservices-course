@@ -1,9 +1,10 @@
 package ru.shishmakov.domain;
 
 import lombok.*;
+import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
-import java.util.Objects;
+import java.time.Instant;
 
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.SEQUENCE;
@@ -11,6 +12,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
 @Setter
 @Getter
@@ -19,28 +21,20 @@ import static javax.persistence.GenerationType.SEQUENCE;
 public class Comment {
 
     @Id
-    @SequenceGenerator(name = "c_seq", sequenceName = "comment_id_seq", allocationSize = 1)
+    @SequenceGenerator(name = "c_seq", sequenceName = "book_comment_id_seq", allocationSize = 1)
     @GeneratedValue(generator = "c_seq", strategy = SEQUENCE)
     private Long id;
 
+    @EqualsAndHashCode.Include
     private String text;
+
+    @EqualsAndHashCode.Include
+    @NaturalId
+    @Basic
+    private Instant createDate;
 
     @ToString.Exclude
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "book_id")
     private Book book;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Comment)) return false;
-        Comment comment = (Comment) o;
-        return Objects.equals(id, comment.id) &&
-                Objects.equals(text, comment.text);
-    }
-
-    @Override
-    public int hashCode() {
-        return 31;
-    }
 }

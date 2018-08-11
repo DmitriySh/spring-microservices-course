@@ -35,6 +35,7 @@ CREATE TABLE IF NOT EXISTS book_comment
   id BIGINT DEFAULT book_comment_id_seq.nextval PRIMARY KEY,
   book_id BIGINT NOT NULL,
   text varchar(512) NOT NULL,
+  create_date TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT current_timestamp,
   FOREIGN KEY (book_id) REFERENCES book(id)
 );
 
