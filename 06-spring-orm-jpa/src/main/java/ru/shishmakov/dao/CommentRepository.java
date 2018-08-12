@@ -46,7 +46,7 @@ public class CommentRepository {
         return ofNullable(em.find(Comment.class, commentId, singletonMap("javax.persistence.loadgraph", graph)));
     }
 
-    public void save(Book book, Comment comment) {
+    public void save(Comment comment, Book book) {
         em.getTransaction().begin();
         try {
             comment.setBook(book);

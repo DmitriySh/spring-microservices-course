@@ -111,7 +111,7 @@ public class LibraryService {
     public String createBookComment(long bookId, String commentText) {
         Comment comment = Comment.builder().text(commentText).createDate(Instant.now()).build();
         bookDao.getById(bookId, emptyMap())
-                .ifPresent(b -> commentDao.save(b, comment));
+                .ifPresent(b -> commentDao.save(comment, b));
         return comment.toString();
     }
 

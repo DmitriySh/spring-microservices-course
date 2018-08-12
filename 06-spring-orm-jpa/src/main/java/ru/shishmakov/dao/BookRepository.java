@@ -66,7 +66,7 @@ public class BookRepository {
         return ofNullable(em.find(Book.class, bookId, singletonMap("javax.persistence.loadgraph", graph)));
     }
 
-    public Collection<Book> getAll() {
+    public List<Book> getAll() {
         return em.createQuery("select b from Book b", Book.class) // lazy loading
                 .getResultList();
     }
