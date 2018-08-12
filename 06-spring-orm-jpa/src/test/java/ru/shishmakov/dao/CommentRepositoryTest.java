@@ -1,7 +1,6 @@
 package ru.shishmakov.dao;
 
 import org.assertj.core.util.Sets;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.SystemOutRule;
 import org.junit.runner.RunWith;
@@ -27,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @DataJpaTest
 public class CommentRepositoryTest {
-    @Rule
+    //    @Rule
     public final SystemOutRule systemOutRule = new SystemOutRule().muteForSuccessfulTests();
     @SpyBean
     private CommentRepository commentRepository;
