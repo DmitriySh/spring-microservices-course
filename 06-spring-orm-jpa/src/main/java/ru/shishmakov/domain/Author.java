@@ -7,8 +7,6 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-import static javax.persistence.CascadeType.MERGE;
-import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.SEQUENCE;
 
@@ -30,6 +28,6 @@ public class Author {
     private String fullname;
 
     @ToString.Exclude
-    @ManyToMany(mappedBy = "authors", cascade = {PERSIST, MERGE}, fetch = LAZY)
+    @ManyToMany(mappedBy = "authors", fetch = LAZY)
     private Set<Book> books = new HashSet<>();
 }

@@ -7,8 +7,6 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-import static javax.persistence.CascadeType.MERGE;
-import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.SEQUENCE;
 
@@ -30,7 +28,7 @@ public class Genre {
     @EqualsAndHashCode.Include
     private String name;
 
-    @ManyToMany(mappedBy = "genres", cascade = {PERSIST, MERGE}, fetch = LAZY)
+    @ManyToMany(mappedBy = "genres", fetch = LAZY)
     @ToString.Exclude
     private Set<Book> books = new HashSet<>();
 }

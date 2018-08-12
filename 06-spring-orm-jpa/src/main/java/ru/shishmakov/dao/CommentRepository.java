@@ -57,7 +57,7 @@ public class CommentRepository {
             throw e;
         }
     }
-    
+
     public void delete(Comment comment) {
         em.getTransaction().begin();
         try {
