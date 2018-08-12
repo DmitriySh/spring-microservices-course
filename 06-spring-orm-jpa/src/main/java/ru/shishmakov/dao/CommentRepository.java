@@ -41,8 +41,9 @@ public class CommentRepository {
                 .map(List.class::cast)
                 .flatMap(Collection::stream)
                 .map(String::valueOf)
-                .forEach(graph::addSubgraph);
-        return ofNullable(em.find(Comment.class, commentId, singletonMap("javax.persistence.fetchgraph", graph)));
+                .filter(Objects::nonNull)
+                .forEach(graph::addAttributeNodes);
+        return ofNullable(em.find(Comment.class, commentId, singletonMap("javax.persistence.loadgraph", graph)));
     }
 
     public void save(Book book, Comment comment) {

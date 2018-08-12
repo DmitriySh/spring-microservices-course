@@ -61,8 +61,9 @@ public class BookRepository {
                 .map(List.class::cast)
                 .flatMap(Collection::stream)
                 .map(String::valueOf)
-                .forEach(graph::addSubgraph);
-        return ofNullable(em.find(Book.class, bookId, singletonMap("javax.persistence.fetchgraph", graph)));
+                .filter(Objects::nonNull)
+                .forEach(graph::addAttributeNodes);
+        return ofNullable(em.find(Book.class, bookId, singletonMap("javax.persistence.loadgraph", graph)));
     }
 
     public Collection<Book> getAll() {
