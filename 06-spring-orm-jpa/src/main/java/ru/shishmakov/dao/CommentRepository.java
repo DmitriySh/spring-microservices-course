@@ -71,4 +71,14 @@ public class CommentRepository {
             throw e;
         }
     }
+
+    public long count() {
+        return em.createQuery("select count(c.id) from Comment c", Long.class)
+                .getSingleResult();
+    }
+
+    public long maxCommentId() {
+        return em.createQuery("select max(c.id) from Comment c", Long.class)
+                .getSingleResult();
+    }
 }

@@ -25,6 +25,14 @@ public class BookRepository {
         this.em = em.createEntityManager();
     }
 
+    public long count() {
+        return em.createQuery("select count(b.id) from Book b", Long.class).getSingleResult();
+    }
+
+    public long maxBookId() {
+        return em.createQuery("select max(b.id) from Book b", Long.class).getSingleResult();
+    }
+
     public void save(Book book, List<Author> authors, List<Genre> genres) {
         em.getTransaction().begin();
         try {

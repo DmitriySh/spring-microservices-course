@@ -76,7 +76,7 @@ public class LibraryShell {
     }
 
     @ShellMethod(value = "Delete the comment.")
-    public String deleteComment(long commentId) {
+    public String deleteBookComment(long commentId) {
         service.deleteComment(commentId);
         return "deleted";
     }
