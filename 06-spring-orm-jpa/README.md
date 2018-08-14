@@ -82,6 +82,7 @@ Persistence technology defines objects state (framework) and persists state (dat
 
 
 Spring Transaction Management: https://docs.spring.io/spring/docs/5.0.x/spring-framework-reference/data-access.html#transaction
+
 Spring ORM: https://docs.spring.io/spring/docs/5.0.x/spring-framework-reference/data-access.html#orm
 
 
