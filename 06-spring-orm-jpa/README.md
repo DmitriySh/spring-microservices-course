@@ -8,7 +8,7 @@ Persistence technology defines objects state (framework) and persists state (dat
  * The program stores information about books in the Library
  * The program runs in a terminal and use:
    * `H2` in-memory database 
-   * tables: book, author and genre
+   * tables: book, author, genre and books comments
  * Services covered by unit tests
 
 
@@ -86,3 +86,94 @@ Spring ORM: https://docs.spring.io/spring/docs/5.0.x/spring-framework-reference/
 
 
 ## Run
+ *  Build project
+```sh
+spring-microservices-course$ ./gradlew clean build
+                             
+> Configure project :
+Version 0.1
+                             
+BUILD SUCCESSFUL in 29s
+36 actionable tasks: 36 executed
+```
+
+  *  Run server: 
+```sh
+spring-microservices-course$ ./06-spring-orm-jpa/build/libs/06-spring-orm-jpa-all-0.1.jar
+
+ _       _____  ______   ______   ______   ______  __    _
+| |       | |  | |  | \ | |  | \ | |  | | | |  | \ \ \  | |
+| |   _   | |  | |--| < | |__| | | |__| | | |__| |  \_\_| |
+|_|__|_| _|_|_ |_|__|_/ |_|  \_\ |_|  |_| |_|  \_\  ____|_|
+Dmitriy Shishmakov | Spring Boot
+
+2018-08-14 06:29:05.603  INFO 12980 --- [           main] ru.shishmakov.Main                       : Starting Main on shishmakov.local with PID 12980 (/Users/dima/programming/git/otus/spring-course/spring-microservices-course/06-spring-orm-jpa/build/libs/06-spring-orm-jpa-all-0.1.jar started by dima in /Users/dima/programming/git/otus/spring-course/spring-microservices-course/06-spring-orm-jpa/build/libs)
+2018-08-14 06:29:05.609  INFO 12980 --- [           main] ru.shishmakov.Main                       : No active profile set, falling back to default profiles: default
+2018-08-14 06:29:05.658  INFO 12980 --- [           main] s.c.a.AnnotationConfigApplicationContext : Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@60215eee: startup date [Tue Aug 14 06:29:05 MSK 2018]; root of context hierarchy
+2018-08-14 06:29:06.581  INFO 12980 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2018-08-14 06:29:06.748  INFO 12980 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2018-08-14 06:29:06.752  INFO 12980 --- [           main] o.s.jdbc.datasource.init.ScriptUtils     : Executing SQL script from URL [jar:file:/Users/dima/programming/git/otus/spring-course/spring-microservices-course/06-spring-orm-jpa/build/libs/06-spring-orm-jpa-all-0.1.jar!/BOOT-INF/classes!/schema.sql]
+2018-08-14 06:29:06.795  INFO 12980 --- [           main] o.s.jdbc.datasource.init.ScriptUtils     : Executed SQL script from URL [jar:file:/Users/dima/programming/git/otus/spring-course/spring-microservices-course/06-spring-orm-jpa/build/libs/06-spring-orm-jpa-all-0.1.jar!/BOOT-INF/classes!/schema.sql] in 43 ms.
+2018-08-14 06:29:06.800  INFO 12980 --- [           main] o.s.jdbc.datasource.init.ScriptUtils     : Executing SQL script from URL [jar:file:/Users/dima/programming/git/otus/spring-course/spring-microservices-course/06-spring-orm-jpa/build/libs/06-spring-orm-jpa-all-0.1.jar!/BOOT-INF/classes!/data.sql]
+2018-08-14 06:29:06.815  INFO 12980 --- [           main] o.s.jdbc.datasource.init.ScriptUtils     : Executed SQL script from URL [jar:file:/Users/dima/programming/git/otus/spring-course/spring-microservices-course/06-spring-orm-jpa/build/libs/06-spring-orm-jpa-all-0.1.jar!/BOOT-INF/classes!/data.sql] in 14 ms.
+2018-08-14 06:29:06.958  INFO 12980 --- [           main] j.LocalContainerEntityManagerFactoryBean : Building JPA container EntityManagerFactory for persistence unit 'default'
+2018-08-14 06:29:06.979  INFO 12980 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+2018-08-14 06:29:07.085  INFO 12980 --- [           main] org.hibernate.Version                    : HHH000412: Hibernate Core {5.2.17.Final}
+2018-08-14 06:29:07.089  INFO 12980 --- [           main] org.hibernate.cfg.Environment            : HHH000206: hibernate.properties not found
+2018-08-14 06:29:07.150  INFO 12980 --- [           main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2018-08-14 06:29:07.390  INFO 12980 --- [           main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.H2Dialect
+2018-08-14 06:29:08.025  INFO 12980 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+
+	Welcome to demo Library!
+
+2018-08-14 06:29:08.846  INFO 12980 --- [           main] o.s.j.e.a.AnnotationMBeanExporter        : Registering beans for JMX exposure on startup
+2018-08-14 06:29:08.847  INFO 12980 --- [           main] o.s.j.e.a.AnnotationMBeanExporter        : Bean with name 'dataSource' has been autodetected for JMX exposure
+2018-08-14 06:29:08.851  INFO 12980 --- [           main] o.s.j.e.a.AnnotationMBeanExporter        : Located MBean 'dataSource': registering with JMX server as MBean [com.zaxxer.hikari:name=dataSource,type=HikariDataSource]
+2018-08-14 06:29:08.865  INFO 12980 --- [           main] ru.shishmakov.Main                       : Started Main in 3.822 seconds (JVM running for 4.341)
+shell:>help
+AVAILABLE COMMANDS
+
+Built-In Commands
+        clear: Clear the shell screen.
+        help: Display help about available commands.
+        history: Display or save the history of previously run commands
+        stacktrace: Display the full stacktrace of the last error.
+
+Library Shell
+        create-book: Create new book.
+        create-book-comment: Create new comment to book.
+        delete-book: Delete the book.
+        delete-book-comment: Delete the comment.
+        exit, quit: Exit the library.
+        get-authors: Get all authors.
+        get-book-authors: Get authors of the book.
+        get-book-comments: Get comments of the book.
+        get-book-genres: Get genres of the book.
+        get-books: Get all books.
+        get-comments: Get all comments.
+        get-genres: Get all genres.
+        h2: Run H2 database console.
+
+
+shell:>
+```
+
+
+## Stop
+
+ * The program is terminated at the end of quiz, by command `exit` or response to a user interrupt, such as typing `^C` (Ctrl + C), or a system-wide event of a shutdown.
+```sh
+...
+shell:>exit
+
+	Goodbye! =)
+
+2018-08-14 06:30:58.694  INFO 12980 --- [       Thread-2] s.c.a.AnnotationConfigApplicationContext : Closing org.springframework.context.annotation.AnnotationConfigApplicationContext@60215eee: startup date [Tue Aug 14 06:29:05 MSK 2018]; root of context hierarchy
+2018-08-14 06:30:58.699  INFO 12980 --- [       Thread-2] o.s.j.e.a.AnnotationMBeanExporter        : Unregistering JMX-exposed beans on shutdown
+2018-08-14 06:30:58.700  INFO 12980 --- [       Thread-2] o.s.j.e.a.AnnotationMBeanExporter        : Unregistering JMX-exposed beans
+2018-08-14 06:30:58.700  INFO 12980 --- [       Thread-2] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2018-08-14 06:30:58.701  INFO 12980 --- [       Thread-2] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2018-08-14 06:30:58.736  INFO 12980 --- [       Thread-2] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+```
