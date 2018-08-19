@@ -1,40 +1,45 @@
 package ru.shishmakov.repository;
 
 import org.assertj.core.util.Sets;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.SystemOutRule;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 import ru.shishmakov.domain.Author;
 import ru.shishmakov.domain.Book;
+import ru.shishmakov.domain.Comment;
 import ru.shishmakov.domain.Genre;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.transaction.annotation.Propagation.NOT_SUPPORTED;
 
 /**
  * Test JPA layer without Web
  */
 @RunWith(SpringRunner.class)
 @DataJpaTest
-@Ignore
+@Transactional(propagation = NOT_SUPPORTED)
 public class BookRepositoryTest {
     @Rule
     public final SystemOutRule systemOutRule = new SystemOutRule().muteForSuccessfulTests();
-    @SpyBean
+    @Autowired
     private BookRepository bookRepository;
-    @SpyBean
+    @Autowired
     private AuthorRepository authorRepository;
-    @SpyBean
+    @Autowired
     private GenreRepository genreRepository;
+    @Autowired
+    private CommentRepository commentRepository;
 
     @Test
     public void getAllShouldGetAllBooks() {
@@ -58,68 +63,89 @@ public class BookRepositoryTest {
     }
 
     @Test
-    public void saveShouldSaveNewBook() throws InterruptedException {
+    @Transactional
+    public void saveAndFlushShouldSaveNewBook() {
         List<Author> authors = requireNonNull(authorRepository.findAllById(Sets.newLinkedHashSet(1L, 2L)));
         List<Genre> genres = requireNonNull(genreRepository.findAllById(Sets.newLinkedHashSet(1L, 2L)));
-        Book book = Book.builder().title("title").isbn("isbn").build();
+        Comment comment = Comment.builder().createDate(Instant.now()).text("next comment").build();
+        Book newBook = Book.builder().title("title").isbn("isbn").build();
 
-        book.getAuthors().addAll(authors);
-        book.getGenres().addAll(genres);
-        bookRepository.save(book);
-//            em.persist(book); // save entity
-//            book.getAuthors().addAll(authors);
-//            book.getGenres().addAll(genres);
-//            em.merge(book); // save references
+        newBook.getAuthors().addAll(authors);
+        newBook.getGenres().addAll(genres);
+        newBook.addComment(comment);
+        Book book = bookRepository.saveAndFlush(newBook);
 
         assertThat(book.getId())
                 .isNotNull()
                 .isPositive();
         assertThat(book.getAuthors())
-                .isNotNull()
+                .isNotEmpty()
                 .containsAll(authors);
         assertThat(book.getGenres())
-                .isNotNull()
+                .isNotEmpty()
                 .containsAll(genres);
-//        assertThat(authors)
-//                .isNotNull()
-//                .allMatch(a -> a.getBooks().stream().anyMatch(b -> Objects.equals(b, book)));
-//        assertThat(genres)
-//                .isNotNull()
-//                .allMatch(g -> g.getBooks().stream().anyMatch(b -> Objects.equals(b, book)));
+        assertThat(book.getComments())
+                .isNotEmpty()
+                .contains(comment);
+
+        assertThat(comment.getId())
+                .isNotNull()
+                .isPositive();
+        assertThat(comment.getBook())
+                .isNotNull();
+        assertThat(authors)
+                .isNotNull()
+                .allMatch(a -> a.getBooks().stream().anyMatch(b -> Objects.equals(b, book)));
+        assertThat(genres)
+                .isNotNull()
+                .allMatch(g -> g.getBooks().stream().anyMatch(b -> Objects.equals(b, book)));
     }
 
     @Test
-    public void deleteShouldDeleteComment() {
+    @Transactional
+    public void deleteShouldDeleteBook() {
         List<Author> authors = requireNonNull(authorRepository.findAllById(Sets.newLinkedHashSet(1L, 2L)));
         List<Genre> genres = requireNonNull(genreRepository.findAllById(Sets.newLinkedHashSet(1L, 2L)));
+        Comment comment = Comment.builder().createDate(Instant.now()).text("next comment").build();
         Book newBook = Book.builder().title("title").isbn("isbn").build();
 
         newBook.getAuthors().addAll(authors);
         newBook.getGenres().addAll(genres);
-        bookRepository.save(newBook);
-//            em.persist(book); // save entity
-//            book.getAuthors().addAll(authors);
-//            book.getGenres().addAll(genres);
-//            em.merge(book); // save references
+        newBook.addComment(comment);
+        Book book = bookRepository.saveAndFlush(newBook);
 
-        Long newBookId = requireNonNull(newBook.getId());
+        Long bookId = requireNonNull(book.getId());
+        Long commentId = requireNonNull(comment.getId());
 
-        bookRepository.deleteById(newBookId);
-//            getById(bookId, singletonMap("eager", singletonList("comments"))).ifPresent(b -> {
-//                b.removeAllComment();
-//                em.remove(b);
-//            });
+        authors.forEach(book::removeAuthor);
+        genres.forEach(book::removeGenre);
+        book.removeAllComment();
+        bookRepository.deleteById(bookId);
 
-        Optional<Book> deletedBook = bookRepository.findById(newBookId);
+        Optional<Book> deletedBook = bookRepository.findById(bookId);
 
         assertThat(deletedBook)
                 .isNotNull()
                 .isNotPresent();
+        assertThat(book.getAuthors())
+                .isNotNull()
+                .doesNotContain(authors.toArray(new Author[0]));
+        assertThat(book.getGenres())
+                .isNotNull()
+                .doesNotContain(genres.toArray(new Genre[0]));
+        assertThat(book.getComments())
+                .isEmpty();
+
+        assertThat(comment.getBook())
+                .isNull();
+        assertThat(commentRepository.findById(commentId))
+                .isNotNull()
+                .isNotPresent();
         assertThat(authors)
                 .isNotNull()
-                .allMatch(a -> a.getBooks().stream().noneMatch(b -> Objects.equals(b, newBook)));
+                .allMatch(a -> a.getBooks().stream().noneMatch(b -> Objects.equals(b, book)));
         assertThat(genres)
                 .isNotNull()
-                .allMatch(g -> g.getBooks().stream().noneMatch(b -> Objects.equals(b, newBook)));
+                .allMatch(g -> g.getBooks().stream().noneMatch(b -> Objects.equals(b, book)));
     }
 }

@@ -1,14 +1,14 @@
 package ru.shishmakov.repository;
 
 import org.assertj.core.util.Sets;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.SystemOutRule;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 import ru.shishmakov.domain.Book;
 import ru.shishmakov.domain.Comment;
 
@@ -20,19 +20,20 @@ import java.util.Set;
 
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.transaction.annotation.Propagation.NOT_SUPPORTED;
 
 /**
  * Test JPA layer without Web
  */
 @RunWith(SpringRunner.class)
 @DataJpaTest
-@Ignore
+@Transactional(propagation = NOT_SUPPORTED)
 public class CommentRepositoryTest {
     @Rule
     public final SystemOutRule systemOutRule = new SystemOutRule().muteForSuccessfulTests();
-    @SpyBean
+    @Autowired
     private CommentRepository commentRepository;
-    @SpyBean
+    @Autowired
     private BookRepository bookRepository;
 
     @Test
@@ -78,15 +79,12 @@ public class CommentRepositoryTest {
     }
 
     @Test
+    @Transactional
     public void saveShouldSaveNewComment() {
         Book book = requireNonNull(bookRepository.findById(1L).orElse(null));
         Comment comment = Comment.builder().createDate(Instant.now()).text("next comment").build();
-        comment.setBook(book);
+        book.addComment(comment);
         commentRepository.save(comment);
-
-//        comment.setBook(book);
-//        commentRepository.save(comment);
-//        book.addComment(comment); // performance: update context if 'comment' don't have cascade updates
 
         assertThat(comment.getId())
                 .isNotNull()
@@ -100,18 +98,19 @@ public class CommentRepositoryTest {
     }
 
     @Test
+    @Transactional
     public void deleteShouldDeleteComment() {
-        Book book = requireNonNull(bookRepository.findById(1L).orElse(null));
+        Book book = requireNonNull(bookRepository.findByIdWithFetchComments(1L).orElse(null));
         Comment newComment = Comment.builder().createDate(Instant.now()).text("next comment").build();
-        newComment.setBook(book);
+        book.addComment(newComment);
         commentRepository.save(newComment);
 
-//        comment.setBook(book);
-//        commentRepository.save(comment);
-//        book.addComment(comment); // performance: update context if 'comment' don't have cascade updates
-
         Long newCommentId = requireNonNull(newComment.getId());
+        assertThat(book.getComments())
+                .isNotNull()
+                .contains(newComment);
 
+        book.removeComment(newComment);
         commentRepository.delete(newComment);
         Optional<Comment> deletedComment = commentRepository.findById(newCommentId);
 
