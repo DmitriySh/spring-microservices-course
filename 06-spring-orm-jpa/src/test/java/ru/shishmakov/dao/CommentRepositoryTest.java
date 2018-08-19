@@ -89,7 +89,7 @@ public class CommentRepositoryTest {
                 .isNotNull()
                 .isEqualTo(book);
         assertThat(book.getComments())
-                .isNotNull()
+                .isNotEmpty()
                 .contains(comment);
     }
 
@@ -100,6 +100,9 @@ public class CommentRepositoryTest {
         commentRepository.save(newComment, book);
 
         Long newCommentId = requireNonNull(newComment.getId());
+        assertThat(book.getComments())
+                .isNotEmpty()
+                .contains(newComment);
 
         commentRepository.delete(newComment);
         Optional<Comment> deletedComment = commentRepository.getById(newCommentId, emptyMap());
