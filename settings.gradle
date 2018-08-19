@@ -15,4 +15,5 @@ include '03-spring-boot-start'
 include '04-spring-shell'
 include '05-spring-jdbc'
 include '06-spring-orm-jpa'
+include '07-spring-data-jpa'
 
