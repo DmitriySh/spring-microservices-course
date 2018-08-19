@@ -26,6 +26,10 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("SELECT b from Book b where b.id = :id")
     Optional<Book> findByIdWithFetchComments(@Param("id") long bookId);
 
+    @EntityGraph(type = LOAD, attributePaths = {"comments", "genres", "authors"})
+    @Query("SELECT b from Book b where b.id = :id")
+    Optional<Book> findByIdWithFetchCommentsGenresAuthors(@Param("id") long bookId);
+
     @Query("SELECT coalesce(max(c.id), 0) FROM Comment c")
     long findMaxId();
 }

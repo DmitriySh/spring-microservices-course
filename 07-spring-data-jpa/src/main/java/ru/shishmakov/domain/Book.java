@@ -59,9 +59,25 @@ public class Book {
         author.getBooks().remove(this);
     }
 
+    public void removeAllAuthors() {
+        for (Iterator<Author> iterator = authors.iterator(); iterator.hasNext(); ) {
+            Author author = iterator.next();
+            author.getBooks().remove(this);
+            iterator.remove();
+        }
+    }
+
     public void removeGenre(Genre genre) {
         genres.remove(genre);
         genre.getBooks().remove(this);
+    }
+
+    public void removeAllGenres() {
+        for (Iterator<Genre> iterator = genres.iterator(); iterator.hasNext(); ) {
+            Genre genre = iterator.next();
+            genre.getBooks().remove(this);
+            iterator.remove();
+        }
     }
 
     public void addComment(Comment comment) {

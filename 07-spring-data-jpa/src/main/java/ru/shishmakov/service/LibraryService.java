@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.h2.tools.Console;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.shishmakov.domain.Author;
 import ru.shishmakov.domain.Book;
 import ru.shishmakov.domain.Comment;
@@ -25,6 +26,7 @@ import static java.util.stream.Collectors.joining;
 
 @RequiredArgsConstructor
 @Service
+@Transactional(readOnly = true)
 public class LibraryService {
     private final GenreRepository genreDao;
     private final BookRepository bookDao;
@@ -99,6 +101,7 @@ public class LibraryService {
                 .orElseGet(() -> "book: " + bookId + " not found");
     }
 
+    @Transactional
     public String createBook(String title, String isbn, Set<Long> authorIds, Set<Long> genreIds) {
         Book book = Book.builder().title(title).isbn(isbn).build();
         List<Author> authors = authorDao.findAllById(authorIds);
@@ -107,41 +110,36 @@ public class LibraryService {
         book.getAuthors().addAll(authors);
         book.getGenres().addAll(genres);
         bookDao.save(book);
-//            em.persist(book); // save entity
-//            book.getAuthors().addAll(authors);
-//            book.getGenres().addAll(genres);
-//            em.merge(book); // save references
         return book.toString();
     }
 
+    @Transactional
     public String createBookComment(long bookId, String commentText) {
         Comment comment = Comment.builder().text(commentText).createDate(Instant.now()).build();
         bookDao.findById(bookId)
                 .ifPresent(b -> {
-                    comment.setBook(b);
+                    b.addComment(comment);
                     commentDao.save(comment);
-//                    comment.setBook(b);
-//                    commentDao.save(comment);
-//                    b.addComment(comment); // performance: update context if 'comment' don't have cascade updates
                 });
         return comment.toString();
     }
 
+    @Transactional
     public void deleteBook(long bookId) {
-        bookDao.deleteById(bookId);
-//            getById(bookId, singletonMap("eager", singletonList("comments"))).ifPresent(b -> {
-//                b.removeAllComment();
-//                em.remove(b);
-//            });
+        bookDao.findByIdWithFetchCommentsGenresAuthors(bookId).ifPresent(b -> {
+            b.removeAllAuthors();
+            b.removeAllGenres();
+            b.removeAllComment();
+            bookDao.delete(b);
+        });
     }
 
+    @Transactional
     public void deleteComment(long commentId) {
         commentDao.findByIdWithFetchBook(commentId)
                 .ifPresent(comment -> {
+                    comment.getBook().removeComment(comment);
                     commentDao.delete(comment);
-//                    Book book = comment.getBook();
-//                    commentDao.delete(comment);
-//                    book.removeComment(comment);
                 });
     }
 

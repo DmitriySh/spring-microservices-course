@@ -117,8 +117,8 @@ public class BookRepositoryTest {
         Long bookId = requireNonNull(book.getId());
         Long commentId = requireNonNull(comment.getId());
 
-        authors.forEach(book::removeAuthor);
-        genres.forEach(book::removeGenre);
+        book.removeAllAuthors();
+        book.removeAllGenres();
         book.removeAllComment();
         bookRepository.deleteById(bookId);
 
