@@ -81,7 +81,7 @@ public class BookRepositoryTest {
     }
 
     @Test
-    public void deleteShouldDeleteComment() {
+    public void deleteShouldDeleteBook() {
         List<Author> authors = requireNonNull(authorRepository.getByIds(Sets.newLinkedHashSet(1L, 2L)));
         List<Genre> genres = requireNonNull(genreRepository.getByIds(Sets.newLinkedHashSet(1L, 2L)));
         Book newBook = Book.builder().title("title").isbn("isbn").build();
