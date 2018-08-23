@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.h2.tools.Console;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.shishmakov.dao.AuthorRepository;
 import ru.shishmakov.dao.BookRepository;
 import ru.shishmakov.dao.CommentRepository;
@@ -20,12 +22,15 @@ import java.util.Optional;
 import java.util.Set;
 
 import static java.lang.System.lineSeparator;
-import static java.util.Collections.*;
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.singletonList;
+import static java.util.Collections.singletonMap;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.joining;
 
 @RequiredArgsConstructor
 @Service
+@Transactional(propagation = Propagation.NOT_SUPPORTED)
 public class LibraryService {
     private final GenreRepository genreDao;
     private final BookRepository bookDao;
@@ -100,6 +105,7 @@ public class LibraryService {
                 .orElseGet(() -> "book: " + bookId + " not found");
     }
 
+    @Transactional
     public String createBook(String title, String isbn, Set<Long> authorIds, Set<Long> genreIds) {
         Book book = Book.builder().title(title).isbn(isbn).build();
         List<Author> authors = authorDao.getByIds(authorIds);
@@ -108,6 +114,7 @@ public class LibraryService {
         return book.toString();
     }
 
+    @Transactional
     public String createBookComment(long bookId, String commentText) {
         Comment comment = Comment.builder().text(commentText).createDate(Instant.now()).build();
         bookDao.getById(bookId, emptyMap())
@@ -115,10 +122,12 @@ public class LibraryService {
         return comment.toString();
     }
 
+    @Transactional
     public void deleteBook(long bookId) {
         bookDao.delete(bookId);
     }
 
+    @Transactional
     public void deleteComment(long commentId) {
         commentDao.getById(commentId, singletonMap("eager", singletonList("book")))
                 .ifPresent(commentDao::delete);

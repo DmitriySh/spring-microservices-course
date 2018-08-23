@@ -7,10 +7,13 @@ import ru.shishmakov.domain.Genre;
 
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceUnit;
-import java.util.*;
+import javax.persistence.PersistenceContext;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
+import java.util.Optional;
 
 import static java.util.Collections.singletonList;
 import static java.util.Collections.singletonMap;
@@ -18,12 +21,8 @@ import static java.util.Optional.ofNullable;
 
 @Repository
 public class BookRepository {
+    @PersistenceContext
     private EntityManager em;
-
-    @PersistenceUnit
-    public void setEmf(EntityManagerFactory em) {
-        this.em = em.createEntityManager();
-    }
 
     public long count() {
         return em.createQuery("select count(b.id) from Book b", Long.class).getSingleResult();
@@ -33,32 +32,19 @@ public class BookRepository {
         return em.createQuery("select max(b.id) from Book b", Long.class).getSingleResult();
     }
 
-    public void save(Book book, List<Author> authors, List<Genre> genres) {
-        em.getTransaction().begin();
-        try {
-            em.persist(book); // save entity
-            book.getAuthors().addAll(authors);
-            book.getGenres().addAll(genres);
-            em.merge(book); // save references
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            em.getTransaction().rollback();
-            throw e;
-        }
+    public void save(Book book, Collection<Author> authors, Collection<Genre> genres) {
+        em.persist(book); // save entity
+        book.getAuthors().addAll(authors);
+        book.getGenres().addAll(genres);
+        em.merge(book); // save references
     }
 
     public void delete(long bookId) {
-        em.getTransaction().begin();
-        try {
-            getById(bookId, singletonMap("eager", singletonList("comments"))).ifPresent(b -> {
-                b.removeAllComment();
-                em.remove(b);
-            });
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            em.getTransaction().rollback();
-            throw e;
-        }
+        getById(bookId, singletonMap("eager", singletonList("comments"))).ifPresent(b -> {
+            em.merge(b);
+            b.removeAllComment();
+            em.remove(b);
+        });
     }
 
     public Optional<Book> getById(long bookId, Map<String, Object> context) {

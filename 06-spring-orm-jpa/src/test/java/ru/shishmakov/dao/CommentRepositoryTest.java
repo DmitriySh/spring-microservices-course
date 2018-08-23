@@ -5,9 +5,13 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.SystemOutRule;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.shishmakov.domain.Book;
 import ru.shishmakov.domain.Comment;
 
@@ -22,10 +26,12 @@ import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Test JPA layer without Web
+ * Test JPA layer without Web.<br/>
+ * Test methods could use already prepared data by `data.sql`
  */
 @RunWith(SpringRunner.class)
 @DataJpaTest
+@Transactional(propagation = Propagation.NOT_SUPPORTED)
 public class CommentRepositoryTest {
     @Rule
     public final SystemOutRule systemOutRule = new SystemOutRule().muteForSuccessfulTests();
@@ -33,6 +39,8 @@ public class CommentRepositoryTest {
     private CommentRepository commentRepository;
     @SpyBean
     private BookRepository bookRepository;
+    @Autowired
+    private TestEntityManager em;
 
     @Test
     public void getAllShouldGetAllComments() {
@@ -40,7 +48,7 @@ public class CommentRepositoryTest {
 
         assertThat(authors)
                 .isNotNull()
-                .hasSize(6)
+                .isNotEmpty()
                 .matches(list -> list.stream().allMatch(Objects::nonNull), "all elements are not null");
     }
 
@@ -77,6 +85,7 @@ public class CommentRepositoryTest {
     }
 
     @Test
+    @Transactional
     public void saveShouldSaveNewComment() {
         Book book = requireNonNull(bookRepository.getById(1L, emptyMap()).orElse(null));
         Comment comment = Comment.builder().createDate(Instant.now()).text("next comment").build();
@@ -94,6 +103,7 @@ public class CommentRepositoryTest {
     }
 
     @Test
+    @Transactional
     public void deleteShouldDeleteComment() {
         Book book = requireNonNull(bookRepository.getById(1L, emptyMap()).orElse(null));
         Comment newComment = Comment.builder().createDate(Instant.now()).text("next comment").build();

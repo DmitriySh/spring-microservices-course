@@ -8,6 +8,8 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.shishmakov.domain.Author;
 
 import java.util.List;
@@ -17,10 +19,12 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Test JPA layer without Web
+ * Test JPA layer without Web.<br/>
+ * Test methods could use already prepared data by `data.sql`
  */
 @RunWith(SpringRunner.class)
 @DataJpaTest
+@Transactional(propagation = Propagation.NOT_SUPPORTED)
 public class AuthorRepositoryTest {
     @Rule
     public final SystemOutRule systemOutRule = new SystemOutRule().muteForSuccessfulTests();
@@ -33,7 +37,7 @@ public class AuthorRepositoryTest {
 
         assertThat(authors)
                 .isNotNull()
-                .hasSize(4)
+                .isNotEmpty()
                 .matches(list -> list.stream().allMatch(Objects::nonNull), "all elements are not null");
     }
 
