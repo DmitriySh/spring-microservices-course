@@ -35,5 +35,5 @@ Spring Shell. Use annotation [@ShellComponent](https://docs.spring.io/spring-she
 ## Homework 5: [Books library](https://github.com/DmitriySh/spring-microservices-course/tree/master/05-spring-jdbc)
 Spring JDBC. Use DAO, [JdbcTemplate](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/jdbc/core/JdbcTemplate.html) and [TransactionTemplate](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/transaction/support/TransactionTemplate.html) to simplify using of JDBC and programmatic transactions
 
-## Homework 6: [Books library](https://github.com/DmitriySh/spring-microservices-course/tree/feature/06-spring-orm-jpa/06-spring-orm-jpa)
+## Homework 6: [Books library](https://github.com/DmitriySh/spring-microservices-course/tree/master/06-spring-orm-jpa)
 Spring ORM JPA. Use [EntityManagerFactory](https://docs.oracle.com/javaee/7/api/javax/persistence/EntityManagerFactory.html) and [PlatformTransactionManager](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/transaction/PlatformTransactionManager.html) that covers persistence technologies
