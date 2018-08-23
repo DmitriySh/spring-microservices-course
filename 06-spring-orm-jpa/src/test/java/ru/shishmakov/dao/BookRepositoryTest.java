@@ -60,7 +60,7 @@ public class BookRepositoryTest {
     public void saveShouldSaveNewBook() throws InterruptedException {
         List<Author> authors = requireNonNull(authorRepository.getByIds(Sets.newLinkedHashSet(1L, 2L)));
         List<Genre> genres = requireNonNull(genreRepository.getByIds(Sets.newLinkedHashSet(1L, 2L)));
-        Book book = Book.builder().title("title").isbn("isbn").build();
+        Book book = Book.builder().title("title").isbn("isbn 1").build();
         bookRepository.save(book, authors, genres);
 
         assertThat(book.getId())
@@ -84,7 +84,7 @@ public class BookRepositoryTest {
     public void deleteShouldDeleteBook() {
         List<Author> authors = requireNonNull(authorRepository.getByIds(Sets.newLinkedHashSet(1L, 2L)));
         List<Genre> genres = requireNonNull(genreRepository.getByIds(Sets.newLinkedHashSet(1L, 2L)));
-        Book newBook = Book.builder().title("title").isbn("isbn").build();
+        Book newBook = Book.builder().title("title").isbn("isbn 2").build();
         bookRepository.save(newBook, authors, genres);
 
         Long newBookId = requireNonNull(newBook.getId());
