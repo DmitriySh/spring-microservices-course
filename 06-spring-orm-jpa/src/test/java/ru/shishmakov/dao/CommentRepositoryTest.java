@@ -5,12 +5,17 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.SystemOutRule;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.shishmakov.domain.Book;
 import ru.shishmakov.domain.Comment;
 
+import javax.persistence.PersistenceException;
 import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
@@ -20,12 +25,14 @@ import java.util.Set;
 import static java.util.Collections.emptyMap;
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 /**
  * Test JPA layer without Web
  */
 @RunWith(SpringRunner.class)
 @DataJpaTest
+@Transactional(propagation = Propagation.NOT_SUPPORTED)
 public class CommentRepositoryTest {
     @Rule
     public final SystemOutRule systemOutRule = new SystemOutRule().muteForSuccessfulTests();
@@ -33,6 +40,8 @@ public class CommentRepositoryTest {
     private CommentRepository commentRepository;
     @SpyBean
     private BookRepository bookRepository;
+    @Autowired
+    private TestEntityManager em;
 
     @Test
     public void getAllShouldGetAllComments() {
@@ -77,6 +86,7 @@ public class CommentRepositoryTest {
     }
 
     @Test
+    @Transactional
     public void saveShouldSaveNewComment() {
         Book book = requireNonNull(bookRepository.getById(1L, emptyMap()).orElse(null));
         Comment comment = Comment.builder().createDate(Instant.now()).text("next comment").build();
@@ -94,6 +104,7 @@ public class CommentRepositoryTest {
     }
 
     @Test
+    @Transactional
     public void deleteShouldDeleteComment() {
         Book book = requireNonNull(bookRepository.getById(1L, emptyMap()).orElse(null));
         Comment newComment = Comment.builder().createDate(Instant.now()).text("next comment").build();
@@ -110,5 +121,13 @@ public class CommentRepositoryTest {
         assertThat(book.getComments())
                 .isNotNull()
                 .doesNotContain(newComment);
+    }
+
+    @Test
+    @Transactional
+    public void createBookShouldThrowExceptionIfTextNull() {
+        assertThatThrownBy(() -> em.persistAndFlush(Comment.builder().createDate(Instant.now()).text(null).build()))
+                .isInstanceOf(PersistenceException.class)
+                .hasMessageContaining("could not execute statement");
     }
 }

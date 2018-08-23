@@ -6,21 +6,21 @@ import ru.shishmakov.domain.Comment;
 
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceUnit;
-import java.util.*;
+import javax.persistence.PersistenceContext;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 
 import static java.util.Collections.singletonMap;
 import static java.util.Optional.ofNullable;
 
 @Repository
 public class CommentRepository {
+    @PersistenceContext
     private EntityManager em;
-
-    @PersistenceUnit
-    public void setEmf(EntityManagerFactory em) {
-        this.em = em.createEntityManager();
-    }
 
     public List<Comment> getAll() {
         return em.createQuery("select c from Comment c", Comment.class)
@@ -47,29 +47,15 @@ public class CommentRepository {
     }
 
     public void save(Comment comment, Book book) {
-        em.getTransaction().begin();
-        try {
-            comment.setBook(book);
-            em.persist(comment);
-            book.addComment(comment); // performance: update context if 'comment' don't have cascade updates
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            em.getTransaction().rollback();
-            throw e;
-        }
+        comment.setBook(book);
+        em.persist(comment);
+        book.addComment(comment); // performance: update context if 'comment' don't have cascade updates
     }
 
     public void delete(Comment comment) {
-        em.getTransaction().begin();
-        try {
-            Book book = comment.getBook();
-            em.remove(comment);
-            book.removeComment(comment);
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            em.getTransaction().rollback();
-            throw e;
-        }
+        Book book = comment.getBook();
+        em.remove(comment);
+        book.removeComment(comment);
     }
 
     public long count() {

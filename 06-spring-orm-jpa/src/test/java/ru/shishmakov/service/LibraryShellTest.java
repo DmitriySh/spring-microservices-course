@@ -8,9 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.shell.Shell;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.shishmakov.dao.AuthorRepository;
 import ru.shishmakov.dao.BookRepository;
 import ru.shishmakov.dao.CommentRepository;
@@ -18,13 +19,16 @@ import ru.shishmakov.dao.GenreRepository;
 
 import static java.util.Collections.emptySet;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.anyMap;
+import static org.mockito.ArgumentMatchers.anySet;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@Transactional(propagation = Propagation.NOT_SUPPORTED)
 public class LibraryShellTest {
 
     @Rule
@@ -103,6 +107,7 @@ public class LibraryShellTest {
     }
 
     @Test
+    @Transactional
     public void createBookCommentShouldAddNewBookComment() {
         long before = commentRepository.count();
         libraryShell.createBookComment(1L, "book comment N");
@@ -113,6 +118,7 @@ public class LibraryShellTest {
     }
 
     @Test
+    @Transactional
     public void deleteBookCommentShouldDeleteBookComment() {
         long first = commentRepository.count();
 
@@ -129,6 +135,7 @@ public class LibraryShellTest {
     }
 
     @Test
+    @Transactional
     public void createBookShouldAddNewBook() {
         long before = bookRepository.count();
         libraryShell.createBook("book title", "book isbn 1", emptySet(), emptySet());
@@ -139,13 +146,7 @@ public class LibraryShellTest {
     }
 
     @Test
-    public void createBookShouldThrowExceptionIfTitleNull() {
-        assertThatThrownBy(() -> libraryShell.createBook(null, "book isbn 2", emptySet(), emptySet()))
-                .isInstanceOf(JpaSystemException.class)
-                .hasMessageContaining("Error while committing the transaction");
-    }
-
-    @Test
+    @Transactional
     public void deleteBookShouldRemoveBook() {
         long first = bookRepository.count();
 
