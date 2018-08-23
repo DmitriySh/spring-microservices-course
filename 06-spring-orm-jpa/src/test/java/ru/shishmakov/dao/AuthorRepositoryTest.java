@@ -19,7 +19,8 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Test JPA layer without Web
+ * Test JPA layer without Web.<br/>
+ * Test methods could use already prepared data by `data.sql`
  */
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -36,7 +37,7 @@ public class AuthorRepositoryTest {
 
         assertThat(authors)
                 .isNotNull()
-                .hasSize(4)
+                .isNotEmpty()
                 .matches(list -> list.stream().allMatch(Objects::nonNull), "all elements are not null");
     }
 

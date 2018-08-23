@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.shishmakov.domain.Book;
 import ru.shishmakov.domain.Comment;
 
-import javax.persistence.PersistenceException;
 import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
@@ -25,10 +24,10 @@ import java.util.Set;
 import static java.util.Collections.emptyMap;
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 /**
- * Test JPA layer without Web
+ * Test JPA layer without Web.<br/>
+ * Test methods could use already prepared data by `data.sql`
  */
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -49,7 +48,7 @@ public class CommentRepositoryTest {
 
         assertThat(authors)
                 .isNotNull()
-                .hasSize(6)
+                .isNotEmpty()
                 .matches(list -> list.stream().allMatch(Objects::nonNull), "all elements are not null");
     }
 
@@ -121,13 +120,5 @@ public class CommentRepositoryTest {
         assertThat(book.getComments())
                 .isNotNull()
                 .doesNotContain(newComment);
-    }
-
-    @Test
-    @Transactional
-    public void createBookShouldThrowExceptionIfTextNull() {
-        assertThatThrownBy(() -> em.persistAndFlush(Comment.builder().createDate(Instant.now()).text(null).build()))
-                .isInstanceOf(PersistenceException.class)
-                .hasMessageContaining("could not execute statement");
     }
 }

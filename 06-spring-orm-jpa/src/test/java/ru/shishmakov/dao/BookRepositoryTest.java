@@ -20,6 +20,7 @@ import javax.persistence.PersistenceException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 import static java.util.Collections.emptyMap;
 import static java.util.Objects.requireNonNull;
@@ -27,7 +28,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 /**
- * Test JPA layer without Web
+ * Test JPA layer without Web.<br/>
+ * Test methods could use already prepared data by `data.sql`
  */
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -50,7 +52,7 @@ public class BookRepositoryTest {
 
         assertThat(authors)
                 .isNotNull()
-                .hasSize(4)
+                .isNotEmpty()
                 .matches(list -> list.stream().allMatch(Objects::nonNull), "all elements are not null");
     }
 
@@ -70,7 +72,7 @@ public class BookRepositoryTest {
     public void saveShouldSaveNewBook() {
         List<Author> authors = requireNonNull(authorRepository.getByIds(Sets.newLinkedHashSet(1L, 2L)));
         List<Genre> genres = requireNonNull(genreRepository.getByIds(Sets.newLinkedHashSet(1L, 2L)));
-        Book book = Book.builder().title("title").isbn("isbn 1").build();
+        Book book = Book.builder().title("title").isbn(UUID.randomUUID().toString()).build();
         bookRepository.save(book, authors, genres);
 
         assertThat(book.getId())
@@ -95,7 +97,7 @@ public class BookRepositoryTest {
     public void deleteShouldDeleteBook() {
         List<Author> authors = requireNonNull(authorRepository.getByIds(Sets.newLinkedHashSet(1L, 2L)));
         List<Genre> genres = requireNonNull(genreRepository.getByIds(Sets.newLinkedHashSet(1L, 2L)));
-        Book newBook = Book.builder().title("title").isbn("isbn 2").build();
+        Book newBook = Book.builder().title("title").isbn(UUID.randomUUID().toString()).build();
         bookRepository.save(newBook, authors, genres);
 
         Long newBookId = requireNonNull(newBook.getId());
@@ -117,7 +119,18 @@ public class BookRepositoryTest {
     @Test
     @Transactional
     public void createBookShouldThrowExceptionIfTitleNull() {
-        assertThatThrownBy(() -> em.persistAndFlush(Book.builder().title(null).isbn("isbn 3").build()))
+        assertThatThrownBy(() -> em.persistAndFlush(Book.builder().title(null).isbn(UUID.randomUUID().toString()).build()))
+                .isInstanceOf(PersistenceException.class)
+                .hasMessageContaining("could not execute statement");
+    }
+
+    @Test
+    @Transactional
+    public void createBookShouldThrowExceptionIfIsbnIsNotUnique() {
+        assertThatThrownBy(() -> {
+            em.persistAndFlush(Book.builder().title("title").isbn("not unique isbn").build());
+            em.persistAndFlush(Book.builder().title("title").isbn("not unique isbn").build());
+        })
                 .isInstanceOf(PersistenceException.class)
                 .hasMessageContaining("could not execute statement");
     }
