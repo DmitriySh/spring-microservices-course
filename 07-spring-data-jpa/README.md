@@ -31,7 +31,7 @@ Use `Spring Boot 2.x` and `Spring Data JPA 2.x`.<br/>
    * define a custom domain class-specific repository interface (extend [Repository](https://docs.spring.io/spring-data/data-commons/docs/2.1.x/api/org/springframework/data/repository/Repository.html)) 
    and be typed to the Domain class and an ID type:
      * mark your interface as [@RepositoryDefinition](https://docs.spring.io/spring-data/commons/docs/2.1.x/api/org/springframework/data/repository/RepositoryDefinition.html) 
-     or [@Repository](https://docs.spring.io/spring-data/commons/docs/2.1.x/api/org/springframework/data/repository/Repository.html) 
+     or [@Repository](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/stereotype/Repository.html) 
      if you don't want to extend Spring Data interfaces;
      * mark your interface as [@NoRepositoryBean](https://docs.spring.io/spring-data/commons/docs/2.1.x/api/org/springframework/data/repository/NoRepositoryBean.html) 
      if this is an intermediate repository interface (like [CrudRepository](https://docs.spring.io/spring-data/data-commons/docs/2.1.x/api/org/springframework/data/repository/CrudRepository.html) or others) 
