@@ -61,6 +61,27 @@ Persistence technology defines objects state (framework) and persists state (dat
  [EntityManagerFactoryUtils](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/orm/jpa/EntityManagerFactoryUtils.html) (for JPA), 
  [SessionFactoryUtils](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/orm/hibernate5/SessionFactoryUtils.html) (for Hibernate)
 
+
+ * Using annotation [@Transactional](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/transaction/annotation/Transactional.html)
+   * `javax.transaction.Transactional`  is also supported as `org.springframework.transaction.annotation.Transactional`
+   * Spring creates proxies for all the annotated classes
+   * get access through the proxy instance and not self-invocation into one class
+   * annotation applies only to methods with public visibility   
+   * annotate concrete classes because Java annotations are not inherited from interfaces (or use `proxy-target-class="false"` = standard JDK interface-based proxies are created; by default `proxy-target-class="true"` = class-based proxies are created)
+   * easier and fast to use transaction support than `EntityManager.getTransaction`
+   * customize propagation rule for different layers of business logic:
+     * `REQUIRED` - create a new physical transaction scope if no transaction exists yet 
+     or use an existing 'outer' and create a new logical transaction scope;
+     each such logical transaction scope can determine rollback-only status individually and
+     all these scopes will be mapped to the same physical transaction;
+     * `REQUIRES_NEW` - always start an independent physical transaction for each affected scope, 
+     an 'outer' transaction will wait for the end of new 'inner'; never inherited an outer transaction’s characteristics
+     * `MANDATORY` - required an existing 'outer' transaction or throw exception if it doesn't exist;
+     * `NESTED` - uses an existing 'outer' transaction; uses a single physical transaction with multiple savepoints that it can roll back to;
+     * `SUPPORTS` - not depend on the 'outer' transaction; the method could be executed with or without transaction scope;
+     * `NOT_SUPPORTED` - required a non-transactional context for execution, suspend the current transaction if one exists;
+     * `NEVER` - requires a non-transactional context for execution, throw an exception if 'outer' transaction exists;
+
  * Mapping JDBC to JPA:
    * `EntityManagerFactory` is a `DataSource`
    * `EntityManager` with `EntityTransaction` is a `Connection`
