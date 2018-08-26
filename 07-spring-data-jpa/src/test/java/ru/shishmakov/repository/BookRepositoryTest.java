@@ -7,6 +7,7 @@ import org.junit.contrib.java.lang.system.SystemOutRule;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import ru.shishmakov.domain.Author;
@@ -18,9 +19,11 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.springframework.transaction.annotation.Propagation.NOT_SUPPORTED;
 
 /**
@@ -147,5 +150,24 @@ public class BookRepositoryTest {
         assertThat(genres)
                 .isNotNull()
                 .allMatch(g -> g.getBooks().stream().noneMatch(b -> Objects.equals(b, book)));
+    }
+
+    @Test
+    @Transactional
+    public void createBookShouldThrowExceptionIfTitleNull() {
+        assertThatThrownBy(() -> bookRepository.saveAndFlush(Book.builder().title(null).isbn(UUID.randomUUID().toString()).build()))
+                .isInstanceOf(DataIntegrityViolationException.class)
+                .hasMessageContaining("could not execute statement; SQL [n/a]; constraint [null]; nested exception");
+    }
+
+    @Test
+    @Transactional
+    public void createBookShouldThrowExceptionIfIsbnIsNotUnique() {
+        assertThatThrownBy(() -> {
+            bookRepository.saveAndFlush(Book.builder().title("title").isbn("not unique isbn").build());
+            bookRepository.saveAndFlush(Book.builder().title("title").isbn("not unique isbn").build());
+        })
+                .isInstanceOf(DataIntegrityViolationException.class)
+                .hasMessageContaining("could not execute statement; SQL [n/a]; constraint");
     }
 }

@@ -28,10 +28,10 @@ import static java.util.stream.Collectors.joining;
 @Service
 @Transactional(readOnly = true)
 public class LibraryService {
-    private final GenreRepository genreDao;
-    private final BookRepository bookDao;
-    private final CommentRepository commentDao;
-    private final AuthorRepository authorDao;
+    private final GenreRepository genreRepository;
+    private final BookRepository bookRepository;
+    private final CommentRepository commentRepository;
+    private final AuthorRepository authorRepository;
     @Setter
     private volatile Console console;
 
@@ -46,23 +46,23 @@ public class LibraryService {
     }
 
     public String getAllBooks() {
-        return bookDao.findAll().stream().map(Book::toString).collect(joining(lineSeparator()));
+        return bookRepository.findAll().stream().map(Book::toString).collect(joining(lineSeparator()));
     }
 
     public String getAllAuthors() {
-        return authorDao.findAll().stream().map(Author::toString).collect(joining(lineSeparator()));
+        return authorRepository.findAll().stream().map(Author::toString).collect(joining(lineSeparator()));
     }
 
     public String getAllGenres() {
-        return genreDao.findAll().stream().map(Genre::toString).collect(joining(lineSeparator()));
+        return genreRepository.findAll().stream().map(Genre::toString).collect(joining(lineSeparator()));
     }
 
     public String getAllComments() {
-        return commentDao.findAll().stream().map(Comment::toString).collect(joining(lineSeparator()));
+        return commentRepository.findAll().stream().map(Comment::toString).collect(joining(lineSeparator()));
     }
 
     public String getBookAuthors(long bookId) {
-        Optional<Book> book = bookDao.findByIdWithFetchAuthors(bookId);
+        Optional<Book> book = bookRepository.findByIdWithFetchAuthors(bookId);
         return book.map(b -> new StringBuilder("Book:")
                 .append(lineSeparator())
                 .append(b.toString())
@@ -76,7 +76,7 @@ public class LibraryService {
     }
 
     public String getBookGenres(long bookId) {
-        Optional<Book> book = bookDao.findByIdWithFetchGenres(bookId);
+        Optional<Book> book = bookRepository.findByIdWithFetchGenres(bookId);
         return book.map(b -> new StringBuilder("Book:")
                 .append(lineSeparator())
                 .append(b.toString())
@@ -89,7 +89,7 @@ public class LibraryService {
     }
 
     public String getBookComments(long bookId) {
-        Optional<Book> book = bookDao.findByIdWithFetchComments(bookId);
+        Optional<Book> book = bookRepository.findByIdWithFetchComments(bookId);
         return book.map(b -> new StringBuilder("Book:")
                 .append(lineSeparator())
                 .append(b.toString())
@@ -104,43 +104,41 @@ public class LibraryService {
     @Transactional
     public String createBook(String title, String isbn, Set<Long> authorIds, Set<Long> genreIds) {
         Book book = Book.builder().title(title).isbn(isbn).build();
-        List<Author> authors = authorDao.findAllById(authorIds);
-        List<Genre> genres = genreDao.findAllById(genreIds);
+        List<Author> authors = authorRepository.findAllById(authorIds);
+        List<Genre> genres = genreRepository.findAllById(genreIds);
 
         book.getAuthors().addAll(authors);
         book.getGenres().addAll(genres);
-        bookDao.save(book);
+        bookRepository.save(book);
         return book.toString();
     }
 
     @Transactional
     public String createBookComment(long bookId, String commentText) {
         Comment comment = Comment.builder().text(commentText).createDate(Instant.now()).build();
-        bookDao.findById(bookId)
-                .ifPresent(b -> {
-                    b.addComment(comment);
-                    commentDao.save(comment);
-                });
+        bookRepository.findById(bookId).ifPresent(b -> {
+            b.addComment(comment);
+            commentRepository.save(comment);
+        });
         return comment.toString();
     }
 
     @Transactional
     public void deleteBook(long bookId) {
-        bookDao.findByIdWithFetchCommentsGenresAuthors(bookId).ifPresent(b -> {
+        bookRepository.findByIdWithFetchCommentsGenresAuthors(bookId).ifPresent(b -> {
             b.removeAllAuthors();
             b.removeAllGenres();
             b.removeAllComment();
-            bookDao.delete(b);
+            bookRepository.delete(b);
         });
     }
 
     @Transactional
     public void deleteComment(long commentId) {
-        commentDao.findByIdWithFetchBook(commentId)
-                .ifPresent(comment -> {
-                    comment.getBook().removeComment(comment);
-                    commentDao.delete(comment);
-                });
+        commentRepository.findByIdWithFetchBook(commentId).ifPresent(comment -> {
+            comment.getBook().removeComment(comment);
+            commentRepository.delete(comment);
+        });
     }
 
     public void exit() {

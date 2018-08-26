@@ -1,6 +1,5 @@
 package ru.shishmakov.service;
 
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.SystemOutRule;
@@ -9,24 +8,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.shell.Shell;
 import org.springframework.test.context.junit4.SpringRunner;
+import ru.shishmakov.domain.Book;
+import ru.shishmakov.domain.Comment;
 import ru.shishmakov.repository.AuthorRepository;
 import ru.shishmakov.repository.BookRepository;
 import ru.shishmakov.repository.CommentRepository;
 import ru.shishmakov.repository.GenreRepository;
 
+import java.util.Optional;
+
 import static java.util.Collections.emptySet;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anySet;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@Ignore
 public class LibraryShellTest {
 
     @Rule
@@ -34,18 +39,18 @@ public class LibraryShellTest {
 
     @Autowired
     private LibraryShell libraryShell;
+    @SpyBean
+    private LibraryService libraryService;
 
     @MockBean
     private Shell shell;
-    @SpyBean
+    @MockBean
     private BookRepository bookRepository;
-    @SpyBean
-    private LibraryService libraryService;
-    @SpyBean
+    @MockBean
     private AuthorRepository authorRepository;
-    @SpyBean
+    @MockBean
     private GenreRepository genreRepository;
-    @SpyBean
+    @MockBean
     private CommentRepository commentRepository;
 
     @Test
@@ -85,7 +90,7 @@ public class LibraryShellTest {
         libraryShell.getBookAuthors(1L);
 
         verify(libraryService).getBookAuthors(eq(1L));
-        verify(bookRepository).findById(eq(1L));
+        verify(bookRepository).findByIdWithFetchAuthors(eq(1L));
     }
 
     @Test
@@ -93,7 +98,7 @@ public class LibraryShellTest {
         libraryShell.getBookGenres(1L);
 
         verify(libraryService).getBookGenres(eq(1L));
-        verify(bookRepository).findById(eq(1L));
+        verify(bookRepository).findByIdWithFetchGenres(eq(1L));
     }
 
     @Test
@@ -101,66 +106,47 @@ public class LibraryShellTest {
         libraryShell.getBookComments(1L);
 
         verify(libraryService).getBookComments(eq(1L));
-        verify(bookRepository).findById(eq(1L));
+        verify(bookRepository).findByIdWithFetchComments(eq(1L));
     }
 
     @Test
     public void createBookCommentShouldAddNewBookComment() {
-        long before = commentRepository.count();
         libraryShell.createBookComment(1L, "book comment N");
-        long after = commentRepository.count();
 
-        assertThat(before).isLessThan(after);
         verify(libraryService).createBookComment(eq(1L), anyString());
+        verify(bookRepository).findById(eq(1L));
     }
 
     @Test
     public void deleteBookCommentShouldDeleteBookComment() {
-        long first = commentRepository.count();
+        Comment comment = Comment.builder().book(mock(Book.class)).build();
+        doReturn(Optional.of(comment)).when(commentRepository).findByIdWithFetchBook(anyLong());
 
-        libraryShell.createBookComment(1L, "comment 1");
-        long commentId = commentRepository.findMaxId();
+        libraryShell.deleteBookComment(1L);
 
-        long middle = commentRepository.count();
-        libraryShell.deleteBookComment(commentId);
-        long last = commentRepository.count();
-
-        assertThat(first).isLessThan(middle).isEqualTo(last);
-        verify(libraryService).createBookComment(eq(1L), anyString());
-        verify(libraryService).deleteComment(eq(commentId));
+        verify(libraryService).deleteComment(eq(1L));
+        verify(commentRepository).findByIdWithFetchBook(eq(1L));
+        verify(commentRepository).delete(any(Comment.class));
     }
 
     @Test
     public void createBookShouldAddNewBook() {
-        long before = bookRepository.count();
         libraryShell.createBook("book title", "book isbn 1", emptySet(), emptySet());
-        long after = bookRepository.count();
 
-        assertThat(before).isLessThan(after);
         verify(libraryService).createBook(anyString(), anyString(), anySet(), anySet());
-    }
-
-    @Test
-    public void createBookShouldThrowExceptionIfTitleNull() {
-        assertThatThrownBy(() -> libraryShell.createBook(null, "book isbn 2", emptySet(), emptySet()))
-                .isInstanceOf(JpaSystemException.class)
-                .hasMessageContaining("Error while committing the transaction");
+        verify(authorRepository).findAllById(anySet());
+        verify(genreRepository).findAllById(anySet());
+        verify(bookRepository).save(any(Book.class));
     }
 
     @Test
     public void deleteBookShouldRemoveBook() {
-        long first = bookRepository.count();
+        doReturn(Optional.of(mock(Book.class))).when(bookRepository).findByIdWithFetchCommentsGenresAuthors(anyLong());
 
-        libraryShell.createBook("book title", "book isbn 3", emptySet(), emptySet());
-        long bookId = bookRepository.findMaxId();
+        libraryShell.deleteBook(1L);
 
-        long middle = bookRepository.count();
-
-        libraryShell.deleteBook(bookId);
-        long last = bookRepository.count();
-
-        assertThat(first).isLessThan(middle).isEqualTo(last);
-        verify(libraryService).createBook(anyString(), anyString(), anySet(), anySet());
-        verify(libraryService).deleteBook(eq(bookId));
+        verify(libraryService).deleteBook(eq(1L));
+        verify(bookRepository).findByIdWithFetchCommentsGenresAuthors(eq(1L));
+        verify(bookRepository).delete(any(Book.class));
     }
 }
