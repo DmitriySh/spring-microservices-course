@@ -48,8 +48,13 @@ public class Book {
 
     @ToString.Exclude
     @Builder.Default
-    @DBRef(lazy = true)
     private Set<Comment> comments = new HashSet<>();
+
+    public Book addAuthors(Set<Author> authors) {
+        this.authors.addAll(authors);
+        authors.forEach(a -> a.getBooks().add(this));
+        return this;
+    }
 
     public void removeAuthor(Author author) {
         authors.remove(author);
@@ -62,6 +67,12 @@ public class Book {
             author.getBooks().remove(this);
             iterator.remove();
         }
+    }
+
+    public Book addGenres(Set<Genre> genres) {
+        this.genres.addAll(genres);
+        genres.forEach(g -> g.getBooks().add(this));
+        return this;
     }
 
     public void removeGenre(Genre genre) {
@@ -77,21 +88,11 @@ public class Book {
         }
     }
 
-    public void addComment(Comment comment) {
-        comments.add(comment);
-//        comment.setBook(this);
-    }
-
     public void removeComment(Comment comment) {
         comments.remove(comment);
-//        comment.setBook(null);
     }
 
     public void removeAllComment() {
-        for (Iterator<Comment> iterator = comments.iterator(); iterator.hasNext(); ) {
-            Comment comment = iterator.next();
-//            comment.setBook(null);
-            iterator.remove();
-        }
+        comments.clear();
     }
 }
