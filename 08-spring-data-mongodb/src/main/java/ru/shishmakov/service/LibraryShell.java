@@ -1,6 +1,8 @@
 package ru.shishmakov.service;
 
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
+import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 
 import javax.annotation.PostConstruct;
@@ -12,7 +14,7 @@ import static java.lang.System.lineSeparator;
  * User client
  */
 @RequiredArgsConstructor
-//@ShellComponent
+@ShellComponent
 public class LibraryShell {
     private final LibraryService service;
 
@@ -36,21 +38,21 @@ public class LibraryShell {
         return service.getAllGenres();
     }
 
-//    @ShellMethod(value = "Get authors of the book.")
-//    public String getBookAuthors(long bookId) {
-//        return service.getBookAuthors(bookId);
-//    }
-//
-//    @ShellMethod(value = "Get genres of the book.")
-//    public String getBookGenres(long bookId) {
-//        return service.getBookGenres(bookId);
-//    }
-//
-//    @ShellMethod(value = "Get comments of the book.")
-//    public String getBookComments(long bookId) {
-//        return service.getBookComments(bookId);
-//    }
-//
+    @ShellMethod(value = "Get authors of the book.")
+    public String getBookAuthors(ObjectId bookId) {
+        return service.getBookAuthors(bookId);
+    }
+
+    @ShellMethod(value = "Get genres of the book.")
+    public String getBookGenres(ObjectId bookId) {
+        return service.getBookGenres(bookId);
+    }
+
+    @ShellMethod(value = "Get comments of the book.")
+    public String getBookComments(ObjectId bookId) {
+        return service.getBookComments(bookId);
+    }
+
 //    @ShellMethod(value = "Create new book.")
 //    public String createBook(String title, String isbn, Set<Long> authorIds, Set<Long> genreIds) {
 //        return service.createBook(title, isbn, authorIds, genreIds);

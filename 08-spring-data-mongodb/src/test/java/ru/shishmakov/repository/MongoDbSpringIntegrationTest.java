@@ -7,7 +7,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.shell.Shell;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.shishmakov.domain.Book;
 
@@ -20,6 +22,8 @@ public class MongoDbSpringIntegrationTest {
     private MongoTemplate mongoTemplate;
     @Autowired
     private BookRepository authorRepository;
+    @MockBean
+    private Shell shell;
 
 //    private MongodExecutable mongodExecutable;
 //
