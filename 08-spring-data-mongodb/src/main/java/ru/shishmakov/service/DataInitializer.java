@@ -60,16 +60,16 @@ class DataInitializer implements CommandLineRunner {
         genreRepository.saveAll(genres);
 
         List<Book> books = Arrays.asList(
-                Book.builder().title("book 1").isbn("0-395-08254-1").comments(comments(3)).build()
-                        .addAuthors(items(authors, Author::getFullname, "author 1", "author 2", "author 3", "author 4"))
-                        .addGenres(items(genres, Genre::getName, "genre 1", "genre 2")),
-                Book.builder().title("book 2").isbn("0-395-08254-2").comments(comments(2)).build()
-                        .addAuthors(items(authors, Author::getFullname, "author 1", "author 3"))
-                        .addGenres(items(genres, Genre::getName, "genre 2")),
+                Book.builder().title("book 1").isbn("0-395-08254-1").comments(buildComments(3)).build()
+                        .addAuthors(filter(authors, Author::getFullname, "author 1", "author 2", "author 3", "author 4"))
+                        .addGenres(filter(genres, Genre::getName, "genre 1", "genre 2")),
+                Book.builder().title("book 2").isbn("0-395-08254-2").comments(buildComments(2)).build()
+                        .addAuthors(filter(authors, Author::getFullname, "author 1", "author 3"))
+                        .addGenres(filter(genres, Genre::getName, "genre 2")),
                 Book.builder().title("book 3").isbn("0-395-08254-3").build(),
-                Book.builder().title("book 4").isbn("0-395-08254-4").comments(comments(1)).build()
-                        .addAuthors(items(authors, Author::getFullname, "author 4"))
-                        .addGenres(items(genres, Genre::getName, "genre 1")));
+                Book.builder().title("book 4").isbn("0-395-08254-4").comments(buildComments(1)).build()
+                        .addAuthors(filter(authors, Author::getFullname, "author 4"))
+                        .addGenres(filter(genres, Genre::getName, "genre 1")));
         bookRepository.saveAll(books);
         authorRepository.saveAll(authors);
         genreRepository.saveAll(genres);
@@ -78,14 +78,13 @@ class DataInitializer implements CommandLineRunner {
         log.info("books: {}", bookRepository.findAll());
     }
 
-    private Set<Comment> comments(int count) {
+    private Set<Comment> buildComments(int count) {
         return LongStream.range(0, count)
-                .map(id -> id + 1)
-                .mapToObj(id -> Comment.builder().id(new ObjectId()).createDate(Instant.now()).text("comment " + id).build())
+                .mapToObj(id -> Comment.builder().id(new ObjectId()).createDate(Instant.now()).text("comment " + id + 1).build())
                 .collect(toSet());
     }
 
-    private <T> Set<T> items(List<T> authors, Function<T, String> function, String... items) {
+    private <T> Set<T> filter(List<T> authors, Function<T, String> function, String... items) {
         List<String> list = Arrays.asList(items);
         return authors.stream()
                 .filter(a -> list.contains(function.apply(a)))
