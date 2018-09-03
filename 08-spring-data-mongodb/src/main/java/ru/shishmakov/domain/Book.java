@@ -12,9 +12,12 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+
+import static java.util.Optional.ofNullable;
 
 
 @Builder
@@ -28,6 +31,7 @@ import java.util.Set;
 public class Book {
 
     @Id
+    @EqualsAndHashCode.Include
     private ObjectId _id;
 
     @EqualsAndHashCode.Include
@@ -50,9 +54,9 @@ public class Book {
     @Builder.Default
     private Set<Comment> comments = new HashSet<>();
 
-    public Book addAuthors(Set<Author> authors) {
+    public Book addAuthors(Collection<Author> authors) {
         this.authors.addAll(authors);
-        authors.forEach(a -> a.getBooks().add(this));
+        authors.forEach(a -> ofNullable(a.getBooks()).map(b -> b.add(this)));
         return this;
     }
 
@@ -69,9 +73,9 @@ public class Book {
         }
     }
 
-    public Book addGenres(Set<Genre> genres) {
+    public Book addGenres(Collection<Genre> genres) {
         this.genres.addAll(genres);
-        genres.forEach(g -> g.getBooks().add(this));
+        genres.forEach(g -> ofNullable(g.getBooks()).map(b -> b.add(this)));
         return this;
     }
 

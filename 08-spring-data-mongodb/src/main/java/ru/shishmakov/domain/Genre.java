@@ -26,6 +26,7 @@ import java.util.Set;
 public class Genre {
 
     @Id
+    @EqualsAndHashCode.Include
     private ObjectId _id;
 
     @EqualsAndHashCode.Include

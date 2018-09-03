@@ -12,7 +12,9 @@ import ru.shishmakov.repository.AuthorRepository;
 import ru.shishmakov.repository.BookRepository;
 import ru.shishmakov.repository.GenreRepository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static java.lang.System.lineSeparator;
 import static java.util.stream.Collectors.joining;
@@ -77,17 +79,18 @@ public class LibraryService {
                 .orElseGet(() -> "book: " + bookId + " not found");
     }
 
-//    public String createBook(String title, String isbn, Set<Long> authorIds, Set<Long> genreIds) {
-//        Book book = Book.builder().title(title).isbn(isbn).build();
-//        List<Author> authors = authorRepository.findAllById(authorIds);
-//        List<Genre> genres = genreRepository.findAllById(genreIds);
-//
-//        book.getAuthors().addAll(authors);
-//        book.getGenres().addAll(genres);
-//        bookRepository.save(book);
-//        return book.toString();
-//    }
-//
+    public String createBook(String title, String isbn, Set<ObjectId> authorIds, Set<ObjectId> genreIds) {
+        Book book = Book.builder().title(title).isbn(isbn).build();
+
+        List<Author> authors = authorRepository.findAllByIdFetchId(authorIds);
+        List<Genre> genres = genreRepository.findAllByIdFetchId(genreIds);
+
+        book.addAuthors(authors);
+        book.addGenres(genres);
+        bookRepository.save(book);
+        return book.toString();
+    }
+
 //    public String createBookComment(long bookId, String commentText) {
 //        Comment comment = Comment.builder().text(commentText).createDate(Instant.now()).build();
 //        bookRepository.findById(bookId).ifPresent(b -> {

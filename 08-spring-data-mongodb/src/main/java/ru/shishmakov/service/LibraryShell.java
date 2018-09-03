@@ -6,6 +6,7 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 
 import javax.annotation.PostConstruct;
+import java.util.Set;
 
 import static java.lang.System.lineSeparator;
 
@@ -53,11 +54,11 @@ public class LibraryShell {
         return service.getBookComments(bookId);
     }
 
-//    @ShellMethod(value = "Create new book.")
-//    public String createBook(String title, String isbn, Set<Long> authorIds, Set<Long> genreIds) {
-//        return service.createBook(title, isbn, authorIds, genreIds);
-//    }
-//
+    @ShellMethod(value = "Create new book.")
+    public String createBook(String title, String isbn, Set<ObjectId> authorIds, Set<ObjectId> genreIds) {
+        return service.createBook(title, isbn, authorIds, genreIds);
+    }
+
 //    @ShellMethod(value = "Create new comment to book.")
 //    public String createBookComment(long bookId, String comment) {
 //        return service.createBookComment(bookId, comment);

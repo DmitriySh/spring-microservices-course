@@ -26,6 +26,7 @@ import java.util.Set;
 @Document
 public class Author {
     @Id
+    @EqualsAndHashCode.Include
     private ObjectId _id;
 
     @EqualsAndHashCode.Include
