@@ -20,9 +20,6 @@ import java.time.Instant;
 public class Comment {
 
     @EqualsAndHashCode.Include
-    private Long id;
-
-    @EqualsAndHashCode.Include
     private String text;
 
     @EqualsAndHashCode.Include

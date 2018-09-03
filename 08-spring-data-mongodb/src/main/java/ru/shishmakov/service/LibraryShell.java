@@ -59,11 +59,11 @@ public class LibraryShell {
         return service.createBook(title, isbn, authorIds, genreIds);
     }
 
-//    @ShellMethod(value = "Create new comment to book.")
-//    public String createBookComment(long bookId, String comment) {
-//        return service.createBookComment(bookId, comment);
-//    }
-//
+    @ShellMethod(value = "Create new comment to book.")
+    public String createBookComment(ObjectId bookId, String comment) {
+        return service.createBookComment(bookId, comment);
+    }
+
 //    @ShellMethod(value = "Delete the book.")
 //    public String deleteBook(long bookId) {
 //        service.deleteBook(bookId);

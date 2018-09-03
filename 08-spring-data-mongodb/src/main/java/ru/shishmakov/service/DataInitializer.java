@@ -80,7 +80,7 @@ class DataInitializer implements CommandLineRunner {
     private Set<Comment> comments(int count) {
         return LongStream.range(0, count)
                 .map(id -> id + 1)
-                .mapToObj(id -> Comment.builder().id(id).createDate(Instant.now()).text("comment " + id).build())
+                .mapToObj(id -> Comment.builder().createDate(Instant.now()).text("comment " + id).build())
                 .collect(toSet());
     }
 

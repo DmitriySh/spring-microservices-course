@@ -12,6 +12,7 @@ import ru.shishmakov.repository.AuthorRepository;
 import ru.shishmakov.repository.BookRepository;
 import ru.shishmakov.repository.GenreRepository;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -91,15 +92,18 @@ public class LibraryService {
         return book.toString();
     }
 
-//    public String createBookComment(long bookId, String commentText) {
-//        Comment comment = Comment.builder().text(commentText).createDate(Instant.now()).build();
-//        bookRepository.findById(bookId).ifPresent(b -> {
-//            b.addComment(comment);
-//            commentRepository.save(comment);
-//        });
-//        return comment.toString();
-//    }
-//
+    public String createBookComment(ObjectId bookId, String commentText) {
+        return bookRepository.findById(bookId)
+                .map(b -> {
+                    System.out.println(b);
+                    Comment comment = Comment.builder().text(commentText).createDate(Instant.now()).build();
+                    b.addComment(comment);
+                    bookRepository.save(b);
+                    return comment.toString();
+                })
+                .orElseGet(() -> "book: " + bookId + " not found");
+    }
+
 //    public void deleteBook(long bookId) {
 //        bookRepository.findByIdWithFetchCommentsGenresAuthors(bookId).ifPresent(b -> {
 //            b.removeAllAuthors();
