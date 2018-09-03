@@ -15,9 +15,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.Set;
-
-import static java.util.Optional.ofNullable;
 
 
 @Builder
@@ -56,7 +55,7 @@ public class Book {
 
     public Book addAuthors(Collection<Author> authors) {
         this.authors.addAll(authors);
-        authors.forEach(a -> ofNullable(a.getBooks()).map(b -> b.add(this)));
+        authors.forEach(a -> a.getBooks().add(this));
         return this;
     }
 
@@ -78,7 +77,7 @@ public class Book {
 
     public Book addGenres(Collection<Genre> genres) {
         this.genres.addAll(genres);
-        genres.forEach(g -> ofNullable(g.getBooks()).map(b -> b.add(this)));
+        genres.forEach(g -> g.getBooks().add(this));
         return this;
     }
 
@@ -102,11 +101,11 @@ public class Book {
         this.comments.add(comment);
     }
 
-    public void removeComment(Comment comment) {
-        comments.remove(comment);
+    public boolean removeComment(ObjectId commentId) {
+        return comments.removeIf(c -> Objects.equals(c.getId(), commentId));
     }
 
-    public void removeAllComment() {
+    public void removeAllComments() {
         comments.clear();
     }
 }

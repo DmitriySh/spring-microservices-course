@@ -3,7 +3,6 @@ package ru.shishmakov.service;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.shishmakov.domain.Author;
 import ru.shishmakov.domain.Book;
 import ru.shishmakov.domain.Comment;
@@ -22,7 +21,6 @@ import static java.util.stream.Collectors.joining;
 
 @RequiredArgsConstructor
 @Service
-@Transactional(readOnly = true)
 public class LibraryService {
     private final GenreRepository genreRepository;
     private final BookRepository bookRepository;
@@ -83,12 +81,14 @@ public class LibraryService {
     public String createBook(String title, String isbn, Set<ObjectId> authorIds, Set<ObjectId> genreIds) {
         Book book = Book.builder().title(title).isbn(isbn).build();
 
-        List<Author> authors = authorRepository.findAllByIdFetchId(authorIds);
-        List<Genre> genres = genreRepository.findAllByIdFetchId(genreIds);
+        List<Author> authors = authorRepository.findAllById(authorIds);
+        List<Genre> genres = genreRepository.findAllById(genreIds);
 
         book.addAuthors(authors);
         book.addGenres(genres);
         bookRepository.save(book);
+        authorRepository.saveAll(authors);
+        genreRepository.saveAll(genres);
         return book.toString();
     }
 
@@ -96,7 +96,7 @@ public class LibraryService {
         return bookRepository.findById(bookId)
                 .map(b -> {
                     System.out.println(b);
-                    Comment comment = Comment.builder().text(commentText).createDate(Instant.now()).build();
+                    Comment comment = Comment.builder().id(new ObjectId()).text(commentText).createDate(Instant.now()).build();
                     b.addComment(comment);
                     bookRepository.save(b);
                     return comment.toString();
@@ -104,22 +104,28 @@ public class LibraryService {
                 .orElseGet(() -> "book: " + bookId + " not found");
     }
 
-    public void deleteBook(ObjectId bookId) {
-        bookRepository.findByIdWithFetchGenresAuthors(bookId).ifPresent(b -> {
-            Set<Author> authors = b.removeAllAuthors();
-            Set<Genre> genres = b.removeAllGenres();
-            authorRepository.saveAll(authors);
-            genreRepository.saveAll(genres);
-            bookRepository.delete(b);
-        });
+    public String deleteBook(ObjectId bookId) {
+        return bookRepository.findByIdWithFetchGenresAuthors(bookId)
+                .map(b -> {
+                    Set<Author> authors = b.removeAllAuthors();
+                    Set<Genre> genres = b.removeAllGenres();
+                    authorRepository.saveAll(authors);
+                    genreRepository.saveAll(genres);
+                    bookRepository.delete(b);
+                    return "deleted";
+                })
+                .orElseGet(() -> "book: " + bookId + " not found");
     }
 
-//    public void deleteComment(long commentId) {
-//        commentRepository.findByIdWithFetchBook(commentId).ifPresent(comment -> {
-//            comment.getBook().removeComment(comment);
-//            commentRepository.delete(comment);
-//        });
-//    }
+    public String deleteComment(ObjectId bookId, ObjectId commentId) {
+        return bookRepository.findById(bookId)
+                .map(b -> {
+                    String response = b.removeComment(commentId) ? "deleted" : "comment: " + commentId + " not found";
+                    bookRepository.save(b);
+                    return response;
+                })
+                .orElseGet(() -> "book: " + bookId + " not found");
+    }
 
     public void exit() {
         System.out.println(lineSeparator() + "\tGoodbye! =)" + lineSeparator());

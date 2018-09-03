@@ -66,15 +66,13 @@ public class LibraryShell {
 
     @ShellMethod(value = "Delete the book.")
     public String deleteBook(ObjectId bookId) {
-        service.deleteBook(bookId);
-        return "deleted";
+        return service.deleteBook(bookId);
     }
 
-//    @ShellMethod(value = "Delete the comment.")
-//    public String deleteBookComment(long commentId) {
-//        service.deleteComment(commentId);
-//        return "deleted";
-//    }
+    @ShellMethod(value = "Delete the comment.")
+    public String deleteBookComment(ObjectId bookId, ObjectId commentId) {
+        return service.deleteComment(bookId, commentId);
+    }
 
     @ShellMethod(value = "Exit the library.", key = {"exit", "quit"})
     public void exit() {

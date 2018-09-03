@@ -2,6 +2,7 @@ package ru.shishmakov.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.types.ObjectId;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.PriorityOrdered;
 import org.springframework.shell.Shell;
@@ -80,7 +81,7 @@ class DataInitializer implements CommandLineRunner {
     private Set<Comment> comments(int count) {
         return LongStream.range(0, count)
                 .map(id -> id + 1)
-                .mapToObj(id -> Comment.builder().createDate(Instant.now()).text("comment " + id).build())
+                .mapToObj(id -> Comment.builder().id(new ObjectId()).createDate(Instant.now()).text("comment " + id).build())
                 .collect(toSet());
     }
 

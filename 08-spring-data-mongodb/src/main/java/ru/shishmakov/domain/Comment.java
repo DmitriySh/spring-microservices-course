@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
 
 import java.time.Instant;
 
@@ -18,6 +20,10 @@ import java.time.Instant;
 @Setter
 @Getter
 public class Comment {
+
+    @Id
+    @EqualsAndHashCode.Include
+    private ObjectId id;
 
     @EqualsAndHashCode.Include
     private String text;
