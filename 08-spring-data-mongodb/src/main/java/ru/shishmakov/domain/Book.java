@@ -65,12 +65,15 @@ public class Book {
         author.getBooks().remove(this);
     }
 
-    public void removeAllAuthors() {
+    public Set<Author> removeAllAuthors() {
+        Set<Author> temp = new HashSet<>();
         for (Iterator<Author> iterator = authors.iterator(); iterator.hasNext(); ) {
             Author author = iterator.next();
             author.getBooks().remove(this);
             iterator.remove();
+            temp.add(author);
         }
+        return temp;
     }
 
     public Book addGenres(Collection<Genre> genres) {
@@ -84,12 +87,15 @@ public class Book {
         genre.getBooks().remove(this);
     }
 
-    public void removeAllGenres() {
+    public Set<Genre> removeAllGenres() {
+        Set<Genre> temp = new HashSet<>();
         for (Iterator<Genre> iterator = genres.iterator(); iterator.hasNext(); ) {
             Genre genre = iterator.next();
             genre.getBooks().remove(this);
             iterator.remove();
+            temp.add(genre);
         }
+        return temp;
     }
 
     public void addComment(Comment comment) {

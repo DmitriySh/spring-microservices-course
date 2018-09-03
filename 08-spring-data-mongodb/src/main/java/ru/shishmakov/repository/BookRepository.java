@@ -19,6 +19,6 @@ public interface BookRepository extends MongoRepository<Book, ObjectId> {
     @Query(value = "{'_id': ?0}", fields = "{'_id': -1, 'title': 1, 'isbn': 1, 'comments': 1}")
     Optional<Book> findByIdWithFetchComments(ObjectId bookId);
 
-    @Query(value = "{'_id': ?0}", fields = "{'_id': -1, 'title': 1, 'isbn': 1, 'comments': 1, 'genres': 1, 'authors': 1}")
-    Optional<Book> findByIdWithFetchCommentsGenresAuthors(ObjectId bookId);
+    @Query(value = "{'_id': ?0}", fields = "{'_id': -1, 'title': 1, 'isbn': 1, 'genres': 1, 'authors': 1}")
+    Optional<Book> findByIdWithFetchGenresAuthors(ObjectId bookId);
 }

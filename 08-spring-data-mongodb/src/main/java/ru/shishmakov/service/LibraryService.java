@@ -104,15 +104,16 @@ public class LibraryService {
                 .orElseGet(() -> "book: " + bookId + " not found");
     }
 
-//    public void deleteBook(long bookId) {
-//        bookRepository.findByIdWithFetchCommentsGenresAuthors(bookId).ifPresent(b -> {
-//            b.removeAllAuthors();
-//            b.removeAllGenres();
-//            b.removeAllComment();
-//            bookRepository.delete(b);
-//        });
-//    }
-//
+    public void deleteBook(ObjectId bookId) {
+        bookRepository.findByIdWithFetchGenresAuthors(bookId).ifPresent(b -> {
+            Set<Author> authors = b.removeAllAuthors();
+            Set<Genre> genres = b.removeAllGenres();
+            authorRepository.saveAll(authors);
+            genreRepository.saveAll(genres);
+            bookRepository.delete(b);
+        });
+    }
+
 //    public void deleteComment(long commentId) {
 //        commentRepository.findByIdWithFetchBook(commentId).ifPresent(comment -> {
 //            comment.getBook().removeComment(comment);

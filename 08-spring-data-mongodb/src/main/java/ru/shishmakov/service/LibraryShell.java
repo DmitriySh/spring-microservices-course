@@ -64,12 +64,12 @@ public class LibraryShell {
         return service.createBookComment(bookId, comment);
     }
 
-//    @ShellMethod(value = "Delete the book.")
-//    public String deleteBook(long bookId) {
-//        service.deleteBook(bookId);
-//        return "deleted";
-//    }
-//
+    @ShellMethod(value = "Delete the book.")
+    public String deleteBook(ObjectId bookId) {
+        service.deleteBook(bookId);
+        return "deleted";
+    }
+
 //    @ShellMethod(value = "Delete the comment.")
 //    public String deleteBookComment(long commentId) {
 //        service.deleteComment(commentId);
