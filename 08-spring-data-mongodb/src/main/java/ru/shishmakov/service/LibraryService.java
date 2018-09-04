@@ -104,7 +104,6 @@ public class LibraryService {
     public String createBookComment(ObjectId bookId, String commentText) {
         return bookRepository.findById(bookId)
                 .map(b -> {
-                    System.out.println(b);
                     Comment comment = Comment.builder().id(new ObjectId()).text(commentText).createDate(Instant.now()).build();
                     b.addComment(comment);
                     bookRepository.save(b);
