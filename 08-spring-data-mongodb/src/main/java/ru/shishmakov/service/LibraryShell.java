@@ -39,6 +39,11 @@ public class LibraryShell {
         return service.getAllGenres();
     }
 
+    @ShellMethod(value = "Get all comments.", key = "get-comments")
+    public String getAllComments() {
+        return service.getAllComments();
+    }
+
     @ShellMethod(value = "Get authors of the book.")
     public String getBookAuthors(ObjectId bookId) {
         return service.getBookAuthors(bookId);
