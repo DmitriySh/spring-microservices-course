@@ -8,12 +8,14 @@ import org.junit.contrib.java.lang.system.SystemOutRule;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.shishmakov.domain.Author;
 import ru.shishmakov.domain.Book;
 import ru.shishmakov.domain.Comment;
 import ru.shishmakov.domain.Genre;
 
+import javax.validation.ConstraintViolationException;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -21,9 +23,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * Test MongoDb Data layer without Web
@@ -105,109 +109,88 @@ public class BookRepositoryTest {
                 .isNotPresent();
     }
 
-//    @Test
-//    @Transactional
-//    public void saveAndFlushShouldSaveNewBook() {
-//        List<Author> authors = requireNonNull(authorRepository.findAllById(Sets.newLinkedHashSet(1L, 2L)));
-//        List<Genre> genres = requireNonNull(genreRepository.findAllById(Sets.newLinkedHashSet(1L, 2L)));
-//        Comment comment = Comment.builder().createDate(Instant.now()).text("next comment").build();
-//        Book newBook = Book.builder().title("title").isbn("isbn").build();
-//
-//        newBook.getAuthors().addAll(authors);
-//        newBook.getGenres().addAll(genres);
-//        newBook.addComment(comment);
-//        Book book = bookRepository.saveAndFlush(newBook);
-//
-//        assertThat(book.getId())
-//                .isNotNull()
-//                .isPositive();
-//        assertThat(book.getAuthors())
-//                .isNotEmpty()
-//                .containsAll(authors);
-//        assertThat(book.getGenres())
-//                .isNotEmpty()
-//                .containsAll(genres);
-//        assertThat(book.getComments())
-//                .isNotEmpty()
-//                .contains(comment);
-//
-//        assertThat(comment.getId())
-//                .isNotNull()
-//                .isPositive();
-//        assertThat(comment.getBook())
-//                .isNotNull();
-//        assertThat(authors)
-//                .isNotNull()
-//                .allMatch(a -> a.getBooks().stream().anyMatch(b -> Objects.equals(b, book)));
-//        assertThat(genres)
-//                .isNotNull()
-//                .allMatch(g -> g.getBooks().stream().anyMatch(b -> Objects.equals(b, book)));
-//    }
-//
-//    @Test
-//    @Transactional
-//    public void deleteShouldDeleteBook() {
-//        List<Author> authors = requireNonNull(authorRepository.findAllById(Sets.newLinkedHashSet(1L, 2L)));
-//        List<Genre> genres = requireNonNull(genreRepository.findAllById(Sets.newLinkedHashSet(1L, 2L)));
-//        Comment comment = Comment.builder().createDate(Instant.now()).text("next comment").build();
-//        Book newBook = Book.builder().title("title").isbn("isbn").build();
-//
-//        newBook.getAuthors().addAll(authors);
-//        newBook.getGenres().addAll(genres);
-//        newBook.addComment(comment);
-//        Book book = bookRepository.saveAndFlush(newBook);
-//
-//        Long bookId = requireNonNull(book.getId());
-//        Long commentId = requireNonNull(comment.getId());
-//
-//        book.removeAllAuthors();
-//        book.removeAllGenres();
-//        book.removeAllComment();
-//        bookRepository.deleteById(bookId);
-//
-//        Optional<Book> deletedBook = bookRepository.findById(bookId);
-//
-//        assertThat(deletedBook)
-//                .isNotNull()
-//                .isNotPresent();
-//        assertThat(book.getAuthors())
-//                .isNotNull()
-//                .doesNotContain(authors.toArray(new Author[0]));
-//        assertThat(book.getGenres())
-//                .isNotNull()
-//                .doesNotContain(genres.toArray(new Genre[0]));
-//        assertThat(book.getComments())
-//                .isEmpty();
-//
-//        assertThat(comment.getBook())
-//                .isNull();
-//        assertThat(commentRepository.findById(commentId))
-//                .isNotNull()
-//                .isNotPresent();
-//        assertThat(authors)
-//                .isNotNull()
-//                .allMatch(a -> a.getBooks().stream().noneMatch(b -> Objects.equals(b, book)));
-//        assertThat(genres)
-//                .isNotNull()
-//                .allMatch(g -> g.getBooks().stream().noneMatch(b -> Objects.equals(b, book)));
-//    }
-//
-//    @Test
-//    @Transactional
-//    public void createBookShouldThrowExceptionIfTitleNull() {
-//        assertThatThrownBy(() -> bookRepository.saveAndFlush(Book.builder().title(null).isbn(UUID.randomUUID().toString()).build()))
-//                .isInstanceOf(DataIntegrityViolationException.class)
-//                .hasMessageContaining("could not execute statement; SQL [n/a]; constraint [null]; nested exception");
-//    }
-//
-//    @Test
-//    @Transactional
-//    public void createBookShouldThrowExceptionIfIsbnIsNotUnique() {
-//        assertThatThrownBy(() -> {
-//            bookRepository.saveAndFlush(Book.builder().title("title").isbn("not unique isbn").build());
-//            bookRepository.saveAndFlush(Book.builder().title("title").isbn("not unique isbn").build());
-//        })
-//                .isInstanceOf(DataIntegrityViolationException.class)
-//                .hasMessageContaining("could not execute statement; SQL [n/a]; constraint");
-//    }
+    @Test
+    public void saveShouldSaveNewBook() {
+        Book newBook = Book.builder().title("title").isbn("isbn").build();
+        newBook.addAuthors(dbAuthors);
+        newBook.addGenres(dbGenres);
+        newBook.addComments(dbComments);
+
+        Book book = bookRepository.save(newBook);
+        authorRepository.saveAll(dbAuthors);
+        genreRepository.saveAll(dbGenres);
+
+        assertThat(book.get_id())
+                .isNotNull();
+        assertThat(book.getAuthors())
+                .isNotEmpty()
+                .containsAll(dbAuthors);
+        assertThat(book.getGenres())
+                .isNotEmpty()
+                .containsAll(dbGenres);
+        assertThat(book.getComments())
+                .isNotEmpty()
+                .containsAll(dbComments);
+
+        assertThat(dbAuthors)
+                .isNotNull()
+                .allMatch(a -> a.getBooks().stream().anyMatch(b -> Objects.equals(b, book)));
+        assertThat(dbGenres)
+                .isNotNull()
+                .allMatch(g -> g.getBooks().stream().anyMatch(b -> Objects.equals(b, book)));
+    }
+
+    @Test
+    public void deleteShouldDeleteBook() {
+        Book newBook = Book.builder().title("title").isbn("isbn").build();
+        newBook.addAuthors(dbAuthors);
+        newBook.addGenres(dbGenres);
+        newBook.addComments(dbComments);
+
+        Book book = bookRepository.save(newBook);
+        ObjectId bookId = requireNonNull(book.get_id());
+
+        book.removeAllAuthors();
+        book.removeAllGenres();
+        book.removeAllComments();
+        bookRepository.deleteById(bookId);
+
+        Optional<Book> deletedBook = bookRepository.findById(bookId);
+
+        assertThat(deletedBook)
+                .isNotNull()
+                .isNotPresent();
+        assertThat(book.getAuthors())
+                .isNotNull()
+                .doesNotContain(dbAuthors.toArray(new Author[0]));
+        assertThat(book.getGenres())
+                .isNotNull()
+                .doesNotContain(dbGenres.toArray(new Genre[0]));
+        assertThat(book.getComments())
+                .isEmpty();
+
+        assertThat(dbAuthors)
+                .isNotNull()
+                .allMatch(a -> a.getBooks().stream().noneMatch(b -> Objects.equals(b, book)));
+        assertThat(dbGenres)
+                .isNotNull()
+                .allMatch(g -> g.getBooks().stream().noneMatch(b -> Objects.equals(b, book)));
+    }
+
+    @Test
+    public void createBookShouldThrowExceptionIfTitleNull() {
+        assertThatThrownBy(() -> bookRepository.save(Book.builder().title(null).isbn(UUID.randomUUID().toString()).build()))
+                .isInstanceOf(ConstraintViolationException.class)
+                .hasMessageContaining("title:");
+    }
+
+    @Test
+    public void createBookShouldThrowExceptionIfIsbnIsNotUnique() {
+        assertThatThrownBy(() -> {
+            bookRepository.save(Book.builder().title("title").isbn("not unique isbn").build());
+            bookRepository.save(Book.builder().title("title").isbn("not unique isbn").build());
+        })
+                .isInstanceOf(DuplicateKeyException.class)
+                .hasMessageContaining("library.book index: isbn dup key");
+    }
 }

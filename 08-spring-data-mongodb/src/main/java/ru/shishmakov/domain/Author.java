@@ -12,6 +12,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,10 +27,10 @@ import java.util.Set;
 @Document
 public class Author {
     @Id
-    @EqualsAndHashCode.Include
     private ObjectId _id;
 
     @EqualsAndHashCode.Include
+    @NotEmpty
     private String fullname;
 
     @ToString.Exclude
