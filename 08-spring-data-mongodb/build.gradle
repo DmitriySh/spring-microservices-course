@@ -6,7 +6,6 @@ plugins {
 dependencies {
     compile 'org.springframework.boot:spring-boot-starter-data-mongodb'
     compile 'org.springframework.shell:spring-shell-starter:2.0.1.RELEASE'
-    compile 'org.hibernate:hibernate-validator:6.0.12.Final'
 
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
