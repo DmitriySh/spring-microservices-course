@@ -12,7 +12,6 @@ import ru.shishmakov.repository.BookRepository;
 import ru.shishmakov.repository.GenreRepository;
 
 import java.time.Instant;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -40,11 +39,17 @@ public class LibraryService {
     }
 
     public String getAllComments() {
-        return bookRepository.findAllWithFetchComments().stream()
-                .map(Book::getComments)
-                .flatMap(Collection::stream)
-                .map(Comment::toString)
-                .collect(joining(lineSeparator()));
+        StringBuilder builder = new StringBuilder();
+        bookRepository.findAllWithFetchComments().forEach(b ->
+                builder.append("Book:")
+                        .append(lineSeparator())
+                        .append(b.toString())
+                        .append(lineSeparator())
+                        .append("Comments:")
+                        .append(lineSeparator())
+                        .append(b.getComments().stream().map(Comment::toString).collect(joining(lineSeparator())))
+                        .append(lineSeparator()));
+        return builder.toString();
     }
 
     public String getBookAuthors(ObjectId bookId) {
