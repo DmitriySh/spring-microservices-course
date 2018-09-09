@@ -1,4 +1,4 @@
-package ru.shishmakov.dao;
+package ru.shishmakov.repository;
 
 import org.assertj.core.util.Sets;
 import org.junit.Rule;
@@ -7,10 +7,7 @@ import org.junit.contrib.java.lang.system.SystemOutRule;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.shishmakov.domain.Book;
 import ru.shishmakov.domain.Comment;
@@ -21,41 +18,38 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
-import static java.util.Collections.emptyMap;
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.transaction.annotation.Propagation.NOT_SUPPORTED;
 
 /**
- * Test JPA layer without Web.<br/>
- * Test methods could use already prepared data by `data.sql`
+ * Test JPA layer without Web
  */
 @RunWith(SpringRunner.class)
 @DataJpaTest
-@Transactional(propagation = Propagation.NOT_SUPPORTED)
+@Transactional(propagation = NOT_SUPPORTED)
 public class CommentRepositoryTest {
     @Rule
     public final SystemOutRule systemOutRule = new SystemOutRule().muteForSuccessfulTests();
-    @SpyBean
-    private CommentRepository commentRepository;
-    @SpyBean
-    private BookRepository bookRepository;
     @Autowired
-    private TestEntityManager em;
+    private CommentRepository commentRepository;
+    @Autowired
+    private BookRepository bookRepository;
 
     @Test
     public void getAllShouldGetAllComments() {
-        List<Comment> authors = commentRepository.getAll();
+        List<Comment> authors = commentRepository.findAll();
 
         assertThat(authors)
                 .isNotNull()
-                .isNotEmpty()
+                .hasSize(6)
                 .matches(list -> list.stream().allMatch(Objects::nonNull), "all elements are not null");
     }
 
     @Test
     public void getByIdsShouldGetCommentsIfTheyAvailable() {
         Set<Long> ids = Sets.newLinkedHashSet(1L, 2L);
-        List<Comment> authors = commentRepository.getByIds(ids);
+        List<Comment> authors = commentRepository.findAllById(ids);
 
         assertThat(authors)
                 .isNotNull()
@@ -66,7 +60,7 @@ public class CommentRepositoryTest {
     @Test
     public void getByIdsShouldNotGetCommentsIfTheyNotAvailable() {
         Set<Long> ids = Sets.newLinkedHashSet(101L, 202L);
-        List<Comment> authors = commentRepository.getByIds(ids);
+        List<Comment> authors = commentRepository.findAllById(ids);
 
         assertThat(authors)
                 .isNotNull()
@@ -75,7 +69,7 @@ public class CommentRepositoryTest {
 
     @Test
     public void getByIdShouldGetComment() {
-        Optional<Comment> comment = commentRepository.getById(1L, emptyMap());
+        Optional<Comment> comment = commentRepository.findById(1L);
 
         assertThat(comment)
                 .isNotNull()
@@ -87,9 +81,10 @@ public class CommentRepositoryTest {
     @Test
     @Transactional
     public void saveShouldSaveNewComment() {
-        Book book = requireNonNull(bookRepository.getById(1L, emptyMap()).orElse(null));
+        Book book = requireNonNull(bookRepository.findById(1L).orElse(null));
         Comment comment = Comment.builder().createDate(Instant.now()).text("next comment").build();
-        commentRepository.save(comment, book);
+        book.addComment(comment);
+        commentRepository.save(comment);
 
         assertThat(comment.getId())
                 .isNotNull()
@@ -98,24 +93,26 @@ public class CommentRepositoryTest {
                 .isNotNull()
                 .isEqualTo(book);
         assertThat(book.getComments())
-                .isNotEmpty()
+                .isNotNull()
                 .contains(comment);
     }
 
     @Test
     @Transactional
     public void deleteShouldDeleteComment() {
-        Book book = requireNonNull(bookRepository.getById(1L, emptyMap()).orElse(null));
+        Book book = requireNonNull(bookRepository.findByIdWithFetchComments(1L).orElse(null));
         Comment newComment = Comment.builder().createDate(Instant.now()).text("next comment").build();
-        commentRepository.save(newComment, book);
+        book.addComment(newComment);
+        commentRepository.save(newComment);
 
         Long newCommentId = requireNonNull(newComment.getId());
         assertThat(book.getComments())
-                .isNotEmpty()
+                .isNotNull()
                 .contains(newComment);
 
+        book.removeComment(newComment);
         commentRepository.delete(newComment);
-        Optional<Comment> deletedComment = commentRepository.getById(newCommentId, emptyMap());
+        Optional<Comment> deletedComment = commentRepository.findById(newCommentId);
 
         assertThat(deletedComment)
                 .isNotNull()
