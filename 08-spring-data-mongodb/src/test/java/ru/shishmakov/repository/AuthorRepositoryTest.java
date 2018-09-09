@@ -47,7 +47,7 @@ public class AuthorRepositoryTest {
 
     @Test
     public void findByIdShouldGetAuthor() {
-        Optional<Author> author = authorRepository.findById(dbAuthors.get(0).get_id());
+        Optional<Author> author = authorRepository.findById(dbAuthors.get(0).getId());
 
         assertThat(author)
                 .isNotNull()
@@ -77,7 +77,7 @@ public class AuthorRepositoryTest {
 
     @Test
     public void findAllByIdShouldGetAuthorsIfTheyAvailable() {
-        Set<ObjectId> ids = dbAuthors.stream().map(Author::get_id).collect(toSet());
+        Set<ObjectId> ids = dbAuthors.stream().map(Author::getId).collect(toSet());
         List<Author> authors = authorRepository.findAllById(ids);
 
         assertThat(authors)

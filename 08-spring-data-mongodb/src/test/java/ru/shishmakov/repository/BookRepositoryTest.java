@@ -92,7 +92,7 @@ public class BookRepositoryTest {
 
     @Test
     public void findByIdShouldGetBook() {
-        Optional<Book> book = bookRepository.findById(dbBooks.get(0).get_id());
+        Optional<Book> book = bookRepository.findById(dbBooks.get(0).getId());
 
         assertThat(book)
                 .isNotNull()
@@ -120,7 +120,7 @@ public class BookRepositoryTest {
         authorRepository.saveAll(dbAuthors);
         genreRepository.saveAll(dbGenres);
 
-        assertThat(book.get_id())
+        assertThat(book.getId())
                 .isNotNull();
         assertThat(book.getAuthors())
                 .isNotEmpty()
@@ -148,7 +148,7 @@ public class BookRepositoryTest {
         newBook.addComments(dbComments);
 
         Book book = bookRepository.save(newBook);
-        ObjectId bookId = requireNonNull(book.get_id());
+        ObjectId bookId = requireNonNull(book.getId());
 
         book.removeAllAuthors();
         book.removeAllGenres();

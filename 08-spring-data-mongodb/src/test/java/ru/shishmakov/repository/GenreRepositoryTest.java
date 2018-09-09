@@ -56,7 +56,7 @@ public class GenreRepositoryTest {
 
     @Test
     public void findAllByIdShouldGetGenresIfTheyAvailable() {
-        Set<ObjectId> ids = dbGenres.stream().map(Genre::get_id).collect(toSet());
+        Set<ObjectId> ids = dbGenres.stream().map(Genre::getId).collect(toSet());
         List<Genre> genres = genreRepository.findAllById(ids);
 
         assertThat(genres)

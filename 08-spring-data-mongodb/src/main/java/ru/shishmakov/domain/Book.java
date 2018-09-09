@@ -32,7 +32,7 @@ import java.util.Set;
 public class Book {
 
     @Id
-    private ObjectId _id;
+    private ObjectId id;
 
     @EqualsAndHashCode.Include
     @NotEmpty

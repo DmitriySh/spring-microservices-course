@@ -27,7 +27,7 @@ import java.util.Set;
 public class Genre {
 
     @Id
-    private ObjectId _id;
+    private ObjectId id;
 
     @EqualsAndHashCode.Include
     @NotEmpty
