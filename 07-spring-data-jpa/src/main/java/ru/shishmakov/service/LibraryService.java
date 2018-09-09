@@ -115,12 +115,14 @@ public class LibraryService {
 
     @Transactional
     public String createBookComment(long bookId, String commentText) {
-        Comment comment = Comment.builder().text(commentText).createDate(Instant.now()).build();
-        bookRepository.findById(bookId).ifPresent(b -> {
-            b.addComment(comment);
-            commentRepository.save(comment);
-        });
-        return comment.toString();
+        return bookRepository.findById(bookId)
+                .map(b -> {
+                    Comment comment = Comment.builder().text(commentText).createDate(Instant.now()).build();
+                    b.addComment(comment);
+                    commentRepository.save(comment);
+                    return comment.toString();
+                })
+                .orElseGet(() -> "book: " + bookId + " not found");
     }
 
     @Transactional
