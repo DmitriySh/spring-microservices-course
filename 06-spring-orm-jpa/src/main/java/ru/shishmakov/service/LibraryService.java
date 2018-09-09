@@ -116,10 +116,13 @@ public class LibraryService {
 
     @Transactional
     public String createBookComment(long bookId, String commentText) {
-        Comment comment = Comment.builder().text(commentText).createDate(Instant.now()).build();
-        bookDao.getById(bookId, emptyMap())
-                .ifPresent(b -> commentDao.save(comment, b));
-        return comment.toString();
+        return bookDao.getById(bookId, emptyMap())
+                .map(b -> {
+                    Comment comment = Comment.builder().text(commentText).createDate(Instant.now()).build();
+                    commentDao.save(comment, b);
+                    return comment.toString();
+                })
+                .orElseGet(() -> "book: " + bookId + " not found");
     }
 
     @Transactional
