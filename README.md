@@ -44,6 +44,6 @@ Spring ORM JPA. Use [EntityManagerFactory](https://docs.oracle.com/javaee/7/api/
 and [PlatformTransactionManager](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/transaction/PlatformTransactionManager.html) 
 that covers persistence technologies
 
-## Homework 7: [Books library](https://github.com/DmitriySh/spring-microservices-course/tree/feature/07-spring-data-jpa/07-spring-data-jpa)
+## Homework 7: [Books library](https://github.com/DmitriySh/spring-microservices-course/tree/master/07-spring-data-jpa)
 Spring Data JPA. Use [Repository](https://docs.spring.io/spring-data/data-commons/docs/2.1.x/api/org/springframework/data/repository/Repository.html) interface
 and [@Repository](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/stereotype/Repository.html) annotation to implement patterns DAO
