@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
     <title>Start page</title>
@@ -7,6 +7,7 @@
 <body>
 
 <b>Hello!</b> This is index page.
+<a href="./books.html" th:href="@{/books}">Look this page</a> about books
 
 </body>
 </html>

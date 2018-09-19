@@ -34,7 +34,7 @@ public class Book {
     @EqualsAndHashCode.Include
     private String title;
 
-    @NaturalId
+    @NaturalId(mutable = true)
     @EqualsAndHashCode.Include
     private String isbn;
 }
