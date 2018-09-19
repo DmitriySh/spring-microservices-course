@@ -6,8 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.shishmakov.domain.Book;
 import ru.shishmakov.repository.BookRepository;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -19,16 +19,17 @@ public class BookService {
         return bookRepository.findAll();
     }
 
-    public Optional<Book> getById(long id) {
-        return bookRepository.findById(id);
+    public Book getById(long bookId) {
+        return bookRepository.findById(bookId)
+                .orElseThrow(() -> new EntityNotFoundException("book:" + bookId + " not found"));
     }
 
     @Transactional
-    public void update(long id, Book data) {
-        bookRepository.findById(id).ifPresent(b -> {
-            b.setTitle(data.getTitle());
-            b.setIsbn(data.getIsbn());
-            bookRepository.save(b);
-        });
+    public void update(long bookId, Book data) {
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new EntityNotFoundException("book:" + bookId + " not found"));
+        book.setTitle(data.getTitle());
+        book.setIsbn(data.getIsbn());
+        bookRepository.save(book);
     }
 }

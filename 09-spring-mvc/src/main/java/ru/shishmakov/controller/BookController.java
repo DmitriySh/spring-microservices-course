@@ -9,11 +9,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.shishmakov.domain.Book;
 
-import javax.persistence.EntityNotFoundException;
-
 @RequiredArgsConstructor
 @Controller
-public class MvcController {
+public class BookController {
     private final BookService bookService;
 
     @GetMapping
@@ -29,15 +27,13 @@ public class MvcController {
 
     @GetMapping("/edit")
     public String editBook(Model model, @RequestParam("id") long id) {
-        Book book = bookService.getById(id).orElseThrow(() -> new EntityNotFoundException("book:" + id + " not found"));
-        model.addAttribute("book", book);
+        model.addAttribute("book", bookService.getById(id));
         return "edit";
     }
 
     @PostMapping("/edit")
-    public String editBook(Model model, @ModelAttribute Book book, @RequestParam("id") long id) {
-        bookService.update(id, book);
-        model.addAttribute("books", bookService.getAll());
-        return "books";
+    public String editBook(@ModelAttribute Book data, @RequestParam("id") long id) {
+        bookService.update(id, data);
+        return "redirect:" + "/books";
     }
 }
