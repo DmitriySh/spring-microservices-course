@@ -14,26 +14,49 @@ import ru.shishmakov.domain.Book;
 public class BookController {
     private final BookService bookService;
 
+    /**
+     * Replace of main page
+     */
     @GetMapping
-    public String hello() {
-        return "index";
+    public String main() {
+        return "redirect:" + "/books";
     }
 
+    /**
+     * List all books
+     */
     @GetMapping("/books")
     public String getAllBooks(Model model) {
         model.addAttribute("books", bookService.getAll());
         return "books";
     }
 
+    /**
+     * Prepare to create new or edit existing book
+     */
     @GetMapping("/edit")
-    public String editBook(Model model, @RequestParam("id") long id) {
-        model.addAttribute("book", bookService.getById(id));
-        return "edit";
+    public String editBook(Model model, @RequestParam(name = "id", required = false) Long id,
+                           @RequestParam(name = "create", defaultValue = "false") boolean create) {
+        if (!create) model.addAttribute("book", bookService.getById(id));
+        model.addAttribute("create", create);
+        return "book";
     }
 
-    @PostMapping("/edit")
+    /**
+     * Update existing book
+     */
+    @PostMapping("/update")
     public String editBook(@ModelAttribute Book data, @RequestParam("id") long id) {
         bookService.update(id, data);
+        return "redirect:" + "/books";
+    }
+
+    /**
+     * Insert new book
+     */
+    @PostMapping(value = "/insert")
+    public String insert(@ModelAttribute Book data) {
+        bookService.create(data);
         return "redirect:" + "/books";
     }
 }

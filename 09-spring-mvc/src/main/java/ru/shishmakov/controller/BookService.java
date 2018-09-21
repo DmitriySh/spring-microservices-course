@@ -19,17 +19,22 @@ public class BookService {
         return bookRepository.findAll();
     }
 
-    public Book getById(long bookId) {
+    public Book getById(Long bookId) {
         return bookRepository.findById(bookId)
                 .orElseThrow(() -> new EntityNotFoundException("book:" + bookId + " not found"));
     }
 
     @Transactional
-    public void update(long bookId, Book data) {
+    public void update(Long bookId, Book data) {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new EntityNotFoundException("book:" + bookId + " not found"));
         book.setTitle(data.getTitle());
         book.setIsbn(data.getIsbn());
         bookRepository.save(book);
+    }
+
+    @Transactional
+    public void create(Book data) {
+        bookRepository.save(data);
     }
 }
