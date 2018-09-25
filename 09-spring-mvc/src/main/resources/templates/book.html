@@ -23,7 +23,7 @@
 
 <!-- Book edit -->
 <span th:if="${create == false}">
-    <form id="edit-form" th:action="@{/update(id=*{id})}" th:object="${book}" action="books.html" method="post">
+    <form id="edit-form" th:action="@{/edit(id=*{id})}" th:object="${book}" action="books.html" method="post">
         <h1>Edit Book </h1>
 
         <div class="row">

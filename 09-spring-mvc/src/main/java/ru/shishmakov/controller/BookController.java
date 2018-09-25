@@ -45,7 +45,7 @@ public class BookController {
     /**
      * Update existing book
      */
-    @PostMapping("/update")
+    @PostMapping("/edit")
     public String editBook(@ModelAttribute Book data, @RequestParam("id") long id) {
         bookService.update(id, data);
         return "redirect:" + "/books";
