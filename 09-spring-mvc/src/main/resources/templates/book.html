@@ -21,14 +21,14 @@
 </head>
 <body>
 
-<!-- Book edit -->
 <span th:if="${create == false}">
-    <form id="edit-form" th:action="@{/edit(id=*{id})}" th:object="${book}" action="books.html" method="post">
-        <h1>Edit Book </h1>
+    <!-- Book edit -->
+    <form id="edit-form" th:action="@{/book/edit}" th:object="${book}" action="books.html" method="post">
+        <h1>Edit Book</h1>
 
         <div class="row">
             <label for="id-edit">id:</label>
-            <input id="id-edit" type="number" readonly="readonly" th:value="*{id}" value="1"/>
+            <input id="id-edit" type="number" name="id" readonly="readonly" th:value="*{id}" value="1"/>
         </div>
 
         <div class="row">
@@ -47,9 +47,10 @@
     </form>
 </span>
 
-<!-- Book create -->
+
 <span th:if="${create == true}">
-    <form id="create-form" th:action="@{/insert}" action="books.html" method="post">
+    <!-- Book create -->
+    <form id="create-form" th:action="@{/book/insert}" action="books.html" method="post">
         <h1>Create Book</h1>
 
         <div class="row">

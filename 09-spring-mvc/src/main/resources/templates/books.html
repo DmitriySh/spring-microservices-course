@@ -35,14 +35,14 @@
         <td th:text="*{title}">Book Title</td>
         <td th:text="*{isbn}">Book ISBN</td>
         <td>
-            <a th:href="@{/edit(id=*{id},create='false')}" href="book.html">Edit</a>
+            <a th:href="@{/book/edit(id=*{id},create='false')}" href="book.html">Edit</a>
         </td>
     </tr>
     </tbody>
 </table>
 
 <div class="row">
-    <a th:href="@{/edit(create='true')}" href="book.html">Create book</a>
+    <a th:href="@{/book/edit(create='true')}" href="book.html">Create book</a>
 </div>
 
 </body>

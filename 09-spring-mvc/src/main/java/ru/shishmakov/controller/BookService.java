@@ -25,9 +25,9 @@ public class BookService {
     }
 
     @Transactional
-    public void update(Long bookId, Book data) {
-        Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new EntityNotFoundException("book:" + bookId + " not found"));
+    public void update(Book data) {
+        Book book = bookRepository.findById(data.getId())
+                .orElseThrow(() -> new EntityNotFoundException("book:" + data.getId() + " not found"));
         book.setTitle(data.getTitle());
         book.setIsbn(data.getIsbn());
         bookRepository.save(book);
