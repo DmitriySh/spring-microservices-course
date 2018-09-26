@@ -16,6 +16,7 @@ import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED;
@@ -78,7 +79,7 @@ public class BookControllerTest {
     }
 
     @Test
-    public void postBookEditShouldUpdateBookAndRedirectToAllBooks() throws Exception {
+    public void postBookEditShouldUpdateBookAndRedirectToAllBooksPage() throws Exception {
         mockMvc.perform(post("/book/edit")
                 .contentType(APPLICATION_FORM_URLENCODED)
                 .param("id", "1")
@@ -92,7 +93,7 @@ public class BookControllerTest {
     }
 
     @Test
-    public void postBookInsertShouldCreateNewBookAndRedirectToAllBooks() throws Exception {
+    public void postBookInsertShouldCreateNewBookAndRedirectToAllBooksPage() throws Exception {
         mockMvc.perform(post("/book/insert")
                 .contentType(APPLICATION_FORM_URLENCODED)
                 .param("title", "title 1")
@@ -102,5 +103,16 @@ public class BookControllerTest {
                 .andExpect(content().string(isEmptyString()));
 
         verify(bookService).create(any(Book.class));
+    }
+
+    @Test
+    public void getBookDeleteShouldRemoveBookAndRedirectToAllBooksPage() throws Exception {
+        mockMvc.perform(get("/book/delete")
+                .param("id", "1"))
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/books"))
+                .andExpect(content().string(isEmptyString()));
+
+        verify(bookService).delete(eq(1L));
     }
 }

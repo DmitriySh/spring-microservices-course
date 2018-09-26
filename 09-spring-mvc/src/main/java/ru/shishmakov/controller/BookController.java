@@ -56,8 +56,17 @@ public class BookController {
      * Insert new book
      */
     @PostMapping(value = "/book/insert")
-    public String insert(@ModelAttribute Book data) {
+    public String insertBook(@ModelAttribute Book data) {
         bookService.create(data);
+        return "redirect:" + "/books";
+    }
+
+    /**
+     * Delete existing book
+     */
+    @GetMapping(value = "/book/delete")
+    public String deleteBook(@RequestParam(name = "id") Long id) {
+        bookService.delete(id);
         return "redirect:" + "/books";
     }
 }
