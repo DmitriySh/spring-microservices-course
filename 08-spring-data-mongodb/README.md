@@ -132,11 +132,11 @@ Dmitriy Shishmakov | Spring Boot
 
 2018-09-09 11:07:33.832  INFO 83375 --- [           main] o.s.j.e.a.AnnotationMBeanExporter        : Registering beans for JMX exposure on startup
 2018-09-09 11:07:33.844  INFO 83375 --- [           main] ru.shishmakov.Main                       : Started Main in 2.467 seconds (JVM running for 2.986)
-2018-09-09 11:07:33.845  INFO 83375 --- [           main] ru.shishmakov.service.DataInitializer    : clean old data...
-2018-09-09 11:07:33.865  INFO 83375 --- [           main] ru.shishmakov.service.DataInitializer    : init default data...
-2018-09-09 11:07:34.101  INFO 83375 --- [           main] ru.shishmakov.service.DataInitializer    : authors: [Author(id=5b94d4c595c0dc45af6d11d3, fullname=author 1), Author(id=5b94d4c595c0dc45af6d11d4, fullname=author 2), Author(id=5b94d4c595c0dc45af6d11d5, fullname=author 3), Author(id=5b94d4c595c0dc45af6d11d6, fullname=author 4)]
-2018-09-09 11:07:34.104  INFO 83375 --- [           main] ru.shishmakov.service.DataInitializer    : genres: [Genre(id=5b94d4c595c0dc45af6d11d7, name=genre 1), Genre(id=5b94d4c595c0dc45af6d11d8, name=genre 2), Genre(id=5b94d4c595c0dc45af6d11d9, name=genre 3)]
-2018-09-09 11:07:34.109  INFO 83375 --- [           main] ru.shishmakov.service.DataInitializer    : books: [Book(id=5b94d4c695c0dc45af6d11e0, title=book 1, isbn=0-395-08254-1), Book(id=5b94d4c695c0dc45af6d11e1, title=book 2, isbn=0-395-08254-2), Book(id=5b94d4c695c0dc45af6d11e2, title=book 3, isbn=0-395-08254-3), Book(id=5b94d4c695c0dc45af6d11e3, title=book 4, isbn=0-395-08254-4)]
+2018-09-09 11:07:33.845  INFO 83375 --- [           main] ru.shishmakov.config.DataInitializer    : clean old data...
+2018-09-09 11:07:33.865  INFO 83375 --- [           main] ru.shishmakov.config.DataInitializer    : init default data...
+2018-09-09 11:07:34.101  INFO 83375 --- [           main] ru.shishmakov.config.DataInitializer    : authors: [Author(id=5b94d4c595c0dc45af6d11d3, fullname=author 1), Author(id=5b94d4c595c0dc45af6d11d4, fullname=author 2), Author(id=5b94d4c595c0dc45af6d11d5, fullname=author 3), Author(id=5b94d4c595c0dc45af6d11d6, fullname=author 4)]
+2018-09-09 11:07:34.104  INFO 83375 --- [           main] ru.shishmakov.config.DataInitializer    : genres: [Genre(id=5b94d4c595c0dc45af6d11d7, name=genre 1), Genre(id=5b94d4c595c0dc45af6d11d8, name=genre 2), Genre(id=5b94d4c595c0dc45af6d11d9, name=genre 3)]
+2018-09-09 11:07:34.109  INFO 83375 --- [           main] ru.shishmakov.config.DataInitializer    : books: [Book(id=5b94d4c695c0dc45af6d11e0, title=book 1, isbn=0-395-08254-1), Book(id=5b94d4c695c0dc45af6d11e1, title=book 2, isbn=0-395-08254-2), Book(id=5b94d4c695c0dc45af6d11e2, title=book 3, isbn=0-395-08254-3), Book(id=5b94d4c695c0dc45af6d11e3, title=book 4, isbn=0-395-08254-4)]
 shell:>help
 AVAILABLE COMMANDS
 
