@@ -1,7 +1,7 @@
 Books library
 =======
 Use `Spring Boot 2.x` and `Spring Web MVC 5.x`.<br/>
-Most modern applications work in the Internet and web browsers use HTTP protocol to communicate with them by requests and responses.
+Most classical applications work in the Internet and web browsers use HTTP protocol to communicate with them by requests and responses.
 `Spring Boot` is well suited for web application development: create a self-contained HTTP server by using embedded Tomcat, Jetty or Undertow.
 Most web applications use the `spring-boot-starter-web` module to get up and running quickly.
 
@@ -30,12 +30,12 @@ Most web applications use the `spring-boot-starter-web` module to get up and run
  * `Spring Boot` is not a Framework, it is Spring's [convention over configuration](https://en.wikipedia.org/wiki/Convention_over_configuration) solution for creating stand-alone, production-grade Spring-based applications.
  * Convention over configuration it is a software design paradigm used by software frameworks that attempt to decrease complexity without losing flexibility.
 
- * `Spring MVC` (model-view-controller) is designed around the [Front Controller](https://en.wikipedia.org/wiki/Front_controller) pattern:
+ * `Spring Web MVC` (model-view-controller) is designed around the [Front Controller](https://en.wikipedia.org/wiki/Front_controller) pattern:
    * The `Front Controller` provides a centralized entry point for that controls and manages web request handling
-   * In `Spring MVC` [DispatcherServlet](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/web/servlet/DispatcherServlet.html) is a front controller who handles all the user request and process the request as per there mapping
+   * In `Spring Web MVC` [DispatcherServlet](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/web/servlet/DispatcherServlet.html) is a front controller who handles all the user request and process the request as per there mapping
    * [DispatcherServlet](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/web/servlet/DispatcherServlet.html) is completely integrated with the Spring IoC container
 
- * Flow and lifecycle in Spring MVC:
+ * Flow and lifecycle in `Spring Web MVC`:
    * request will be received by [DispatcherServlet](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/web/servlet/DispatcherServlet.html) as the first step
    * [DispatcherServlet](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/web/servlet/DispatcherServlet.html) gets the help of HandlerMapping and request gets transferred to the `@Controller` associated class
    * then `@Controller` will process the request by executing appropriate methods and returns `ModeAndView` object (contains both Model data and View name) back to the [DispatcherServlet](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/web/servlet/DispatcherServlet.html)
