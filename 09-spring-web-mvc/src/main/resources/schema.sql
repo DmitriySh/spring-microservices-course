@@ -1,0 +1,10 @@
+-- tables
+DROP TABLE IF EXISTS book;
+DROP SEQUENCE IF EXISTS book_id_seq;
+CREATE SEQUENCE IF NOT EXISTS book_id_seq;
+CREATE TABLE IF NOT EXISTS book
+(
+  id    BIGINT DEFAULT book_id_seq.nextval PRIMARY KEY,
+  title VARCHAR(100) NOT NULL,
+  isbn  VARCHAR(100) NOT NULL UNIQUE
+);
