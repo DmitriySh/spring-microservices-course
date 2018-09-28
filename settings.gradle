@@ -16,4 +16,4 @@ include '04-spring-shell'
 include '05-spring-jdbc'
 include '06-spring-orm-jpa'
 include '07-spring-data-jpa'
-
+include '08-spring-data-mongodb'
