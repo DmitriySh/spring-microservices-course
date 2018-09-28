@@ -52,6 +52,6 @@ and [@Repository](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/sprin
 Spring Data MongoDB. Use [Repository](https://docs.spring.io/spring-data/data-commons/docs/2.1.x/api/org/springframework/data/repository/Repository.html) interface
 and [@Repository](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/stereotype/Repository.html) annotation to implement patterns DAO and use NoSQL document-oriented database
 
-## Homework 9: [Books](https://github.com/DmitriySh/spring-microservices-course/tree/feature/09-spring-mvc/09-spring-mvc)
+## Homework 9: [Books](https://github.com/DmitriySh/spring-microservices-course/tree/feature/09-spring-mvc/09-spring-web-mvc)
 Spring Web MVC. Use Embedded `Apache Tomcat`, [@Controller](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/stereotype/Controller.html) annotation, 
 and HTTP to make requests and receives responses from the servlet container
