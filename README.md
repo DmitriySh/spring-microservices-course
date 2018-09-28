@@ -48,6 +48,6 @@ that covers persistence technologies
 Spring Data JPA. Use [Repository](https://docs.spring.io/spring-data/data-commons/docs/2.1.x/api/org/springframework/data/repository/Repository.html) interface
 and [@Repository](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/stereotype/Repository.html) annotation to implement patterns DAO and use RDBMS
 
-## Homework 8: [Books library](https://github.com/DmitriySh/spring-microservices-course/tree/feature/08-spring-data-mongodb/08-spring-data-mongodb)
+## Homework 8: [Books library](https://github.com/DmitriySh/spring-microservices-course/tree/master/08-spring-data-mongodb)
 Spring Data MongoDB. Use [Repository](https://docs.spring.io/spring-data/data-commons/docs/2.1.x/api/org/springframework/data/repository/Repository.html) interface
 and [@Repository](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/stereotype/Repository.html) annotation to implement patterns DAO and use NoSQL document-oriented database

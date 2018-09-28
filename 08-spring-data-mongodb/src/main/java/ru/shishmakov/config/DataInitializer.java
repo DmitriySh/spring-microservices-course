@@ -1,4 +1,4 @@
-package ru.shishmakov.service;
+package ru.shishmakov.config;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
