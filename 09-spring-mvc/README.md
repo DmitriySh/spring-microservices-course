@@ -1,6 +1,6 @@
 Books library
 =======
-Use `Spring Boot 2.x` and `Spring Web MVC`.<br/>
+Use `Spring Boot 2.x` and `Spring Web MVC 5.x`.<br/>
 Most modern applications work in the Internet and web browsers use HTTP protocol to communicate with them by requests and responses.
 `Spring Boot` is well suited for web application development: create a self-contained HTTP server by using embedded Tomcat, Jetty or Undertow.
 Most web applications use the `spring-boot-starter-web` module to get up and running quickly.
@@ -30,7 +30,7 @@ Most web applications use the `spring-boot-starter-web` module to get up and run
  * `Spring Boot` is not a Framework, it is Spring's [convention over configuration](https://en.wikipedia.org/wiki/Convention_over_configuration) solution for creating stand-alone, production-grade Spring-based applications.
  * Convention over configuration it is a software design paradigm used by software frameworks that attempt to decrease complexity without losing flexibility.
 
- * `Spring MVC` (model-view-controller) is designed around the Front Controller pattern:
+ * `Spring MVC` (model-view-controller) is designed around the [Front Controller](https://en.wikipedia.org/wiki/Front_controller) pattern:
    * The `Front Controller` provides a centralized entry point for that controls and manages web request handling
    * In `Spring MVC` [DispatcherServlet](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/web/servlet/DispatcherServlet.html) is a front controller who handles all the user request and process the request as per there mapping
    * [DispatcherServlet](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/web/servlet/DispatcherServlet.html) is completely integrated with the Spring IoC container
@@ -42,6 +42,8 @@ Most web applications use the `spring-boot-starter-web` module to get up and run
    * [DispatcherServlet](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/web/servlet/DispatcherServlet.html) send the model object to the `ViewResolver` to resolve and retrieve the actual view page
    * [DispatcherServlet](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/web/servlet/DispatcherServlet.html) will pass the Model object to the View page to display the result and create the response
    * finally [DispatcherServlet](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/web/servlet/DispatcherServlet.html) sends the response back to the browser
+
+![](https://raw.githubusercontent.com/javatutorials2016/jp/master/img/spring-flow.png)
 
  * In a standalone application the main HTTP port defaults to `8080`, but can be set with `server.port`
  * To switch off the HTTP endpoints completely but still create a `WebApplicationContext` use `server.port=-1`
