@@ -1,5 +1,6 @@
 package ru.shishmakov.repository;
 
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.SystemOutRule;
@@ -27,6 +28,7 @@ import static org.springframework.transaction.annotation.Propagation.NOT_SUPPORT
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @Transactional(propagation = NOT_SUPPORTED)
+@Ignore
 public class BookRepositoryTest {
     @Rule
     public final SystemOutRule systemOutRule = new SystemOutRule().muteForSuccessfulTests();

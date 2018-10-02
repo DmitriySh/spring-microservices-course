@@ -7,6 +7,7 @@
         body {
             padding: 50px;
         }
+
         .books, .books td {
             border: 1px solid lightgray;
             padding: 5px;
@@ -27,6 +28,9 @@
         <th>id</th>
         <th>title</th>
         <th>isbn</th>
+        <th>authors</th>
+        <th>genres</th>
+        <th colspan="2">actions</th>
     </tr>
     </thead>
     <tbody>
@@ -35,7 +39,23 @@
         <td th:text="*{title}">Book Title</td>
         <td th:text="*{isbn}">Book ISBN</td>
         <td>
-            <a th:href="@{/book/edit(id=*{id},create='false')}" href="book.html">Edit</a>
+            <ul>
+                <li th:each="author : *{authors}"
+                    th:text="${author.fullname}">
+                    Book author
+                </li>
+            </ul>
+        </td>
+        <td>
+            <ul>
+                <li th:each="genre : *{genres}"
+                    th:text="${genre.name}">
+                    Book genre
+                </li>
+            </ul>
+        </td>
+        <td>
+            <a th:href="@{/book/edit(id=*{id})}" href="book.html">Edit</a>
         </td>
         <td>
             <a th:href="@{/book/delete(id=*{id})}" href="books.html">Delete</a>
