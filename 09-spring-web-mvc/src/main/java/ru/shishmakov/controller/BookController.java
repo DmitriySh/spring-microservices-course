@@ -40,8 +40,8 @@ public class BookController {
                            @RequestParam(name = "create", defaultValue = "false") boolean create) {
         if (!create) {
             model.addAttribute("book", libraryService.getBookById(id));
-            model.addAttribute("authors", libraryService.getAllAuthors());
-            model.addAttribute("genres", libraryService.getAllGenres());
+            model.addAttribute("allAuthors", libraryService.getAllAuthors());
+            model.addAttribute("allGenres", libraryService.getAllGenres());
         }
         model.addAttribute("create", create);
         return "book";

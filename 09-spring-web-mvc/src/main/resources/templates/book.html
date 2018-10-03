@@ -41,11 +41,10 @@
             <input id="isbn-edit" type="text" name="isbn" th:value="*{isbn}" value="Book ISBN"/>
         </div>
 
-        <!-- TODO fix select previous values!!! -->
         <div class="row">
             <label for="authors-edit">authors:</label>
-            <select id="authors-edit" name="authors" size="10" multiple="multiple">
-                <option th:each="author : ${authors}"
+            <select id="authors-edit" name="authors" th:field="*{authors}" size="10" multiple="multiple">
+                <option th:each="author : ${allAuthors}" selected="true"
                         th:value="${{author}}" th:text="${author.fullname}">
                     Book author
                 </option>
@@ -54,8 +53,8 @@
 
         <div class="row">
             <label for="genres-edit">genres:</label>
-            <select id="genres-edit" name="genres" size="10" multiple="multiple">
-                <option th:each="genre : ${genres}"
+            <select id="genres-edit" name="genres" th:field="*{genres}" size="10" multiple="multiple">
+                <option th:each="genre : ${allGenres}"
                         th:value="${{genre}}" th:text="${genre.name}">
                     Book genre
                 </option>
