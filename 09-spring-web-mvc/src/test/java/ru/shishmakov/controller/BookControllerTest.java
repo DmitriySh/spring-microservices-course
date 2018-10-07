@@ -8,6 +8,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.shishmakov.domain.Book;
+import ru.shishmakov.dto.BookDto;
 
 import java.util.Arrays;
 
@@ -33,7 +34,7 @@ public class BookControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @MockBean
-    private BookService bookService;
+    private LibraryService libraryService;
 
     @Test
     public void getRootPageShouldRedirectToBooks() throws Exception {
@@ -46,8 +47,9 @@ public class BookControllerTest {
     @Test
     public void getBooksShouldGetBooksPage() throws Exception {
         doReturn(Arrays.asList(
-                new Book(1L, "title 1", "isbn 1"),
-                new Book(2L, "title 2", "isbn 2"))).when(bookService).getAll();
+                Book.builder().id(1L).title("title 1").isbn("isbn 1").build(),
+                Book.builder().id(2L).title("title 2").isbn("isbn 2").build()))
+                .when(libraryService).getAllBooks();
 
         mockMvc.perform(get("/books"))
                 .andExpect(status().isOk())
@@ -55,7 +57,7 @@ public class BookControllerTest {
                 .andExpect(content().string(not(isEmptyString())))
                 .andExpect(xpath("html/body/table/tbody/tr").nodeCount(is(2)));
 
-        verify(bookService).getAll();
+        verify(libraryService).getAllBooks();
     }
 
     @Test
@@ -69,9 +71,12 @@ public class BookControllerTest {
 
     @Test
     public void getBookEditShouldGetEditPage() throws Exception {
-        doReturn(new Book(1L, "title 1", "isbn 1")).when(bookService).getById(anyLong());
+        doReturn(Book.builder().id(1L).title("title 1").isbn("isbn 1").build())
+                .when(libraryService)
+                .getBookById(anyLong());
 
-        mockMvc.perform(get("/book/edit").param("id", "1"))
+        mockMvc.perform(get("/book/edit")
+                .param("id", "1"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("text/html;charset=UTF-8"))
                 .andExpect(content().string(not(isEmptyString())))
@@ -84,12 +89,14 @@ public class BookControllerTest {
                 .contentType(APPLICATION_FORM_URLENCODED)
                 .param("id", "1")
                 .param("title", "title 1")
-                .param("isbn", "isbn 1"))
+                .param("isbn", "isbn 1")
+                .param("authors", "1,2")
+                .param("genres", "1,2"))
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("/books"))
                 .andExpect(content().string(isEmptyString()));
 
-        verify(bookService).update(any(Book.class));
+        verify(libraryService).updateBook(any(BookDto.class));
     }
 
     @Test
@@ -97,12 +104,14 @@ public class BookControllerTest {
         mockMvc.perform(post("/book/insert")
                 .contentType(APPLICATION_FORM_URLENCODED)
                 .param("title", "title 1")
-                .param("isbn", "isbn 1"))
+                .param("isbn", "isbn 1")
+                .param("authors", "1,2")
+                .param("genres", "1,2"))
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("/books"))
                 .andExpect(content().string(isEmptyString()));
 
-        verify(bookService).create(any(Book.class));
+        verify(libraryService).createBook(any(BookDto.class));
     }
 
     @Test
@@ -113,6 +122,6 @@ public class BookControllerTest {
                 .andExpect(redirectedUrl("/books"))
                 .andExpect(content().string(isEmptyString()));
 
-        verify(bookService).delete(eq(1L));
+        verify(libraryService).deleteBookById(eq(1L));
     }
 }

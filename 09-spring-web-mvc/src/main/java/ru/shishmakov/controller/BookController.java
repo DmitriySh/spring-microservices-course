@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.shishmakov.domain.Book;
+import ru.shishmakov.dto.BookDto;
 
 @RequiredArgsConstructor
 @Controller
 public class BookController {
-    private final BookService bookService;
+    private final LibraryService libraryService;
 
     /**
      * Replace of main page
@@ -27,7 +27,7 @@ public class BookController {
      */
     @GetMapping("/books")
     public String getAllBooks(Model model) {
-        model.addAttribute("books", bookService.getAll());
+        model.addAttribute("books", libraryService.getAllBooks());
         return "books";
     }
 
@@ -38,7 +38,9 @@ public class BookController {
     public String editBook(Model model,
                            @RequestParam(name = "id", required = false) Long id,
                            @RequestParam(name = "create", defaultValue = "false") boolean create) {
-        if (!create) model.addAttribute("book", bookService.getById(id));
+        if (!create) model.addAttribute("book", libraryService.getBookById(id));
+        model.addAttribute("allAuthors", libraryService.getAllAuthors());
+        model.addAttribute("allGenres", libraryService.getAllGenres());
         model.addAttribute("create", create);
         return "book";
     }
@@ -47,8 +49,8 @@ public class BookController {
      * Update existing book
      */
     @PostMapping("/book/edit")
-    public String editBook(@ModelAttribute Book data) {
-        bookService.update(data);
+    public String editBook(@ModelAttribute BookDto data) {
+        libraryService.updateBook(data);
         return "redirect:" + "/books";
     }
 
@@ -56,8 +58,8 @@ public class BookController {
      * Insert new book
      */
     @PostMapping(value = "/book/insert")
-    public String insertBook(@ModelAttribute Book data) {
-        bookService.create(data);
+    public String insertBook(@ModelAttribute BookDto data) {
+        libraryService.createBook(data);
         return "redirect:" + "/books";
     }
 
@@ -66,7 +68,7 @@ public class BookController {
      */
     @GetMapping(value = "/book/delete")
     public String deleteBook(@RequestParam(name = "id") Long id) {
-        bookService.delete(id);
+        libraryService.deleteBookById(id);
         return "redirect:" + "/books";
     }
 }
