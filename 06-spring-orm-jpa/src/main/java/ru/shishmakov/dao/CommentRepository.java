@@ -33,14 +33,12 @@ public class CommentRepository {
                 .getResultList();
     }
 
-    public Optional<Comment> getById(long commentId, Map<String, Object> context) {
+    public Optional<Comment> getById(long commentId, Map<String, List<String>> context) {
         EntityGraph<Comment> graph = em.createEntityGraph(Comment.class);
         context.entrySet().stream()
                 .filter(e -> Objects.equals(e.getKey(), "eager")) //eager
                 .map(Map.Entry::getValue)
-                .map(List.class::cast)
                 .flatMap(Collection::stream)
-                .map(String::valueOf)
                 .filter(Objects::nonNull)
                 .forEach(graph::addAttributeNodes);
         return ofNullable(em.find(Comment.class, commentId, singletonMap("javax.persistence.loadgraph", graph)));

@@ -47,14 +47,12 @@ public class BookRepository {
         });
     }
 
-    public Optional<Book> getById(long bookId, Map<String, Object> context) {
+    public Optional<Book> getById(long bookId, Map<String, List<String>> context) {
         EntityGraph<Book> graph = em.createEntityGraph(Book.class);
         context.entrySet().stream()
                 .filter(e -> Objects.equals(e.getKey(), "eager")) //eager
                 .map(Entry::getValue)
-                .map(List.class::cast)
                 .flatMap(Collection::stream)
-                .map(String::valueOf)
                 .filter(Objects::nonNull)
                 .forEach(graph::addAttributeNodes);
         return ofNullable(em.find(Book.class, bookId, singletonMap("javax.persistence.loadgraph", graph)));

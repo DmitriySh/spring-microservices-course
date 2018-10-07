@@ -1,12 +1,12 @@
 plugins {
-    id 'org.springframework.boot' version '2.0.3.RELEASE'
-    id 'io.spring.dependency-management' version '1.0.5.RELEASE' // + automatically import the spring-boot-dependencies bom from the version of Spring Boot
+    id 'org.springframework.boot' version '2.0.5.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.6.RELEASE' // + automatically import the spring-boot-dependencies bom from the version of Spring Boot
 }
 
 dependencies {
     compile 'com.h2database:h2'
     compile 'org.springframework.boot:spring-boot-starter-jdbc'
-    compile 'org.springframework.shell:spring-shell-starter:2.0.1.RELEASE'
+    compile "org.springframework.shell:spring-shell-starter:${springShell}"
 
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"

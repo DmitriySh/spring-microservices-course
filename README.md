@@ -7,11 +7,10 @@ Spring Framework Developer
 
 Although Spring Framework had been introduced in 2002 it is continue to be the most popular for software development in Java World. The main goal of this course is covering a modern development with Java 8, Spring Core 5.x, Spring Boot 2.x and Spring Cloud.
 
-PS: unfortunately not all other libraries get ready work with Java 9 or 10.
 
 ## Requirements:
 
-  * Java SE Development Kit 8  
+  * Java SE Development Kit 10  
   * Gradle 4.x (or you could use Gradle wrapper)   
   * Git 1.7.x (or newer) 
 
