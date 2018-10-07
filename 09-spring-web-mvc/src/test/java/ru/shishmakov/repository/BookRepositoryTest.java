@@ -1,6 +1,5 @@
 package ru.shishmakov.repository;
 
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.SystemOutRule;
@@ -28,7 +27,6 @@ import static org.springframework.transaction.annotation.Propagation.NOT_SUPPORT
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @Transactional(propagation = NOT_SUPPORTED)
-@Ignore
 public class BookRepositoryTest {
     @Rule
     public final SystemOutRule systemOutRule = new SystemOutRule().muteForSuccessfulTests();
@@ -37,9 +35,9 @@ public class BookRepositoryTest {
 
     @Test
     public void getAllShouldGetAllBooks() {
-        List<Book> authors = bookRepository.findAll();
+        List<Book> books = bookRepository.findAll();
 
-        assertThat(authors)
+        assertThat(books)
                 .isNotNull()
                 .hasSize(4)
                 .matches(list -> list.stream().allMatch(Objects::nonNull), "all elements are not null");
@@ -47,9 +45,9 @@ public class BookRepositoryTest {
 
     @Test
     public void getByIdShouldGetBook() {
-        Optional<Book> comment = bookRepository.findById(1L);
+        Optional<Book> book = bookRepository.findById(1L);
 
-        assertThat(comment)
+        assertThat(book)
                 .isNotNull()
                 .isPresent()
                 .get()
@@ -60,19 +58,16 @@ public class BookRepositoryTest {
     @Transactional
     public void saveAndFlushShouldSaveNewBook() {
         Book newBook = Book.builder().title("title").isbn("isbn").build();
-
         assertThat(newBook.getId())
                 .isNull();
 
         Book book = bookRepository.saveAndFlush(newBook);
-
         assertThat(book.getId())
                 .isNotNull()
                 .isPositive();
     }
 
     @Test
-    @Transactional
     public void deleteShouldDeleteBook() {
         Book book = bookRepository.saveAndFlush(Book.builder().title("title").isbn("isbn").build());
 
@@ -86,7 +81,6 @@ public class BookRepositoryTest {
     }
 
     @Test
-    @Transactional
     public void createBookShouldThrowExceptionIfTitleNull() {
         assertThatThrownBy(() -> bookRepository.saveAndFlush(Book.builder().title(null).isbn(UUID.randomUUID().toString()).build()))
                 .isInstanceOf(DataIntegrityViolationException.class)

@@ -1,15 +1,11 @@
 package ru.shishmakov.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@ToString
-@Setter
-@Getter
+@Data
 public class BookDto {
     private Long id;
     private String title;
