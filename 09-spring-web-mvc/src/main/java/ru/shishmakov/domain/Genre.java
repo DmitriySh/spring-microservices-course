@@ -1,6 +1,7 @@
 package ru.shishmakov.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ import java.util.Set;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.SEQUENCE;
 
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -27,7 +29,6 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @Getter
 @Entity
 public class Genre {
-
     @Id
     @SequenceGenerator(name = "g_seq", sequenceName = "genre_id_seq", allocationSize = 1)
     @GeneratedValue(generator = "g_seq", strategy = SEQUENCE)
@@ -37,7 +38,8 @@ public class Genre {
     @EqualsAndHashCode.Include
     private String name;
 
-    @ManyToMany(mappedBy = "genres", fetch = LAZY)
+    @Builder.Default
     @ToString.Exclude
+    @ManyToMany(mappedBy = "genres", fetch = LAZY)
     private Set<Book> books = new HashSet<>();
 }

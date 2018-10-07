@@ -48,7 +48,6 @@ public class Book {
     private String isbn;
 
     @ToString.Exclude
-    @EqualsAndHashCode.Include
     @Builder.Default
     @ManyToMany(cascade = {PERSIST, MERGE}, fetch = LAZY)
     @JoinTable(name = "book_author",

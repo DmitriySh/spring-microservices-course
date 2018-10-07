@@ -1,6 +1,7 @@
 package ru.shishmakov.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ import java.util.Set;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.SEQUENCE;
 
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -36,6 +38,7 @@ public class Author {
     @NaturalId
     private String fullname;
 
+    @Builder.Default
     @ToString.Exclude
     @ManyToMany(mappedBy = "authors", fetch = LAZY)
     private Set<Book> books = new HashSet<>();

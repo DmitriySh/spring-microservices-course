@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.shishmakov.domain.Book;
+import ru.shishmakov.dto.BookDto;
 
 @RequiredArgsConstructor
 @Controller
@@ -38,11 +38,9 @@ public class BookController {
     public String editBook(Model model,
                            @RequestParam(name = "id", required = false) Long id,
                            @RequestParam(name = "create", defaultValue = "false") boolean create) {
-        if (!create) {
-            model.addAttribute("book", libraryService.getBookById(id));
-            model.addAttribute("allAuthors", libraryService.getAllAuthors());
-            model.addAttribute("allGenres", libraryService.getAllGenres());
-        }
+        if (!create) model.addAttribute("book", libraryService.getBookById(id));
+        model.addAttribute("allAuthors", libraryService.getAllAuthors());
+        model.addAttribute("allGenres", libraryService.getAllGenres());
         model.addAttribute("create", create);
         return "book";
     }
@@ -51,7 +49,7 @@ public class BookController {
      * Update existing book
      */
     @PostMapping("/book/edit")
-    public String editBook(@ModelAttribute Book data) {
+    public String editBook(@ModelAttribute BookDto data) {
         libraryService.updateBook(data);
         return "redirect:" + "/books";
     }
@@ -60,7 +58,7 @@ public class BookController {
      * Insert new book
      */
     @PostMapping(value = "/book/insert")
-    public String insertBook(@ModelAttribute Book data) {
+    public String insertBook(@ModelAttribute BookDto data) {
         libraryService.createBook(data);
         return "redirect:" + "/books";
     }
