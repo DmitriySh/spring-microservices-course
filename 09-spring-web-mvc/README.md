@@ -30,7 +30,7 @@ Most web applications use the `spring-boot-starter-web` module to get up and run
  * `Spring Boot` is not a Framework, it is Spring's [convention over configuration](https://en.wikipedia.org/wiki/Convention_over_configuration) solution for creating stand-alone, production-grade Spring-based applications.
  * Convention over configuration it is a software design paradigm used by software frameworks that attempt to decrease complexity without losing flexibility.
 
- * `Spring Web MVC` is the web framework built on the Servlet API and uses an asynchronous blocking I/O architecture with a one-request-per-thread model
+ * `Spring Web MVC` is the web framework built on the Servlet API and uses a synchronous blocking I/O architecture with a one-request-per-thread model
  * `Spring Web MVC` (model-view-controller) is designed around the [Front Controller](https://en.wikipedia.org/wiki/Front_controller) pattern:
    * The `Front Controller` provides a centralized entry point for that controls and manages web request handling
    * In `Spring Web MVC` [DispatcherServlet](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/web/servlet/DispatcherServlet.html) is a front controller who handles all the user request and process the request as per there mapping
