@@ -3,15 +3,14 @@ language: java
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+
 cache:
   directories:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 
-addons:
-  apt:
-    packages:
-      - oracle-java8-set-default
+jdk:
+- openjdk10
 
 script: ./gradlew check --daemon
 
