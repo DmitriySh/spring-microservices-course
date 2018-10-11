@@ -52,5 +52,5 @@ Spring Data MongoDB. Use [Repository](https://docs.spring.io/spring-data/data-co
 and [@Repository](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/stereotype/Repository.html) annotation to implement patterns DAO and use NoSQL document-oriented database
 
 ## Homework 9: [Books library](https://github.com/DmitriySh/spring-microservices-course/tree/master/09-spring-web-mvc)
-Spring Web MVC. Use Embedded `Apache Tomcat`, [@Controller](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/stereotype/Controller.html) annotation, 
+Spring Web MVC. Use `Servlet API`, embedded `Apache Tomcat`, [@Controller](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/stereotype/Controller.html) annotation, 
 and HTTP to make requests and receives responses from the servlet container

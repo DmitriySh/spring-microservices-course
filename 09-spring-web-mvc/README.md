@@ -1,7 +1,7 @@
 Books library
 =======
 Use `Spring Boot 2.x` and `Spring Web MVC 5.x`.<br/>
-Most classical applications work in the Internet and web browsers use HTTP protocol to communicate with them by requests and responses.
+Most classical applications work on the Internet and use a web browser to communicate with the server by HTTP protocol to send a request and get a response back. HTML pages are a common response used for communication between a server and a client.
 `Spring Boot` is well suited for web application development: create a self-contained HTTP server by using embedded Tomcat, Jetty or Undertow.
 Most web applications use the `spring-boot-starter-web` module to get up and running quickly.
 
@@ -30,6 +30,7 @@ Most web applications use the `spring-boot-starter-web` module to get up and run
  * `Spring Boot` is not a Framework, it is Spring's [convention over configuration](https://en.wikipedia.org/wiki/Convention_over_configuration) solution for creating stand-alone, production-grade Spring-based applications.
  * Convention over configuration it is a software design paradigm used by software frameworks that attempt to decrease complexity without losing flexibility.
 
+ * `Spring Web MVC` is the web framework built on the Servlet API and uses an asynchronous blocking I/O architecture with a one-request-per-thread model
  * `Spring Web MVC` (model-view-controller) is designed around the [Front Controller](https://en.wikipedia.org/wiki/Front_controller) pattern:
    * The `Front Controller` provides a centralized entry point for that controls and manages web request handling
    * In `Spring Web MVC` [DispatcherServlet](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/web/servlet/DispatcherServlet.html) is a front controller who handles all the user request and process the request as per there mapping
