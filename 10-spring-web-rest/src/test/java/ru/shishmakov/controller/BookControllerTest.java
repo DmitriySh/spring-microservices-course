@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import ru.shishmakov.domain.Book;
 import ru.shishmakov.dto.BookDto;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Arrays;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -23,6 +24,7 @@ import static org.hamcrest.Matchers.not;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8;
@@ -77,7 +79,7 @@ public class BookControllerTest {
     }
 
     @Test
-    public void getBookByIdShouldGetBook() throws Exception {
+    public void getBookByIdShouldSuccessfullyGetBook() throws Exception {
         doReturn(Book.builder().id(1L).title("title 1").isbn("isbn 1").build())
                 .when(libraryService).getBookById(eq(1L));
 
@@ -92,6 +94,16 @@ public class BookControllerTest {
         verify(libraryService).getBookById(eq(1L));
     }
 
+    @Test
+    public void getBookByIdShouldFailIfBookIdNotFound() throws Exception {
+        doThrow(new EntityNotFoundException("book: 1 not found")).when(libraryService).getBookById(eq(1L));
+
+        mockMvc.perform(get("/book/{id}", 1))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(isEmptyString()));
+
+        verify(libraryService).getBookById(eq(1L));
+    }
 
     @Test
     public void postBookShouldCreateNewBook() throws Exception {
@@ -111,7 +123,7 @@ public class BookControllerTest {
     }
 
     @Test
-    public void putBookByIdShouldUpdateBook() throws Exception {
+    public void putBookByIdShouldSuccessfullyUpdateBook() throws Exception {
         Book book = Book.builder().id(1L).title("title 1").isbn("isbn 1").build();
         doReturn(book).when(libraryService).updateBook(any(BookDto.class));
 
@@ -127,10 +139,35 @@ public class BookControllerTest {
     }
 
     @Test
-    public void deleteBookShouldRemoveBook() throws Exception {
+    public void putBookByIdShouldFailIfBookIdNotFound() throws Exception {
+        doThrow(new EntityNotFoundException("book: 1 not found")).when(libraryService).updateBook(any(BookDto.class));
+
+        mockMvc.perform(put("/book/{id}", 1)
+                .contentType(APPLICATION_JSON)
+                .content(json.write(BookDto.from(Book.builder().title("title 1").isbn("isbn 1").build())).getJson()))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(isEmptyString()));
+
+        verify(libraryService).updateBook(any(BookDto.class));
+    }
+
+    @Test
+    public void deleteBookByIdShouldSuccessfullyRemoveBook() throws Exception {
         mockMvc.perform(delete("/book/{id}", 1)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
+                .andExpect(content().string(isEmptyString()));
+
+        verify(libraryService).deleteBookById(eq(1L));
+    }
+
+    @Test
+    public void deleteBookByIdShouldFailIfBookIdNotFound() throws Exception {
+        doThrow(new EntityNotFoundException("book: 1 not found")).when(libraryService).deleteBookById(eq(1L));
+
+        mockMvc.perform(delete("/book/{id}", 1)
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isNotFound())
                 .andExpect(content().string(isEmptyString()));
 
         verify(libraryService).deleteBookById(eq(1L));
