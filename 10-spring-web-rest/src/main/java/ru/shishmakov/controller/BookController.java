@@ -31,7 +31,7 @@ public class BookController {
         return ResponseEntity
                 .status(FOUND)
                 .header(LOCATION, "/books")
-                .body("RESTfull API for Book Library");
+                .body("RESTful API for Book Library");
     }
 
     /**

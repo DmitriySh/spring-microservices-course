@@ -58,7 +58,7 @@ public class BookControllerTest {
         mockMvc.perform(get("/"))
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("/books"))
-                .andExpect(content().string(equalTo("RESTfull API for Book Library")));
+                .andExpect(content().string(equalTo("RESTful API for Book Library")));
     }
 
     @Test
@@ -156,18 +156,6 @@ public class BookControllerTest {
         mockMvc.perform(delete("/book/{id}", 1)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().string(isEmptyString()));
-
-        verify(libraryService).deleteBookById(eq(1L));
-    }
-
-    @Test
-    public void deleteBookByIdShouldFailIfBookIdNotFound() throws Exception {
-        doThrow(new EntityNotFoundException("book: 1 not found")).when(libraryService).deleteBookById(eq(1L));
-
-        mockMvc.perform(delete("/book/{id}", 1)
-                .contentType(APPLICATION_JSON))
-                .andExpect(status().isNotFound())
                 .andExpect(content().string(isEmptyString()));
 
         verify(libraryService).deleteBookById(eq(1L));

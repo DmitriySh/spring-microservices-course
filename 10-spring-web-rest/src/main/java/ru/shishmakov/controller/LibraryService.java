@@ -88,12 +88,12 @@ public class LibraryService {
 
     @Transactional
     public void deleteBookById(Long bookId) {
-        bookRepository.findByIdWithFetchGenresAuthors(bookId).ifPresentOrElse(book -> {
+        bookRepository.findByIdWithFetchGenresAuthors(bookId).ifPresent(book -> {
             book.removeAllAuthors();
             book.removeAllGenres();
             bookRepository.delete(book);
             log.info("delete book: {}", book);
-        }, () -> new EntityNotFoundException("book:" + bookId + " not found"));
+        });
     }
 
     private Set<Genre> findGenres(Set<Long> genreIds) {
