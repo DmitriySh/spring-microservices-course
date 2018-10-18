@@ -54,3 +54,7 @@ and [@Repository](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/sprin
 ## Homework 9: [Books library](https://github.com/DmitriySh/spring-microservices-course/tree/master/09-spring-web-mvc)
 Spring Web MVC. Use `Servlet API`, embedded `Apache Tomcat`, [@Controller](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/stereotype/Controller.html) annotation, 
 and HTTP to make requests and receives responses from the servlet container
+
+## Homework 10: [Books library](https://github.com/DmitriySh/spring-microservices-course/tree/master/10-spring-web-rest)
+Spring Web MVC with REST. Use `Servlet API`, embedded `Apache Tomcat`, [@RestController](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/web/bind/annotation/RestController.html) annotation, 
+and HTTP to simplify the creation of `RESTful` web services

@@ -30,15 +30,19 @@ and provides the necessary API support to implement it seamlessly, with little e
  * `Spring Boot` is not a Framework, it is Spring's [convention over configuration](https://en.wikipedia.org/wiki/Convention_over_configuration) solution for creating stand-alone, production-grade Spring-based applications
  * Convention over configuration it is a software design paradigm used by software frameworks that attempt to decrease complexity without losing flexibility
 
- - `REST` (REpresentational State Transfer) is an architectural style that defines a set of constraints to be used for creating a distributed application in the network. This is how web services interact
- - `REST` is not a framework, a protocol or communication format it is an architectural style or design pattern for APIs
- - `REST` was defined by Roy Fielding, a computer scientist. He presented the `REST` principles in his Ph.D. dissertation in 2000
+ * `REST` (REpresentational State Transfer) is an architectural style that defines a set of constraints to be used for creating a distributed application in the network. This is how web services interact
+ * `REST` is not a framework, a protocol or communication format it is an architectural style or design pattern for APIs
+ * `REST` was defined by Roy Fielding, a computer scientist. He presented the `REST` principles in his Ph.D. dissertation in 2000
 
- - The system supporting `REST` is a `RESTful`, each unit of information is URL with already defined standard declarations based on HTTP
- - HTTP commands are used for CRUD operations: GET (retrieve), PUT (update/modify), POST (create), DELETE (remove)
- - It means when a `RESTful API` is called, the server will use HTTP command and transfer to the client a representation state of the requested resource
- - The representation of the state can be in a JSON format and probably for most APIs this is indeed the case. It can also be in XML or HTML format
+ * The system supporting `REST` is a `RESTful`, each unit of information is URL with already defined standard declarations based on HTTP
+ * HTTP commands are used for CRUD operations: GET (retrieve), PUT (update/modify), POST (create), DELETE (remove)
+ * It means when a `RESTful API` is called, the server will use HTTP command and transfer to the client a representation state of the requested resource
+ * The representation of the state can be in a JSON format and probably for most APIs this is indeed the case. It can also be in XML or HTML format
  
+ * [@RestController](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/web/bind/annotation/RestController.html) annotation was introduced in `Spring 4.0` 
+ to combines [@Controller](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/stereotype/Controller.html) 
+ and [@ResponseBody](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/web/bind/annotation/ResponseBody.html) 
+ annotations to simplify the creation of `RESTful` web services
  * `RESTful API` should follow 6 constraints:
    * Uniform interface
      Interactions client-server should be defined by predefined rules

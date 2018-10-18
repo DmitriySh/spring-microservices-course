@@ -46,6 +46,10 @@ Most web applications use the `spring-boot-starter-web` module to get up and run
 
 ![](https://raw.githubusercontent.com/javatutorials2016/jp/master/img/spring-flow.png)
 
+ * [@Controller](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/stereotype/Controller.html) 
+ it is a specialization of `@Component` annotation. The `DispatcherServlet` scans such annotated classes for mapped methods and detects `@RequestMapping` annotations
+ * [@ResponseBody](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/web/bind/annotation/ResponseBody.html) could be used to indicates a method return value should be bound to the web response body
+ because the default response based on View of MVC
  * [@EnableWebMvc](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/web/servlet/config/annotation/EnableWebMvc.html) 
  annotation provides the `Spring Web MVC` configuration that enables the `@Controller` and the `@RequestMapping` annotations
  * `Spring Boot` has `spring-boot-autoconfigure` module contains class [WebMvcAutoConfiguration](https://docs.spring.io/spring-boot/docs/2.0.x/api/org/springframework/boot/autoconfigure/web/servlet/WebMvcAutoConfiguration.html)
