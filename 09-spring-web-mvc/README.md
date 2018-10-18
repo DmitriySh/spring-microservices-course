@@ -46,6 +46,11 @@ Most web applications use the `spring-boot-starter-web` module to get up and run
 
 ![](https://raw.githubusercontent.com/javatutorials2016/jp/master/img/spring-flow.png)
 
+ * [@EnableWebMvc](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/web/servlet/config/annotation/EnableWebMvc.html) 
+ annotation provides the `Spring Web MVC` configuration that enables the `@Controller` and the `@RequestMapping` annotations
+ * `Spring Boot` has `spring-boot-autoconfigure` module contains class [WebMvcAutoConfiguration](https://docs.spring.io/spring-boot/docs/2.0.x/api/org/springframework/boot/autoconfigure/web/servlet/WebMvcAutoConfiguration.html)
+ with inner configuration class [EnableWebMvcConfiguration](https://docs.spring.io/spring-boot/docs/2.0.x/api/org/springframework/boot/autoconfigure/web/servlet/WebMvcAutoConfiguration.EnableWebMvcConfiguration.html)
+ equivalent to `@EnableWebMvc` and you don't need to enable it manually
  * In a standalone application the main HTTP port defaults to `8080`, but can be set with `server.port`
  * To switch off the HTTP endpoints completely but still create a `WebApplicationContext` use `server.port=-1`
  * To scan for a free port use `server.port=0`
