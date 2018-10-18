@@ -49,7 +49,7 @@ public class BookController {
      * Get one book by id
      */
     @GetMapping("/book/{id}")
-    public ResponseEntity<BookDto> getBook(@PathVariable("id") long bookId) {
+    public ResponseEntity<BookDto> getBook(@PathVariable("id") Long bookId) {
         Book book = libraryService.getBookById(bookId);
         return ResponseEntity.ok(BookDto.from(book));
     }
@@ -67,7 +67,7 @@ public class BookController {
      * Update existing book
      */
     @PutMapping("/book/{id}")
-    public ResponseEntity<BookDto> editBook(@RequestBody BookDto data, @PathVariable("id") long id) {
+    public ResponseEntity<BookDto> editBook(@RequestBody BookDto data, @PathVariable("id") Long id) {
         data.setId(id);
         Book book = libraryService.updateBook(data);
         return ResponseEntity.ok(BookDto.from(book));
