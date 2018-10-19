@@ -30,6 +30,7 @@ and provides the necessary API support to implement it seamlessly, with little e
  * `Spring Boot` is not a Framework, it is Spring's [convention over configuration](https://en.wikipedia.org/wiki/Convention_over_configuration) solution for creating stand-alone, production-grade Spring-based applications
  * Convention over configuration it is a software design paradigm used by software frameworks that attempt to decrease complexity without losing flexibility
 
+ * `REST` like `Spring Web MVC` have built on the Servlet API and use synchronous blocking I/O architecture
  * `REST` (REpresentational State Transfer) is an architectural style that defines a set of constraints to be used for creating a distributed application in the network. This is how web services interact
  * `REST` is not a framework, a protocol or communication format it is an architectural style or design pattern for APIs
  * `REST` was defined by Roy Fielding, a computer scientist. He presented the `REST` principles in his Ph.D. dissertation in 2000
@@ -44,7 +45,7 @@ and provides the necessary API support to implement it seamlessly, with little e
  and [@ResponseBody](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/web/bind/annotation/ResponseBody.html) 
  annotations to simplify the creation of `RESTful` web services
  * `RESTful API` should follow 6 constraints:
-   * Uniform interface
+   * Uniform interface<br/>
      Interactions client-server should be defined by predefined rules
        1) each resource must be uniquely identified by a stable identifier. A `stable` identifier means that it doesn't change across interactions, 
        and it doesn't change even when the state of the resource changes
