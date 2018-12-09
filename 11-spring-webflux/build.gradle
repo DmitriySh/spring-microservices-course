@@ -1,0 +1,25 @@
+plugins {
+    id 'org.springframework.boot' version '2.0.5.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.6.RELEASE' // + automatically import the spring-boot-dependencies bom from the version of Spring Boot
+}
+
+dependencies {
+    compile 'org.springframework.boot:spring-boot-starter-webflux'
+    compile 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
+
+    compile 'org.hibernate:hibernate-validator:6.0.12.Final'
+    compile 'org.glassfish:javax.el:3.0.1-b10'
+
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+    testCompile 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
+    testCompile 'io.projectreactor:reactor-test'
+}
+
+bootJar {
+    baseName = project.name + '-all'
+    enabled = true
+    launchScript()
+}
