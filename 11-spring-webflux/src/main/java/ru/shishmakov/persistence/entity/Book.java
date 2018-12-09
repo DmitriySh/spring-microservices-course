@@ -1,4 +1,4 @@
-package ru.shishmakov.domain;
+package ru.shishmakov.persistence.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

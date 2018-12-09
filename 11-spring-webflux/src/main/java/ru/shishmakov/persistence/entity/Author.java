@@ -1,4 +1,4 @@
-package ru.shishmakov.domain;
+package ru.shishmakov.persistence.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,12 +8,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.bson.types.ObjectId;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
+
 
 @Builder
 @AllArgsConstructor
@@ -22,18 +24,17 @@ import java.time.Instant;
 @ToString
 @Setter
 @Getter
-public class Comment {
-
+@Document
+public class Author {
     @Id
-    @EqualsAndHashCode.Include
-    @NotNull
     private ObjectId id;
 
     @EqualsAndHashCode.Include
     @NotEmpty
-    private String text;
+    private String fullname;
 
-    @EqualsAndHashCode.Include
-    @CreatedDate
-    private Instant createDate;
+    @ToString.Exclude
+    @Builder.Default
+    @DBRef(lazy = true)
+    private Set<Book> books = new HashSet<>();
 }

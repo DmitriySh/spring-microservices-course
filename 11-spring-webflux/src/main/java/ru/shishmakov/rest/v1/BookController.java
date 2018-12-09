@@ -1,4 +1,4 @@
-package ru.shishmakov.controller;
+package ru.shishmakov.rest.v1;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.shishmakov.service.LibraryService;
-import ru.shishmakov.web.BookDto;
+import ru.shishmakov.web.dto.BookDto;
 
 import static org.springframework.http.HttpHeaders.LOCATION;
 import static org.springframework.http.HttpStatus.CREATED;

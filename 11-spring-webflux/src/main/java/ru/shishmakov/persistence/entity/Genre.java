@@ -1,4 +1,4 @@
-package ru.shishmakov.domain;
+package ru.shishmakov.persistence.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +16,6 @@ import javax.validation.constraints.NotEmpty;
 import java.util.HashSet;
 import java.util.Set;
 
-
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,13 +24,14 @@ import java.util.Set;
 @Setter
 @Getter
 @Document
-public class Author {
+public class Genre {
+
     @Id
     private ObjectId id;
 
     @EqualsAndHashCode.Include
     @NotEmpty
-    private String fullname;
+    private String name;
 
     @ToString.Exclude
     @Builder.Default

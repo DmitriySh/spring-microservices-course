@@ -7,13 +7,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import ru.shishmakov.domain.Author;
-import ru.shishmakov.domain.Book;
-import ru.shishmakov.domain.Genre;
-import ru.shishmakov.repository.AuthorRepository;
-import ru.shishmakov.repository.BookRepository;
-import ru.shishmakov.repository.GenreRepository;
-import ru.shishmakov.web.BookDto;
+import ru.shishmakov.persistence.entity.Author;
+import ru.shishmakov.persistence.entity.Book;
+import ru.shishmakov.persistence.entity.Genre;
+import ru.shishmakov.persistence.repository.AuthorRepository;
+import ru.shishmakov.persistence.repository.BookRepository;
+import ru.shishmakov.persistence.repository.GenreRepository;
+import ru.shishmakov.web.dto.BookDto;
 
 @Slf4j
 @RequiredArgsConstructor

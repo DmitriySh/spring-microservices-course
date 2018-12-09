@@ -1,4 +1,4 @@
-package ru.shishmakov.repository;
+package ru.shishmakov.persistence.repository;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.Query;
@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import ru.shishmakov.domain.Book;
+import ru.shishmakov.persistence.entity.Book;
 
 @Repository
 public interface BookRepository extends ReactiveMongoRepository<Book, ObjectId> {

@@ -1,4 +1,4 @@
-package ru.shishmakov.web;
+package ru.shishmakov.web.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -8,9 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.bson.types.ObjectId;
-import ru.shishmakov.domain.Author;
-import ru.shishmakov.domain.Book;
-import ru.shishmakov.domain.Genre;
+import ru.shishmakov.persistence.entity.Author;
+import ru.shishmakov.persistence.entity.Book;
+import ru.shishmakov.persistence.entity.Genre;
 
 import java.util.HashSet;
 import java.util.Set;
