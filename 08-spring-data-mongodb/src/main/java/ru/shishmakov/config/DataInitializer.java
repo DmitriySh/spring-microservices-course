@@ -85,10 +85,10 @@ class DataInitializer implements CommandLineRunner {
                 .collect(toSet());
     }
 
-    private <T> Set<T> filter(List<T> authors, Function<T, String> function, String... items) {
-        List<String> list = Arrays.asList(items);
-        return authors.stream()
-                .filter(a -> list.contains(function.apply(a)))
+    private <T> Set<T> filter(List<T> src, Function<T, String> function, String... items) {
+        Set<String> set = Set.of(items);
+        return src.stream()
+                .filter(a -> set.contains(function.apply(a)))
                 .collect(toSet());
     }
 }
