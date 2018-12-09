@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
+import java.util.Locale;
+
 @SpringBootApplication
 public class Main {
 
@@ -20,6 +22,7 @@ public class Main {
 
     @Bean
     public LocalValidatorFactoryBean validator() {
+        Locale.setDefault(Locale.US);
         return new LocalValidatorFactoryBean();
     }
 }

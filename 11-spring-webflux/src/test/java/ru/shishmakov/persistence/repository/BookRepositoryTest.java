@@ -1,9 +1,8 @@
-package ru.shishmakov.repository;
+package ru.shishmakov.persistence.repository;
 
 import org.junit.Rule;
 import org.junit.contrib.java.lang.system.SystemOutRule;
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.shishmakov.persistence.repository.BookRepository;
 
 /**
  * Test JPA layer without Web

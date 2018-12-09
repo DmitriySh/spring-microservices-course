@@ -1,4 +1,4 @@
-package ru.shishmakov.controller;
+package ru.shishmakov.rest.v1;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
