@@ -22,6 +22,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.LongStream;
 
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toSet;
 
 /**
@@ -81,7 +82,9 @@ class DataInitializer implements ApplicationListener<ApplicationReadyEvent> {
                         .flatMapMany(bookRepository::saveAll))
                 .thenMany(bookRepository.findAll())
                 .collectList()
-                .doOnSuccess(data -> log.info("init books: {}", data))
+                .doOnSuccess((List<Book> data) -> log.info("init books: {}", data.stream()
+                        .map(Book::toString)
+                        .collect(joining("\n", "\n", ""))))
                 .thenMany(authorRepository.saveAll(authors))
                 .thenMany(genreRepository.saveAll(genres))
                 .then().block();
