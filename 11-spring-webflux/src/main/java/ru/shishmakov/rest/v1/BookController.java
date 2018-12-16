@@ -4,10 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -36,8 +39,8 @@ public class BookController {
      * List all books
      */
     @GetMapping("/books")
-    public Flux<BookDto> getAllBooks() {
-        return libraryService.getAllBooks()
+    public Flux<BookDto> getAllBooks(@RequestParam(value = "limit", required = false, defaultValue = "10000") int limit) {
+        return libraryService.getAllBooks(limit)
                 .map(BookDto::from);
     }
 
@@ -65,22 +68,22 @@ public class BookController {
     /**
      * Update existing book
      */
-//    @PutMapping("/book/{id}")
-//    public Mono<ResponseEntity<BookDto>> editBook(@RequestBody BookDto data, @PathVariable("id") ObjectId id) {
-//        data.setId(id);
-//        return libraryService.updateBook(data)
-//                .map(BookDto::from)
-//                .map(ResponseEntity::ok)
-//                .defaultIfEmpty(ResponseEntity.notFound().build());
-//    }
+    @PutMapping("/book/{id}")
+    public Mono<ResponseEntity<BookDto>> editBook(@RequestBody BookDto data, @PathVariable("id") ObjectId id) {
+        data.setId(id);
+        return libraryService.updateBook(data)
+                .map(BookDto::from)
+                .map(ResponseEntity::ok)
+                .defaultIfEmpty(ResponseEntity.notFound().build());
+    }
 
     /**
      * Delete existing book
      */
-//    @DeleteMapping(value = "/book/{id}")
-//    public Mono<ResponseEntity<Void>> deleteBook(@PathVariable("id") ObjectId id) {
-//        return libraryService.deleteBook(id)
-//                .thenReturn(ResponseEntity.ok().<Void>build())
-//                .defaultIfEmpty(ResponseEntity.notFound().<Void>build());
-//    }
+    @DeleteMapping(value = "/book/{id}")
+    public Mono<ResponseEntity<Void>> deleteBook(@PathVariable("id") ObjectId id) {
+        return libraryService.deleteBook(id)
+                .thenReturn(ResponseEntity.ok().<Void>build())
+                .defaultIfEmpty(ResponseEntity.notFound().build());
+    }
 }

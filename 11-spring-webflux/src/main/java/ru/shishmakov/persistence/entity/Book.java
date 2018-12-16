@@ -58,8 +58,10 @@ public class Book {
     private Set<Comment> comments = new HashSet<>();
 
     public Book addAuthors(Collection<Author> authors) {
-        this.authors.addAll(authors);
-        authors.forEach(a -> a.getBooks().add(this));
+        authors.forEach(a -> {
+            this.authors.add(a);
+            a.getBooks().add(this);
+        });
         return this;
     }
 
@@ -86,8 +88,10 @@ public class Book {
     }
 
     public Book addGenres(Collection<Genre> genres) {
-        this.genres.addAll(genres);
-        genres.forEach(g -> g.getBooks().add(this));
+        genres.forEach(g -> {
+            this.genres.add(g);
+            g.getBooks().add(this);
+        });
         return this;
     }
 

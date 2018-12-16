@@ -3,7 +3,6 @@ package ru.shishmakov.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -15,6 +14,10 @@ import ru.shishmakov.persistence.repository.BookRepository;
 import ru.shishmakov.persistence.repository.GenreRepository;
 import ru.shishmakov.web.dto.BookDto;
 
+import java.util.Set;
+
+import static java.util.Optional.ofNullable;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -23,10 +26,7 @@ public class LibraryService {
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
 
-    @Value("${limit:10000}")
-    private int limit;
-
-    public Flux<Book> getAllBooks() {
+    public Flux<Book> getAllBooks(int limit) {
         return bookRepository.findAll()
                 .limitRequest(limit)
                 .doFinally(signal -> log.info("get all book items"));
@@ -103,37 +103,28 @@ public class LibraryService {
         Flux<Author> authors = authorRepository.findAllById(data.getAuthors());
         Flux<Genre> genres = genreRepository.findAllById(data.getGenres());
         return Flux.just(Book.builder().title(data.getTitle()).isbn(data.getIsbn()).build())
-                .zipWith(authors, 3, Book::addAuthor)
-                .zipWith(genres, 3, Book::addGenre)
+                .zipWith(authors, 2, Book::addAuthor)
+                .zipWith(genres, 2, Book::addGenre)
                 .flatMap(bookRepository::save)
                 .doOnComplete(() -> authorRepository.saveAll(authors))
                 .doOnComplete(() -> genreRepository.saveAll(genres))
                 .doFinally(signal -> log.info("save book: {}"))
-                .next();
+                .single();
     }
 
-//    public Mono<Book> updateBook(BookDto data) {
-//        return bookRepository.findById(data.getId())
-//                .flatMap(book -> {
-//                    Set<Author> oldAuthors = book.getAuthors();
-//                    Flux<Author> newAuthors = authorRepository.findAllByIdWithFetchBooks(data.getAuthors());
-//                    newAuthors
-//                            .doOnNext(author -> {
-//                                if (!oldAuthors.contains(author)) {
-//
-//                                }
-//                                author
-//                            })
-//                            .doOnNext(author -> author.getBooks().add(book))
-//
-//
-//                    book.setTitle(data.getTitle());
-//                    book.setIsbn(data.getIsbn());
-//                    book.setAuthors(newAuthors);
-//                    book.setGenres(newGenres);
-//                    return bookRepository.save(book);
-//                });
-//    }
+    public Mono<Book> updateBook(BookDto data) {
+        return bookRepository.findById(data.getId())
+                /*новые авторы*/
+                .flatMap(book -> processNewAuthors(data, book))
+                /*новые жанры*/
+                .flatMap(book -> processNewGenres(data, book))
+                /*итоговое состояние книги*/
+                .flatMap(book -> {
+                    book.setIsbn(data.getIsbn());
+                    book.setTitle(data.getTitle());
+                    return bookRepository.save(book);
+                });
+    }
 
 //    public String createBookComment(ObjectId bookId, String commentText) {
 //        return bookRepository.findById(bookId)
@@ -146,18 +137,13 @@ public class LibraryService {
 //                .orElseGet(() -> "book: " + bookId + " not found");
 //    }
 
-//    public Mono<Void> deleteBook(ObjectId bookId) {
-//        return bookRepository.findByIdWithFetchGenresAuthors(bookId)
-//                .map(b -> {
-//                    Set<Author> authors = b.removeAllAuthors();
-//                    Set<Genre> genres = b.removeAllGenres();
-//                    authorRepository.saveAll(authors);
-//                    genreRepository.saveAll(genres);
-//                    bookRepository.delete(b);
-//                    return "deleted";
-//                })
-//                .orElseGet(() -> "book: " + bookId + " not found");
-//    }
+    public Mono<Void> deleteBook(ObjectId bookId) {
+        return bookRepository.findByIdWithFetchGenresAuthors(bookId)
+                .flatMap(book -> authorRepository.saveAll(book.removeAllAuthors())
+                        .thenMany(genreRepository.saveAll(book.removeAllGenres()))
+                        .then(Mono.just(book)))
+                .flatMap(bookRepository::delete);
+    }
 
 //    public String deleteComment(ObjectId bookId, ObjectId commentId) {
 //        return bookRepository.findById(bookId)
@@ -168,4 +154,49 @@ public class LibraryService {
 //                })
 //                .orElseGet(() -> "book: " + bookId + " not found");
 //    }
+
+    private Mono<Book> processNewGenres(BookDto data, Book book) {
+        return ofNullable(data.getGenres())
+                .map(genreRepository::findAllByIdWithFetchBooks)
+                .orElseGet(Flux::empty)
+                // оставляем только старые жанры в book
+                .doOnNext(newGenre -> book.getGenres().remove(newGenre))
+                // собираем все новые жанры
+                .collectList()
+                .flatMap(newGenres -> {
+                    // в book остались только старые жанры:
+                    // 1) убираем из книги старые жанры
+                    // 2) из каждого старого жанра убираем книгу
+                    Set<Genre> oldGenres = book.removeAllGenres();
+                    // 3) добавляем в книгу новые жанры
+                    book.addGenres(newGenres);
+                    return Mono.just(oldGenres);
+                })
+                // состояние старых жанров нужно сохранить
+                .flatMapMany(genreRepository::saveAll)
+                .then(Mono.just(book));
+    }
+
+    private Mono<Book> processNewAuthors(BookDto data, Book book) {
+        return ofNullable(data.getAuthors())
+                .map(authorRepository::findAllByIdWithFetchBooks)
+                .orElseGet(Flux::empty)
+                // оставляем только старых авторов в book
+                .doOnNext(newAuthor -> book.getAuthors().remove(newAuthor))
+                // собираем всех новых авторов
+                .collectList()
+                .flatMap(newAuthors -> {
+                    // в book остались только старые авторы:
+                    // 1) убираем из книги старых авторов
+                    // 2) из каждого старого автора убираем книгу
+                    Set<Author> oldAuthors = book.removeAllAuthors();
+                    // 3) добавляем в книгу новых авторов
+                    book.addAuthors(newAuthors);
+                    return Mono.just(oldAuthors);
+                })
+                // состояние старых книг нужно сохранить
+                .flatMapMany(authorRepository::saveAll)
+                .then(Mono.just(book));
+    }
+
 }
