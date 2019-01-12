@@ -63,7 +63,8 @@ public class AuthorRepositoryTest {
 
     @Test
     public void findByIdShouldNotGetAuthorIfNotAvailable() {
-        Mono<Author> author = authorRepository.findById(new ObjectId());
+        ObjectId absentAuthorId = new ObjectId();
+        Mono<Author> author = authorRepository.findById(absentAuthorId);
 
         StepVerifier
                 .create(author)
@@ -74,8 +75,8 @@ public class AuthorRepositoryTest {
 
     @Test
     public void findAllByIdShouldGetAuthorsIfTheyAvailable() {
-        Set<ObjectId> ids = dbAuthors.stream().map(Author::getId).collect(toSet());
-        Flux<Author> authors = authorRepository.findAllById(ids);
+        Set<ObjectId> authorIds = dbAuthors.stream().map(Author::getId).collect(toSet());
+        Flux<Author> authors = authorRepository.findAllById(authorIds);
 
         StepVerifier
                 .create(authors)
@@ -85,8 +86,8 @@ public class AuthorRepositoryTest {
 
     @Test
     public void findAllByIdShouldNotGetAuthorsIfTheyNotAvailable() {
-        Set<ObjectId> ids = Set.of(new ObjectId(), new ObjectId());
-        Flux<Author> authors = authorRepository.findAllById(ids);
+        Set<ObjectId> absentAuthorIds = Set.of(new ObjectId(), new ObjectId());
+        Flux<Author> authors = authorRepository.findAllById(absentAuthorIds);
 
         StepVerifier
                 .create(authors)

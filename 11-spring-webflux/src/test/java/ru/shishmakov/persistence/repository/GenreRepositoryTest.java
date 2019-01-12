@@ -61,8 +61,9 @@ public class GenreRepositoryTest {
     }
 
     @Test
-    public void findByIdShouldNotGetAuthorIfNotAvailable() {
-        Mono<Genre> genre = genreRepository.findById(new ObjectId());
+    public void findByIdShouldNotGetGenreIfNotAvailable() {
+        ObjectId absentGenreId = new ObjectId();
+        Mono<Genre> genre = genreRepository.findById(absentGenreId);
 
         StepVerifier
                 .create(genre)
@@ -73,8 +74,8 @@ public class GenreRepositoryTest {
 
     @Test
     public void findAllByIdShouldGetGenresIfTheyAvailable() {
-        Set<ObjectId> ids = dbGenres.stream().map(Genre::getId).collect(toSet());
-        Flux<Genre> genres = genreRepository.findAllById(ids);
+        Set<ObjectId> genreIds = dbGenres.stream().map(Genre::getId).collect(toSet());
+        Flux<Genre> genres = genreRepository.findAllById(genreIds);
 
         StepVerifier
                 .create(genres)
@@ -84,8 +85,8 @@ public class GenreRepositoryTest {
 
     @Test
     public void findAllByIdShouldNotGetGenresIfTheyNotAvailable() {
-        Set<ObjectId> ids = Set.of(new ObjectId(), new ObjectId());
-        Flux<Genre> genres = genreRepository.findAllById(ids);
+        Set<ObjectId> absentGenreIds = Set.of(new ObjectId(), new ObjectId());
+        Flux<Genre> genres = genreRepository.findAllById(absentGenreIds);
 
         StepVerifier
                 .create(genres)
@@ -95,15 +96,15 @@ public class GenreRepositoryTest {
 
     @Test
     public void deleteByIdShouldDeleteGenre() {
-        ObjectId genresId = dbGenres.get(0).getId();
-        Mono<Genre> genre = genreRepository.findById(genresId);
+        ObjectId genreId = dbGenres.get(0).getId();
+        Mono<Genre> genre = genreRepository.findById(genreId);
         StepVerifier
                 .create(genre)
                 .expectNextCount(1)
                 .verifyComplete();
 
-        Mono<Genre> deletedGenre = genreRepository.deleteById(genresId)
-                .then(genreRepository.findById(genresId));
+        Mono<Genre> deletedGenre = genreRepository.deleteById(genreId)
+                .then(genreRepository.findById(genreId));
         StepVerifier
                 .create(deletedGenre)
                 .expectNextCount(0)
@@ -128,7 +129,7 @@ public class GenreRepositoryTest {
     }
 
     @Test
-    public void createAuthorShouldSucceeded() {
+    public void createGenreShouldSucceeded() {
         Mono<Genre> savedGenre = genreRepository.save(Genre.builder().name("new genre").build());
 
         StepVerifier
@@ -138,7 +139,7 @@ public class GenreRepositoryTest {
     }
 
     @Test
-    public void createGenreShouldThrowExceptionIfFullnameNull() {
+    public void createGenreShouldThrowExceptionIfNameNull() {
         Mono<Genre> savedGenre = genreRepository.save(Genre.builder().name(null).build());
 
         StepVerifier
