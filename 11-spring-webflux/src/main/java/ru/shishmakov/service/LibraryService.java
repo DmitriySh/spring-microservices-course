@@ -27,13 +27,13 @@ public class LibraryService {
     private final AuthorRepository authorRepository;
 
     public Flux<Book> getAllBooks(int limit) {
-        return bookRepository.findAll()
+        return bookRepository.findAllWithFetchGenresAuthors()
                 .limitRequest(limit)
                 .doFinally(signal -> log.info("get all book items"));
     }
 
     public Mono<Book> getBookById(ObjectId bookId) {
-        return bookRepository.findById(bookId)
+        return bookRepository.findByIdWithFetchGenresAuthors(bookId)
                 .doFinally(signal -> log.info("get book by id: " + bookId));
     }
 
@@ -108,7 +108,7 @@ public class LibraryService {
                 .flatMap(bookRepository::save)
                 .doOnComplete(() -> authorRepository.saveAll(authors))
                 .doOnComplete(() -> genreRepository.saveAll(genres))
-                .doFinally(signal -> log.info("save book: {}"))
+                .doFinally(signal -> log.info("save book"))
                 .single();
     }
 
