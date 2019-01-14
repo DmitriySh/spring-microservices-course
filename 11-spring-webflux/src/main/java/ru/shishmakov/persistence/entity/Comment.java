@@ -23,7 +23,6 @@ import java.time.Instant;
 @Setter
 @Getter
 public class Comment {
-
     @Id
     @EqualsAndHashCode.Include
     @NotNull

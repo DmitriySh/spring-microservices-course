@@ -30,7 +30,6 @@ import java.util.Set;
 @Getter
 @Document
 public class Book {
-
     @Id
     private ObjectId id;
 

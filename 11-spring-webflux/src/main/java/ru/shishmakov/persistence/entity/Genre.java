@@ -25,7 +25,6 @@ import java.util.Set;
 @Getter
 @Document
 public class Genre {
-
     @Id
     private ObjectId id;
 
